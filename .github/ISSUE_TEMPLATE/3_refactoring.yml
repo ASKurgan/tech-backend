@@ -1,7 +1,7 @@
 name: Рефакторинг (ИСПРАВЛЕНИЕ ОШИБОК -> "Сообщить о баге")
 title: "[Refactoring]: "
 description: Предложить исправление кода под новый лад 
-labels: ["refactor", "improvement"]
+labels: ["refactoring", "improvement"]
 projects: ["SachkovTech"]
 body:
   - type: textarea

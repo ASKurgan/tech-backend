@@ -1,7 +1,7 @@
 name: Другое
 title: "[Other]: "
 description: Опишите ситуацию с которой столкнулись если не подходят другие шаблоны (CI/CD сюда же)
-labels: []
+labels: ["other"]
 projects: ["SachkovTech"]
 body:
   - type: textarea
