@@ -1,4 +1,4 @@
-name: Рефакторинг (ИСПРАВЛЕНИЕ ОШИБОК -> "[Сообщить о баге](https://github.com/SachkovTech/sachkov-tech-backend/issues/new?assignees=&labels=bug%2Ctriage&projects=SachkovTech&template=2_bug-report.yml&title=%5BBug%5D%3A+)")
+name: Рефакторинг (ИСПРАВЛЕНИЕ ОШИБОК -> "Сообщить о баге")
 title: "[Refactoring]: "
 description: Предложить исправление кода под новый лад 
 labels: ["refactor", "improvement"]
