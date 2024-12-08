@@ -1,4 +1,4 @@
-name: Сообщие о баге
+name: Bug Report
 title: "[Bug]: "
 labels: ["bug", "triage"]
 projects: ["SachkovTech"]
