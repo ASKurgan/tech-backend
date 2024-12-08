@@ -1,0 +1,75 @@
+name: Создание теста
+title: "[Testing]: "
+description: Предложите покрыть что-либо тестом и каким
+labels: ["testing", "test-case"]
+projects: ["SachkovTech"]
+body:
+  - type: textarea
+    id: what-to-test
+    attributes:
+      label: Что нужно протестировать?
+      description: Опиши функционал или компонент, который необходимо покрыть тестами.
+      placeholder: "Например: нужно протестировать авторизацию, обработку ошибок и т. д."
+    validations:
+      required: true
+  - type: textarea
+    id: why-to-test
+    attributes:
+      label: Почему данный тест важен?
+      description: Объясни, почему этот тест важен и что он должен покрыть (например, критический кейс, частый баг и т. д.).
+      placeholder: "Например: этот код часто ломается из-за отсутствия тестов."
+    validations:
+      required: true
+  - type: dropdown
+    id: priority-level
+    attributes:
+      label: Приоритет
+      description: Какой приоритет ты думаешь стоит дать этой задаче?
+      options:
+        - P0 (Очень важно, 1-3 дня)
+        - P1 (Важно, 3-7 дней)
+        - P2 (Требуется решить в течение недели)
+        - P3 (Желательно решить в течение месяца)
+        - P4 (Когда-нибудь)
+      default: 2
+    validations:
+      required: true
+  - type: dropdown
+    id: story-points
+    attributes:
+      label: Количество сторипоинтов (Story Points)
+      description: Оцени сколько сторипоинтов (SP) потребуется для выполнения этой задачи. Укажи от 0 до 20.
+      options:
+        - 1/2
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+        - 11
+        - 12
+        - 13
+        - 14
+        - 15
+        - 16
+        - 17
+        - 18
+        - 19
+        - 20
+        - 20+
+      default: 3
+    validations:
+      required: true
+  - type: textarea
+    id: implementation-notes
+    attributes:
+      label: Дополнительные заметки по реализации тестов
+      description: Добавь дополнительные детали, например, какую тестовую стратегию использовать или какие кейсы обязательно покрыть.
+      placeholder: Оставь заметки для разработчиков.
+    validations:
+      required: false

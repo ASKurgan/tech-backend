@@ -1,0 +1,66 @@
+name: Сообщить о баге
+title: "[Bug]: "
+description: "Сообщите о баге"
+labels: ["bug", "triage"]
+projects: ["SachkovTech"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Что произошло?
+      description: Напиши дополнительно, что ты ожидал увидеть?
+      placeholder: Напиши о баге!
+      value: "Я нашел баг!"
+    validations:
+      required: true
+  - type: dropdown
+    id: priority-level
+    attributes:
+      label: Приоритет
+      description: Какой приоритет ты думаешь стоит дать этой задаче?
+      options:
+        - P0 (Очень важно, 1-3 дня)
+        - P1 (Важно, 3-7 дней)
+        - P2 (Требуется решить в течение недели)
+        - P3 (Желательно исправить в течение месяца)
+        - P4 (В беклог)
+      default: 2
+    validations:
+      required: true
+  - type: dropdown
+    id: story-points
+    attributes:
+      label: Количество сторипоинтов (Story Points)
+      description: Оцени сколько сторипоинтов (SP) потребуется для выполнения этой задачи. Укажи от 0 до 20.
+      options:
+        - 1/2
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+        - 11
+        - 12
+        - 13
+        - 14
+        - 15
+        - 16
+        - 17
+        - 18
+        - 19
+        - 20
+        - 20+
+      default: 5
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Логи
+      description: Вставь логи если имеются
+      render: shell
