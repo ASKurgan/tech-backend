@@ -31,7 +31,7 @@ body:
         - P2 (Требуется решить в течение недели)
         - P3 (Желательно решить в течение месяца)
         - P4 (Когда-нибудь)
-      default: 2
+      default: 1
     validations:
       required: true
   - type: dropdown
