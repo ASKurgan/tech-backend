@@ -1,6 +1,6 @@
-name: Рефакторинг
+name: Рефакторинг (ИСПРАВЛЕНИЕ ОШИБОК ЭТО "Сообщить о баге")
 title: "[Refactoring]: "
-description: Предложить исправление кода под новый лад (ИСПРАВЛЕНИЕ ОШИБОК ЭТО "Сообщить о баге")
+description: Предложить исправление кода под новый лад 
 labels: ["refactor", "improvement"]
 projects: ["SachkovTech"]
 body:
