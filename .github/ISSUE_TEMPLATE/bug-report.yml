@@ -1,5 +1,6 @@
 name: Сообщить о баге
 title: "[Bug]: "
+description: "Сообщите о баге"
 labels: ["bug", "triage"]
 projects: ["SachkovTech"]
 body:
