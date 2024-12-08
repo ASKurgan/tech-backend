@@ -1,5 +1,4 @@
-name: Bug Report
-description: File a bug report.
+name: Сообщие о баге
 title: "[Bug]: "
 labels: ["bug", "triage"]
 projects: ["SachkovTech"]
