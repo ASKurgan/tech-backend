@@ -29,5 +29,6 @@ body:
   - type: textarea
     id: logs 
     attributes:
-      label: Вставь логи если имеются
+      label: Логи
+      description: Вставь логи если имеются
       render: shell
