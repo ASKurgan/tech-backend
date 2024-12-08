@@ -34,14 +34,34 @@ body:
       default: 2
     validations:
       required: true
-  - type: number
+  - type: dropdown
     id: story-points
     attributes:
       label: Количество сторипоинтов (Story Points)
       description: Оцени сколько сторипоинтов (SP) потребуется для выполнения этой задачи. Укажи от 0 до 20.
-      placeholder: "Например: 5"
-      min: 0
-      max: 20
+      options:
+        - 1/2
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+        - 11
+        - 12
+        - 13
+        - 14
+        - 15
+        - 16
+        - 17
+        - 18
+        - 19
+        - 20
+        - 20+
     validations:
       required: true
   - type: textarea

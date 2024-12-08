@@ -9,7 +9,7 @@ body:
     attributes:
       label: Описание
       description: Добавь описание задачи, идеи или общего элемента.
-      placeholder: Например: подробно опиши суть задачи, идеи или других объектов, которые требуют рассмотрения.
+      placeholder: "Например: подробно опиши суть задачи, идеи или других объектов, которые требуют рассмотрения."
     validations:
       required: true
   - type: dropdown
@@ -26,21 +26,11 @@ body:
       default: P3 (Желательно решить в течение месяца)
     validations:
       required: true
-  - type: number
-    id: story-points
-    attributes:
-      label: Количество сторипоинтов (Story Points)
-      description: Укажи, сколько сторипоинтов потребуется для выполнения этой задачи. Укажи от 0 до 20.
-      placeholder: Например: 0 (если задача не требует реализации) или выше.
-      min: 0
-      max: 20
-    validations:
-      required: true
   - type: textarea
     id: additional-notes
     attributes:
       label: Дополнительные заметки
       description: Добавь любые дополнительные детали к задаче.
-      placeholder: Например: уточнения, примеры или ссылки на документы.
+      placeholder: "Например: уточнения, примеры или ссылки на документы."
     validations:
       required: false
