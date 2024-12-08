@@ -1,4 +1,4 @@
-name: Bug Report
+name: Сообщить о баге
 title: "[Bug]: "
 labels: ["bug", "triage"]
 projects: ["SachkovTech"]
@@ -13,7 +13,7 @@ body:
     validations:
       required: true
   - type: dropdown
-    id: Приоритет важности
+    id: priority-level
     attributes:
       label: Приоритет
       description: Какой приоритет ты думаешь стоит дать этой задачи?
@@ -26,8 +26,20 @@ body:
       default: 2
     validations:
       required: true
-  - type: textarea
-    id: Логи 
+  - type: number
+    id: story-points
     attributes:
-      label: Вставь логи если имеются
+      label: Количество сторипоинтов (Story Points)
+      description: Оцени сколько сторипоинтов (SP) потребуется для выполнения этой задачи. Укажи от 0 до 20.
+      placeholder:
+        Например: 5
+      min: 0
+      max: 20
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Логи
+      description: Вставь логи если имеются
       render: shell
