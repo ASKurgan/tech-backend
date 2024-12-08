@@ -27,7 +27,7 @@ body:
       default: 2
     validations:
       required: true
-  - type: number
+  - type: textarea
     id: story-points
     attributes:
       label: Количество сторипоинтов (Story Points)
