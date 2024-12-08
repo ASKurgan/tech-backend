@@ -55,6 +55,7 @@ body:
         - 19
         - 20
         - 20+
+      default: 5
     validations:
       required: true
   - type: textarea

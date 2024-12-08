@@ -63,6 +63,7 @@ body:
         - 19
         - 20
         - 20+
+      default: 10
     validations:
       required: true
   - type: textarea

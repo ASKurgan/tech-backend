@@ -10,7 +10,6 @@ body:
       label: Опиши новую фичу
       description: Расскажи, какую новую идею или функционал ты хотел бы добавить?
       placeholder: Что ты предлагаешь?
-      value: "Я предлагаю добавить новую фичу!"
     validations:
       required: true
   - type: textarea
@@ -63,5 +62,6 @@ body:
         - 19
         - 20
         - 20+
+      default: 5
     validations:
       required: true
