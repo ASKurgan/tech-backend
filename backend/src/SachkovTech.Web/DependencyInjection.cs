@@ -4,23 +4,23 @@ using Elastic.Ingest.Elasticsearch;
 using Elastic.Ingest.Elasticsearch.DataStreams;
 using Elastic.Serilog.Sinks;
 using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
-using SachkovTech.Accounts.Infrastructure;
-using SachkovTech.Framework.Authorization;
-using SachkovTech.Issues.Infrastructure;
-using Serilog.Events;
-using Serilog;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
-using SachkovTech.Core.Options;
+using SachkovTech.Accounts.Application;
+using SachkovTech.Accounts.Infrastructure;
 using SachkovTech.Accounts.Presentation;
 using SachkovTech.Core.Abstractions;
+using SachkovTech.Core.Options;
 using SachkovTech.Framework;
+using SachkovTech.Framework.Authorization;
 using SachkovTech.Framework.Models;
-using SachkovTech.Accounts.Application;
 using SachkovTech.Issues.Application;
+using SachkovTech.Issues.Infrastructure;
+using Serilog;
+using Serilog.Events;
 
 namespace SachkovTech.Web;
 
@@ -104,14 +104,12 @@ public static class DependencyInjection
     private static IServiceCollection AddLogging(
         this IServiceCollection services, IConfiguration configuration)
     {
-        string indexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM-dd}";
+        string indexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:dd-MM-yyyy}";
 
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
             .WriteTo.Console()
             .WriteTo.Debug()
-            .WriteTo.Seq(configuration.GetConnectionString("Seq")
-                         ?? throw new ArgumentNullException("Seq"))
             .WriteTo.Elasticsearch(
                 [new Uri("http://localhost:9200")],
                 options =>

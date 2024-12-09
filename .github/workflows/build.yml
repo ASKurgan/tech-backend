@@ -26,9 +26,6 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Restore dependencies
-        run: dotnet restore ./backend/SachkovTech.sln
-        
-      - name: Restore NuGet packages
         run: |
           dotnet restore ./backend/SachkovTech.sln
           dotnet restore ./CommentService/CommentService.sln

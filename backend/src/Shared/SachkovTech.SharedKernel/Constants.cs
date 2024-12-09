@@ -8,19 +8,20 @@ public class Constants
 
         public const int MAX_HIGH_TEXT_LENGTH = 2000;
     }
+
     public static class Files
     {
         //Bytes
         public const int MAX_FILE_SIZE = 10 * 1024 * 1024; 
-        
+
         public static readonly string[] FORBIDDEN_FILE_EXTENSIONS = new[] 
         {
             // Video
             ".mp4", ".avi", ".mkv", ".mov", ".wmv", ".flv",
-    
+
             // Sound
             ".mp3", ".wav", ".flac", ".aac", ".ogg", ".wma",
-    
+
             // Software
             ".exe", ".dll", ".msi", ".bat", ".sh", ".jar"
         };

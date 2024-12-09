@@ -10,11 +10,6 @@ public class Issue : SoftDeletableEntity<IssueId>
 {
     private List<FileId> _files = [];
 
-    //ef core
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    private Issue(IssueId id) : base(id){}
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
     public Issue(
         IssueId id,
         Title title,
@@ -22,7 +17,8 @@ public class Issue : SoftDeletableEntity<IssueId>
         LessonId? lessonId,
         ModuleId moduleId,
         Experience experience,
-        IEnumerable<FileId>? files = null) : base(id)
+        IEnumerable<FileId>? files = null)
+        : base(id)
     {
         Title = title;
         Description = description;
@@ -31,16 +27,22 @@ public class Issue : SoftDeletableEntity<IssueId>
         Experience = experience;
         _files = files?.ToList() ?? [];
     }
-    
+
+    // ef core
+    private Issue(IssueId id)
+        : base(id)
+    {
+    }
+
     public Experience Experience { get; private set; } = default!;
-    
+
     public Title Title { get; private set; } = default!;
-    
+
     public Description Description { get; private set; } = default!;
 
     public LessonId? LessonId { get; private set; }
-    
-    public ModuleId ModuleId { get; private set; }
+
+    public ModuleId ModuleId { get; private set; } = null!;
 
     public IReadOnlyList<FileId> Files => _files;
 

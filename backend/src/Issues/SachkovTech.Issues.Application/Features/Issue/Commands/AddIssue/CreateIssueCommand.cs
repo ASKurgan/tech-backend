@@ -7,4 +7,4 @@ public record CreateIssueCommand(
     Guid ModuleId,
     string Title,
     string Description,
-    int Experience) : ICommand;
+    int Experience): ICommand;
