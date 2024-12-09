@@ -19,7 +19,8 @@ public class MultipartUploadFileTest : FileServiceTestsBase
     public async Task Multipart_Upload_File()
     {
         // arrange
-        FileInfo fileInfo = new FileInfo("..\\..\\..\\test.mp4");
+        FileInfo fileInfo = new FileInfo(
+            $"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName}/test.mp4");
         
         var cancellationToken = new CancellationTokenSource().Token;
         

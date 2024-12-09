@@ -1,10 +1,12 @@
 using Amazon.S3;
 using FileService;
 using FileService.Endpoints;
+using FileService.Extensions;
+using FileService.Jobs;
 using FileService.MongoDataAccess;
 using MongoDB.Driver;
 using Hangfire;
-using Hangfire.PostgreSql;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,12 +27,7 @@ builder.Services.AddScoped<IFilesRepository, FilesRepository>();
 
 var mongoClient = new MongoClient(builder.Configuration.GetConnectionString("MongoConnection"));
 
-builder.Services.AddHangfire(configuration => configuration
-    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-    .UseSimpleAssemblyNameTypeSerializer()
-    .UseRecommendedSerializerSettings()
-    .UsePostgreSqlStorage(c =>
-        c.UseNpgsqlConnection(builder.Configuration.GetConnectionString("HangfireConnection"))));
+builder.Services.AddHangfire(builder.Configuration);
 
 builder.Services.AddHangfireServer(serverOptions => { serverOptions.ServerName = "Hangfire.Mongo server"; });
 
@@ -54,7 +51,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHangfireServer();
+app.CreateHangfireDatabaseIfNotExists();
+
 app.UseHangfireDashboard();
 
 app.UseCors(c => c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());

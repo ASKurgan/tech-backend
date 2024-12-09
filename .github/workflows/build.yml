@@ -58,6 +58,7 @@ jobs:
           dotnet test ./NotificationService/NotificationService.sln --configuration Release --no-restore
           dotnet test ./TagService/TagService.sln --configuration Release --no-restore
           dotnet test ./TelegramBotService/TelegramBotService.sln --configuration Release --no-restore
+          dotnet test ./FileService/FileService.sln --configuration Release --no-restore
           
       - name: General_Tests
         run: dotnet test ./tests/CodeAnalyzer.Tests/CodeAnalyzer.Tests.sln

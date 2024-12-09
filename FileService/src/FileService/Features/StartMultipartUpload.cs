@@ -1,6 +1,7 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
 using FileService.Endpoints;
+using FileService.Providers;
 
 namespace FileService.Features;
 
@@ -22,11 +23,14 @@ public static class StartMultipartUpload
     private static async Task<IResult> Handler(
         StartMultipartUploadRequest request,
         IAmazonS3 s3Client,
+        IFileProvider provider,
         CancellationToken cancellationToken)
     {
         try
         {
             var key = Guid.NewGuid().ToString();
+            
+            await provider.IsBucketExists(["bucket"], cancellationToken);
 
             var startMultipartRequest = new InitiateMultipartUploadRequest
             {
