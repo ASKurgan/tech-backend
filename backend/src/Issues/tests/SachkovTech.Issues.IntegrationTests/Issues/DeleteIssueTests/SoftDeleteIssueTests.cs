@@ -1,8 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using SachkovTech.Core.Abstractions;
-using SachkovTech.Issues.Application.Features.Issue.Commands.DeleteIssue;
 using SachkovTech.Issues.Application.Features.Issue.Commands.DeleteIssue.SoftDeleteIssue;
 
 namespace SachkovTech.Issues.IntegrationTests.Issues.DeleteIssueTests;

@@ -248,6 +248,8 @@ dotnet_diagnostic.SA1101.severity = none
 dotnet_diagnostic.SA1600.severity = none
 dotnet_diagnostic.SA1503.severity = none
 dotnet_diagnostic.SA1206.severity = none
+dotnet_diagnostic.SA1313.severity = none
+dotnet_diagnostic.SA1010.severity = none
 
 #Отключаем комментирование методов в тестах
 [{*Test*.cs}]

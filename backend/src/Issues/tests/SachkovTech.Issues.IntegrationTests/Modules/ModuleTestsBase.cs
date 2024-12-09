@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Domain.Module;
 using SachkovTech.Issues.Infrastructure.DbContexts;
-using SachkovTech.SharedKernel.ValueObjects;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 
 namespace SachkovTech.Issues.IntegrationTests.Modules;
