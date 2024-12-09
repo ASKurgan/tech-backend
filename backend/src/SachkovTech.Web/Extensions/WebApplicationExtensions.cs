@@ -14,7 +14,7 @@ public static class WebApplicationExtensions
             await app.Services.RunAutoSeeding();
         }
 
-        app.UseOpenTelemetryPrometheusScrapingEndpoint();
+        // app.UseOpenTelemetryPrometheusScrapingEndpoint();
         app.UseExceptionMiddleware();
         app.UseSerilogRequestLogging();
         app.ConfigureCors();
