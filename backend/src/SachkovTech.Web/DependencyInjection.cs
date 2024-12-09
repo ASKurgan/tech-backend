@@ -37,7 +37,8 @@ public static class DependencyInjection
             .AddFramework()
             .AddAccountsModule(configuration)
             .AddIssuesModule(configuration)
-            .AddAuthServices(configuration);
+            .AddAuthServices(configuration)
+            .AddAppMetrics(configuration);
     }
 
     private static IServiceCollection AddAccountsModule(
@@ -84,15 +85,17 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddMetrics(
+    private static IServiceCollection AddAppMetrics(
         this IServiceCollection services, IConfiguration configuration)
     {
         services.AddOpenTelemetry()
             .WithMetrics(b => b
-                .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("SachkovTech.Issues"))
+                .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("SachkovTech.Web"))
+                .AddMeter("SachkovTech")
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
                 .AddRuntimeInstrumentation()
+                .AddProcessInstrumentation()
                 .AddPrometheusExporter());
 
         return services;
