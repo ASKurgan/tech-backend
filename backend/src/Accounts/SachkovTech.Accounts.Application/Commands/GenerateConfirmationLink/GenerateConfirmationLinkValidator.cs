@@ -1,5 +1,4 @@
 using FluentValidation;
-using SachkovTech.Accounts.Application.Commands.Register;
 using SachkovTech.Core.Validation;
 using SachkovTech.SharedKernel;
 

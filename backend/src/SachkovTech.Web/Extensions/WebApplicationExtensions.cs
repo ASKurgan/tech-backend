@@ -1,6 +1,4 @@
-﻿using SachkovTech.Accounts.Infrastructure.Seeding;
-using SachkovTech.Core.Abstractions;
-using SachkovTech.Core.Extensions;
+﻿using SachkovTech.Core.Extensions;
 using SachkovTech.Framework.Middlewares;
 using Serilog;
 
@@ -10,12 +8,14 @@ public static class WebApplicationExtensions
 {
     public static async Task Configure(this WebApplication app)
     {
-        
         if (app.Environment.IsDevelopment())
         {
             await app.Services.RunMigrations();
             await app.Services.RunAutoSeeding();
+
+            app.UseOpenTelemetryPrometheusScrapingEndpoint();
         }
+
         app.UseExceptionMiddleware();
         app.UseSerilogRequestLogging();
         app.ConfigureCors();
@@ -24,6 +24,7 @@ public static class WebApplicationExtensions
         app.UseAuthorization();
         app.MapControllers();
     }
+
     private static void ConfigureCors(this WebApplication app)
     {
         app.UseCors(config =>

@@ -1,9 +1,11 @@
 using Amazon.S3;
 using Amazon.S3.Model;
-using AutoFixture;
 using FileService.Core;
+using FileService.Jobs;
 using FileService.MongoDataAccess;
-using Microsoft.AspNetCore.Mvc.Testing;
+using Hangfire;
+using Hangfire.PostgreSql;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FileService.IntegrationTests;
@@ -30,7 +32,9 @@ public class FileServiceTestsBase : IClassFixture<IntegrationTestsWebFactory>
     
     protected async Task<Guid> UploadFile(CancellationToken cancellationToken = default)
     {
-        var file = new FileInfo("..\\..\\..\\test.mp4");
+        var filePath = $"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName}/test.mp4";
+        
+        var file = new FileInfo(filePath);
         
         var fileData = new FileData
         {

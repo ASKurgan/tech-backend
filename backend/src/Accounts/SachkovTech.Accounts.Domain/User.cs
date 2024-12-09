@@ -7,29 +7,29 @@ namespace SachkovTech.Accounts.Domain;
 
 public class User : IdentityUser<Guid>
 {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    //EF CORE
+    private List<Role> _roles = [];
+    private List<SocialNetwork> _socialNetworks = [];
+
+    // EF CORE
     private User()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
     }
 
     public DateTime RegistrationDate { get; set; }
 
-    public FullName FullName { get; set; }
+    public FullName FullName { get; set; } = null!;
+
     public Photo? Photo { get; set; }
 
     public IReadOnlyList<Role> Roles => _roles;
-    private List<Role> _roles = [];
 
     public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
-    private List<SocialNetwork> _socialNetworks = [];
 
-    public StudentAccount? StudentAccount;
+    public StudentAccount? StudentAccount { get; private set; }
 
-    public SupportAccount? SupportAccount;
+    public SupportAccount? SupportAccount { get; private set; }
 
-    public AdminAccount? AdminAccount;
+    public AdminAccount? AdminAccount { get; private set; }
 
     public static Result<User, Error> CreateAdmin(
         string userName,
@@ -47,7 +47,7 @@ public class User : IdentityUser<Guid>
             RegistrationDate = DateTime.UtcNow,
             FullName = fullName,
             _roles = [role],
-            _socialNetworks = []
+            _socialNetworks = [],
         };
     }
 
@@ -66,7 +66,7 @@ public class User : IdentityUser<Guid>
             RegistrationDate = DateTime.UtcNow,
             FullName = FullName.Empty,
             _roles = [role],
-            _socialNetworks = []
+            _socialNetworks = [],
         };
     }
 

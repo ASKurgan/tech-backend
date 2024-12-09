@@ -78,7 +78,7 @@ public class CreateIssueHandler : ICommandHandler<Guid, CreateIssueCommand>
     }
 
     private Domain.Issue.Issue InitIssue(
-        ModuleId moduleId, 
+        ModuleId moduleId,
         LessonId? lessonId,
         CreateIssueCommand command)
     {

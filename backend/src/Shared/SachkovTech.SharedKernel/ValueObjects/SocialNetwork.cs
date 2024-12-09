@@ -9,11 +9,11 @@ public class SocialNetwork : ComparableValueObject
         Name = name;
         Link = link;
     }
-    
+
     public string Name { get; }
-    
+
     public string Link { get; }
-        
+
     public static Result<SocialNetwork, Error> Create(string link, string name)
     {
         if (string.IsNullOrWhiteSpace(link))
@@ -21,7 +21,7 @@ public class SocialNetwork : ComparableValueObject
 
         if (string.IsNullOrWhiteSpace(name))
             return Errors.General.ValueIsRequired("name");
-                
+
         return new SocialNetwork(link, name);
     }
 

@@ -15,6 +15,7 @@ services:
   #   restart: always
   #   environment:
   #     - ASPNETCORE_ENVIRONMENT=Docker
+
   postgres:
     container_name: postgres
     image: postgres
@@ -27,6 +28,7 @@ services:
       - "5434:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+
   pgadmin:
     container_name: pgadmin_container_sachkov
     image: dpage/pgadmin4
@@ -44,15 +46,7 @@ services:
     ports:
       - "${PGADMIN_PORT:-5050}:80"
     restart: unless-stopped
-  seq:
-    image: datalust/seq:latest
-    container_name: seq
-    restart: always
-    environment:
-      - ACCEPT_EULA=Y
-    ports:
-      - "5341:5341"
-      - "8081:80"
+
   minio:
     container_name: minio
     image: minio/minio
@@ -63,6 +57,7 @@ services:
       - minio_data:/data
     command: server --console-address ":9001" /data
     restart: always
+
   mongodb:
     image: mongo
     container_name: mongodb
@@ -74,6 +69,7 @@ services:
       - 27017:27017
     volumes:
       - mongo_data:/data/db
+
   rabbitmq:
     image: rabbitmq:management-alpine
     container_name: rabbitmq
@@ -84,6 +80,7 @@ services:
       - "5672:5672"
       - "15672:15672"
     restart: always
+
   elasticsearch:
     container_name: elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:8.16.1
@@ -95,6 +92,7 @@ services:
       - xpack.security.enabled=false
       - discovery.type=single-node
     restart: always
+
   kibana:
     container_name: kibana
     image: docker.elastic.co/kibana/kibana:8.16.1
@@ -104,6 +102,32 @@ services:
       - elasticsearch
     environment:
       - ELASTICSEARCH_URL=http://localhost:9200
+    restart: always
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    restart: always
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
+      - grafana-simple-json-datasource
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    restart: always
 
   # nginx:
   #   image: nginx:latest
@@ -121,4 +145,6 @@ volumes:
   minio_data:
   mongo_data:
   elasticsearch-data:
+  prometheus_data:
+  grafana_data:
   # rabbitmq_data:

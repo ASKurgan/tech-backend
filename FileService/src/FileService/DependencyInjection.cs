@@ -1,5 +1,9 @@
-﻿using FileService.MongoDataAccess;
+﻿using FileService.Jobs;
+using FileService.MongoDataAccess;
 using FileService.MongoDataAccess.Options;
+using FileService.Providers;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Minio;
 using MongoDB.Driver;
 
@@ -34,6 +38,24 @@ public static class DependencyInjection
             options.WithCredentials(minioOptions.AccessKey, minioOptions.SecretKey);
             options.WithSSL(minioOptions.WithSsl);
         });
+
+        services.AddScoped<IFileProvider, MinioProvider>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddHangfire(
+        this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddScoped<HangfireContext>(_ =>
+            new HangfireContext(configuration.GetConnectionString("HangfireConnection")!));
+        
+        services.AddHangfire(config => config
+            .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+            .UseSimpleAssemblyNameTypeSerializer()
+            .UseRecommendedSerializerSettings()
+            .UsePostgreSqlStorage(c =>
+                c.UseNpgsqlConnection(configuration.GetConnectionString("HangfireConnection"))));
 
         return services;
     }
