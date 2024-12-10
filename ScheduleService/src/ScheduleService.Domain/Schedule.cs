@@ -33,17 +33,17 @@ public abstract class Schedule : DomainEntity<ScheduleId>
         _plannedEvents = [];
     }
 
-    protected List<EventInstance> _plannedEvents { get; set; }
+    private List<EventInstance> _plannedEvents = [];
 
-    public Title Title { get; protected set; }
+    public Title Title { get; private set; }
 
-    public Description Description { get; protected set; }
+    public Description Description { get; private set; }
 
-    public bool IsAutomaticRenewal { get; set; }
+    public bool IsAutomaticRenewal { get; private set; }
 
-    public DateTime StartDate { get; }
+    public DateTime StartDate { get; protected set; }
 
-    public DateTime EndDate { get; set; }
+    public DateTime EndDate { get; protected set; }
 
     protected TimeSpan EventDuration { get; set; }
     public IReadOnlyList<EventInstance> PlannedEvents => _plannedEvents;
@@ -55,7 +55,7 @@ public abstract class Schedule : DomainEntity<ScheduleId>
 
         if (eventInstance.Start < StartDate && eventInstance.Start > EndDate)
             return Errors.Schedule.InvalidPlannedEvent();
-        
+
         _plannedEvents.Add(eventInstance);
 
         return UnitResult.Success<Error>();
@@ -100,7 +100,11 @@ public abstract class Schedule : DomainEntity<ScheduleId>
         return UnitResult.Success<Error>();
     }
 
-    public void ChangeDurationForAllEvents(TimeSpan newTime) => _plannedEvents.ForEach(e => e.SetDuration(newTime));
+    public void ChangeDurationForAllEvents(TimeSpan newTime)
+    {
+        foreach (var e in _plannedEvents)
+            e.SetDuration(newTime);
+    }
 
     public void UpdateSchedule(Title title, Description description) => (Title, Description) = (title, description);
 }
