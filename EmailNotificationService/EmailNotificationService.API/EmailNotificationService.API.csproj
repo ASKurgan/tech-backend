@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EmailNotification.Contacts\EmailNotification.Contacts.csproj" />
+    <ProjectReference Include="..\EmailNotification.Contracts\EmailNotification.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

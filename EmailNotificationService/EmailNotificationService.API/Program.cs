@@ -1,4 +1,4 @@
-using EmailNotificationService.API;
+﻿using EmailNotificationService.API;
 using EmailNotificationService.API.Consumers;
 using Serilog.Events;
 using Serilog;
@@ -9,7 +9,7 @@ using EmailNotificationService.API.Requests;
 using EmailNotificationService.API.Services;
 using EmailNotificationService.API.Features;
 using MassTransit;
-using Response = EmailNotificationService.API.Common.Response;
+using EmailNotificationService.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,26 +77,16 @@ app.MapPost("send", async (MailData mailData, MailSenderService mailSender) =>
 {
     var result = await mailSender.Send(mailData);
 
-    var response = result.IsSuccess
-        ? new Response
-        {
-            StatusCode = 200,
-            Success = true
-        }
-        : new Response
-        {
-            StatusCode = 400,
-            Success = false,
-            Message = result.Error
-        };
-
-    return response;
+    return result.ToResponse();
 });
 
 app.MapPost("confirm-email", async (MailConfirmationRequest request, SendEmailConfirmation service) =>
 {
     var result = await service.Execute(request);
+
+    return result.ToResponse();
 });
+
 
 app.UseHttpsRedirection();
 
