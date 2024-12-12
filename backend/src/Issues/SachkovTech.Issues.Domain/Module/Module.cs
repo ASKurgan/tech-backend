@@ -6,19 +6,20 @@ using SachkovTech.SharedKernel.ValueObjects.Ids;
 
 namespace SachkovTech.Issues.Domain.Module;
 
-public class Module : SoftDeletableEntity<ModuleId>
+public class Module : Entity<ModuleId>, ISoftDeletable
 {
     // ef core
     // ReSharper disable once UnusedMember.Local
-    private Module(ModuleId id) : base(id)
-    {
-    }
-
     public Module(ModuleId moduleId, Title title, Description description)
         : base(moduleId)
     {
         Title = title;
         Description = description;
+    }
+
+    private Module(ModuleId id)
+        : base(id)
+    {
     }
 
     public Title Title { get; private set; } = default!;
@@ -27,6 +28,22 @@ public class Module : SoftDeletableEntity<ModuleId>
 
     public IReadOnlyList<IssuePosition> IssuesPosition = [];
     public IReadOnlyList<LessonPosition> LessonsPosition = [];
+
+    public bool IsDeleted { get; private set; }
+
+    public DateTime? DeletionDate { get; private set; }
+
+    public void SoftDelete()
+    {
+        IsDeleted = true;
+        DeletionDate = DateTime.UtcNow;
+    }
+
+    public void Restore()
+    {
+        IsDeleted = false;
+        DeletionDate = null;
+    }
 
     public void UpdateIssuesPosition(IEnumerable<IssuePosition> issuesPosition)
     {
@@ -52,7 +69,7 @@ public class Module : SoftDeletableEntity<ModuleId>
 
         var newIssuesPosition = new List<IssuePosition>(IssuesPosition)
         {
-            newIssuePosition
+            newIssuePosition,
         };
 
         UpdateIssuesPosition(newIssuesPosition);
@@ -66,7 +83,7 @@ public class Module : SoftDeletableEntity<ModuleId>
 
         var newLessonsPosition = new List<LessonPosition>(LessonsPosition)
         {
-            newLessonPosition
+            newLessonPosition,
         };
 
         UpdateLessonsPosition(newLessonsPosition);
@@ -104,10 +121,10 @@ public class Module : SoftDeletableEntity<ModuleId>
             newPosition.Value);
         if (rearrangedLessonsPositionResult.IsFailure)
             return rearrangedLessonsPositionResult.Error;
-        
+
         if (rearrangedLessonsPositionResult.Value.Count != LessonsPosition.Count)
             return Errors.General.Failure();
-        
+
         UpdateLessonsPosition(rearrangedLessonsPositionResult.Value);
         return Result.Success<Error>();
     }
@@ -171,7 +188,7 @@ public class Module : SoftDeletableEntity<ModuleId>
         var updateListResult = DeleteItemFromIPositionableCollection(copiedList, lessonPosition);
         if (updateListResult.IsFailure)
             return updateListResult.Error;
-        
+
         if (updateListResult.Value.Count != (LessonsPosition.Count - 1))
             return Errors.General.Failure();
 
@@ -189,7 +206,7 @@ public class Module : SoftDeletableEntity<ModuleId>
         var updateListResult = DeleteItemFromIPositionableCollection(copiedList, issuePosition);
         if (updateListResult.IsFailure)
             return updateListResult.Error;
-        
+
         if (updateListResult.Value.Count != (IssuesPosition.Count - 1))
             return Errors.General.Failure();
 

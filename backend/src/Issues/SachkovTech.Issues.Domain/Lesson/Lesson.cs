@@ -6,20 +6,35 @@ using SachkovTech.SharedKernel.ValueObjects.Ids;
 
 namespace SachkovTech.Issues.Domain.Lesson;
 
-public class Lesson : SoftDeletableEntity<LessonId>
+public class Lesson : Entity<LessonId>, ISoftDeletable
 {
-    //EF CORE
+    // EF CORE
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    private Lesson(LessonId id) : base(id) { }
+    private Lesson(LessonId id)
+        : base(id)
+    {
+    }
+
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public Guid ModuleId { get; private set; }
+
     public Title Title { get; private set; }
+
     public Description Description { get; private set; }
+
     public Experience Experience { get; private set; }
+
     public Guid PreviewId { get; private set; }
+
     public Guid[] Tags { get; private set; }
+
     public Guid[] Issues { get; private set; }
+
     public Video Video { get; private set; }
+
+    public bool IsDeleted { get; private set; }
+
+    public DateTime? DeletionDate { get; private set; }
 
     public Lesson(
         LessonId id,
@@ -30,7 +45,8 @@ public class Lesson : SoftDeletableEntity<LessonId>
         Video video,
         Guid previewId,
         Guid[] tags,
-        Guid[] issues) : base(id)
+        Guid[] issues)
+        : base(id)
     {
         ModuleId = moduleId;
         Title = title;
@@ -68,6 +84,18 @@ public class Lesson : SoftDeletableEntity<LessonId>
         PreviewId = fileId;
         Tags = tags;
         Issues = issues;
+    }
+
+    public void SoftDelete()
+    {
+        IsDeleted = true;
+        DeletionDate = DateTime.UtcNow;
+    }
+
+    public void Restore()
+    {
+        IsDeleted = false;
+        DeletionDate = null;
     }
 
     /// <summary>
