@@ -1,10 +1,7 @@
-﻿using System.Text.Json;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.Memory;
 using SachkovTech.Accounts.Application.Database;
-using SachkovTech.Accounts.Application.DataModels;
 using SachkovTech.Accounts.Contracts.Responses;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Caching;
