@@ -13,6 +13,7 @@ using SachkovTech.Accounts.Application;
 using SachkovTech.Accounts.Infrastructure;
 using SachkovTech.Accounts.Presentation;
 using SachkovTech.Core.Abstractions;
+using SachkovTech.Core.Caching;
 using SachkovTech.Core.Options;
 using SachkovTech.Framework;
 using SachkovTech.Framework.Authorization;
@@ -21,7 +22,6 @@ using SachkovTech.Issues.Application;
 using SachkovTech.Issues.Infrastructure;
 using Serilog;
 using Serilog.Events;
-using StackExchange.Redis;
 
 namespace SachkovTech.Web;
 
@@ -39,7 +39,8 @@ public static class DependencyInjection
             .AddAccountsModule(configuration)
             .AddIssuesModule(configuration)
             .AddAuthServices(configuration)
-            .AddAppMetrics(configuration);
+            .AddAppMetrics(configuration)
+            .AddDistributedCache(configuration);
     }
 
     private static IServiceCollection AddDistributedCache(
@@ -52,6 +53,8 @@ public static class DependencyInjection
 
             options.Configuration = connection;
         });
+
+        services.AddSingleton<ICacheService, DistributedCacheService>();
 
         return services;
     }
