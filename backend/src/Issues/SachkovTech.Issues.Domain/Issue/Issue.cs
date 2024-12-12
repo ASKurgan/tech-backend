@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using SachkovTech.Issues.Domain.Issue.Events;
 using SachkovTech.Issues.Domain.Issue.ValueObjects;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
@@ -6,9 +7,15 @@ using SachkovTech.SharedKernel.ValueObjects.Ids;
 
 namespace SachkovTech.Issues.Domain.Issue;
 
-public class Issue : SoftDeletableEntity<IssueId>
+public class Issue : DomainEntity<IssueId>, ISoftDeletable
 {
     private List<FileId> _files = [];
+
+    // ef core
+    private Issue(IssueId id)
+        : base(id)
+    {
+    }
 
     public Issue(
         IssueId id,
@@ -26,12 +33,8 @@ public class Issue : SoftDeletableEntity<IssueId>
         ModuleId = moduleId;
         Experience = experience;
         _files = files?.ToList() ?? [];
-    }
 
-    // ef core
-    private Issue(IssueId id)
-        : base(id)
-    {
+        AddDomainEvent(new IssueCreatedEvent(id, moduleId));
     }
 
     public Experience Experience { get; private set; } = default!;
@@ -45,6 +48,22 @@ public class Issue : SoftDeletableEntity<IssueId>
     public ModuleId ModuleId { get; private set; } = null!;
 
     public IReadOnlyList<FileId> Files => _files;
+
+    public bool IsDeleted { get; private set; }
+
+    public DateTime? DeletionDate { get; private set; }
+
+    public void SoftDelete()
+    {
+        IsDeleted = true;
+        DeletionDate = DateTime.UtcNow;
+    }
+
+    public void Restore()
+    {
+        IsDeleted = false;
+        DeletionDate = null;
+    }
 
     public void UpdateFiles(IEnumerable<FileId> files)
     {

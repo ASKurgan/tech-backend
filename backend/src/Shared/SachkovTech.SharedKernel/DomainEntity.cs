@@ -2,9 +2,11 @@
 
 namespace SachkovTech.SharedKernel;
 
-public abstract class DomainEntity<TId> : Entity<TId> where TId : IComparable<TId>
+public abstract class DomainEntity<TId> : Entity<TId>
+    where TId : IComparable<TId>
 {
-    protected DomainEntity(TId id) : base(id)
+    protected DomainEntity(TId id)
+        : base(id)
     {
     }
 
@@ -12,7 +14,8 @@ public abstract class DomainEntity<TId> : Entity<TId> where TId : IComparable<TI
 
     public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
+    public void ClearDomainEvents() => _domainEvents.Clear();
+
     protected void AddDomainEvent(IDomainEvent domainEvent) => _domainEvents.Add(domainEvent);
 
-    public void ClearDomainEvents() => _domainEvents.Clear();
 }

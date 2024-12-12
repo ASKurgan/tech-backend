@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
@@ -20,6 +21,7 @@ public class CreateIssueHandler : ICommandHandler<Guid, CreateIssueCommand>
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<CreateIssueCommand> _validator;
     private readonly ILogger<CreateIssueHandler> _logger;
+    private readonly IPublisher _publisher;
 
     public CreateIssueHandler(
         IIssuesRepository issuesRepository,
@@ -28,7 +30,8 @@ public class CreateIssueHandler : ICommandHandler<Guid, CreateIssueCommand>
         [FromKeyedServices(SharedKernel.Modules.Issues)]
         IUnitOfWork unitOfWork,
         IValidator<CreateIssueCommand> validator,
-        ILogger<CreateIssueHandler> logger)
+        ILogger<CreateIssueHandler> logger,
+        IPublisher publisher)
     {
         _issuesRepository = issuesRepository;
         _lessonsRepository = lessonsRepository;
@@ -36,6 +39,7 @@ public class CreateIssueHandler : ICommandHandler<Guid, CreateIssueCommand>
         _unitOfWork = unitOfWork;
         _validator = validator;
         _logger = logger;
+        _publisher = publisher;
     }
 
     public async Task<Result<Guid, ErrorList>> Handle(
@@ -64,9 +68,11 @@ public class CreateIssueHandler : ICommandHandler<Guid, CreateIssueCommand>
 
         var module = moduleResult.Value;
         var issue = InitIssue(module.Id, lessonId, command);
+
+
         await _issuesRepository.Add(issue, cancellationToken);
 
-        module.AddIssue(issue.Id);
+        await _publisher.PublishDomainEvents(issue, cancellationToken);
 
         await _unitOfWork.SaveChanges(cancellationToken);
 

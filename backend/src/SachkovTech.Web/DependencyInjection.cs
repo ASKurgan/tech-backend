@@ -188,7 +188,7 @@ public static class DependencyInjection
                     In = ParameterLocation.Header,
                     Description = "Please insert JWT with Bearer into field",
                     Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
+                    Type = SecuritySchemeType.ApiKey,
                 });
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
@@ -197,11 +197,11 @@ public static class DependencyInjection
                     {
                         Reference = new OpenApiReference
                         {
-                            Type = ReferenceType.SecurityScheme, Id = "Bearer"
-                        }
+                            Type = ReferenceType.SecurityScheme, Id = "Bearer",
+                        },
                     },
                     []
-                }
+                },
             });
         });
         return services;

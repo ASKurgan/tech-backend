@@ -10,7 +10,8 @@ public class AddIssueTests : IssueTestsBase
 {
     private readonly ICommandHandler<Guid, CreateIssueCommand> sut;
 
-    public AddIssueTests(IntegrationTestsWebFactory factory) : base(factory)
+    public AddIssueTests(IntegrationTestsWebFactory factory)
+        : base(factory)
     {
         sut = Scope.ServiceProvider.GetRequiredService<ICommandHandler<Guid, CreateIssueCommand>>();
     }
@@ -30,7 +31,7 @@ public class AddIssueTests : IssueTestsBase
         // act
         var result = await sut.Handle(command, cancellationToken);
 
-        //assert
+        // assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
 
@@ -39,6 +40,11 @@ public class AddIssueTests : IssueTestsBase
 
         issue.Should().NotBeNull();
         issue?.ModuleId.Should().Be(moduleId);
+
+        var module = await ReadDbContext.Modules
+            .FirstOrDefaultAsync(m => m.Id == moduleId, cancellationToken);
+
+        module!.IssuesPosition.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -58,7 +64,7 @@ public class AddIssueTests : IssueTestsBase
         // act
         var result = await sut.Handle(command, cancellationToken);
 
-        //assert
+        // assert
         var issue = await ReadDbContext.Issues
             .FirstOrDefaultAsync(cancellationToken);
 
