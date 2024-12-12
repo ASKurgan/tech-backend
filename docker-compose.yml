@@ -1,21 +1,69 @@
 services:
-  # web:
-  #   build:
-  #     context: ./backend
-  #     dockerfile: ./src/SachkovTech.Web/Dockerfile
-  #     args:
-  #       NUGET_USERNAME: ${NUGET_USERNAME}
-  #       NUGET_PASSWORD: ${NUGET_PASSWORD}
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     - postgres
-  #     - minio
-  #     - seq
-  #   restart: always
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Docker
+  issues:
+    build:
+      context: ./backend
+      dockerfile: ./src/SachkovTech.Web/Dockerfile
+      args:
+        NUGET_USERNAME: ${NUGET_USERNAME}
+        NUGET_PASSWORD: ${NUGET_PASSWORD}
+    ports:
+      - "58080:8080"
+    depends_on:
+      - postgres
+      - minio
+      - seq
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
 
+  files:
+    build:
+      context: ./FileService
+      dockerfile: ./src/FileService/Dockerfile
+      args:
+        NUGET_USERNAME: ${NUGET_USERNAME}
+        NUGET_PASSWORD: ${NUGET_PASSWORD}
+    ports:
+      - "58081:8080"
+    depends_on:
+      - minio
+      - postgres
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+  
+  emails:
+    build:
+      context: ./EmailNotificationService
+      dockerfile: ./EmailNotificationService.API/Dockerfile
+      args:
+        NUGET_USERNAME: ${NUGET_USERNAME}
+        NUGET_PASSWORD: ${NUGET_PASSWORD}
+    ports:
+      - "58082:8080"
+    depends_on:
+      - seq
+      - rabbitmq
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+
+  notifications:
+    build:
+      context: ./NotificationService
+      dockerfile: ./src/NotificationService/Dockerfile
+      args:
+        NUGET_USERNAME: ${NUGET_USERNAME}
+        NUGET_PASSWORD: ${NUGET_PASSWORD}
+    ports:
+      - "58083:8080"
+    depends_on:
+      - issues
+      - rabbitmq
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+  
   postgres:
     container_name: postgres
     image: postgres
@@ -101,7 +149,7 @@ services:
     depends_on:
       - elasticsearch
     environment:
-      - ELASTICSEARCH_URL=http://localhost:9200
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
     restart: always
 
   prometheus:
@@ -128,6 +176,16 @@ services:
     depends_on:
       - prometheus
     restart: always
+    
+  seq:
+    image: datalust/seq:latest
+    container_name: seq-logs
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5341:5341
+      - 8081:80
   
   redis:
     image: redis:latest
@@ -138,15 +196,18 @@ services:
       - redis_data:/data
     restart: always
 
-  # nginx:
-  #   image: nginx:latest
-  #   ports:
-  #     - "80:80"
-  #   volumes:
-  #     - ./nginx.conf:/etc/nginx/conf.d/default.conf
-  #   depends_on:
-  #     - web
-  #   restart: always
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf # Mount the nginx.conf file
+    depends_on:
+      - issues
+      - files
+      - emails
+      - notifications
+    restart: always
 
 volumes:
   pgadmin:
@@ -156,5 +217,4 @@ volumes:
   elasticsearch-data:
   prometheus_data:
   grafana_data:
-  redis_data:
   # rabbitmq_data:

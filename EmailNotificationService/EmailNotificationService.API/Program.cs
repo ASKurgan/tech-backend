@@ -13,6 +13,10 @@ using EmailNotificationService.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
 var services = builder.Services;
 var config = builder.Configuration;
 
@@ -67,7 +71,7 @@ app.UseStaticFiles();
 app.UseMiddleware<ExceptionHandler>();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))
 {
     app.UseSwagger();
     app.UseSwaggerUI();

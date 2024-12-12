@@ -7,8 +7,13 @@ using FileService.MongoDataAccess;
 using MongoDB.Driver;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
+const string dockerEnv = "Docker";
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -45,7 +50,7 @@ builder.Services.AddSingleton<IAmazonS3>(_ =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment(dockerEnv))
 {
     app.UseSwagger();
     app.UseSwaggerUI();

@@ -8,7 +8,7 @@ public static class WebApplicationExtensions
 {
     public static async Task Configure(this WebApplication app)
     {
-        if (app.Environment.IsDevelopment())
+        if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))
         {
             await app.Services.RunMigrations();
             await app.Services.RunAutoSeeding();
@@ -23,6 +23,11 @@ public static class WebApplicationExtensions
         app.UseScopeDataMiddleware();
         app.UseAuthorization();
         app.MapControllers();
+
+        if (app.Environment.IsEnvironment("Docker"))
+        {
+            app.MapGet("/", () => "Hello World!");
+        }
     }
 
     private static void ConfigureCors(this WebApplication app)
