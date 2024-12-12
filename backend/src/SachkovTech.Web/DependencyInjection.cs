@@ -13,6 +13,7 @@ using SachkovTech.Accounts.Application;
 using SachkovTech.Accounts.Infrastructure;
 using SachkovTech.Accounts.Presentation;
 using SachkovTech.Core.Abstractions;
+using SachkovTech.Core.Caching;
 using SachkovTech.Core.Options;
 using SachkovTech.Framework;
 using SachkovTech.Framework.Authorization;
@@ -39,6 +40,22 @@ public static class DependencyInjection
             .AddIssuesModule(configuration)
             .AddAuthServices(configuration)
             .AddAppMetrics(configuration);
+    }
+
+    private static IServiceCollection AddDistributedCache(
+        this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddStackExchangeRedisCache(options =>
+        {
+            string connection = configuration.GetConnectionString("Redis")
+                                ?? throw new ArgumentNullException(nameof(connection));
+
+            options.Configuration = connection;
+        });
+
+        services.AddSingleton<ICacheService, DistributedCacheService>();
+
+        return services;
     }
 
     private static IServiceCollection AddAccountsModule(

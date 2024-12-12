@@ -19,7 +19,4 @@ if (app.Environment.IsDevelopment())
 
 app.Run();
 
-namespace SachkovTech.Web
-{
-    public partial class Program;
-}
+public partial class Program;
