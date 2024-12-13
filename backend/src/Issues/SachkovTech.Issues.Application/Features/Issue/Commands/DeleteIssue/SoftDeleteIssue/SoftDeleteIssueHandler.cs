@@ -42,7 +42,7 @@ public class SoftDeleteIssueHandler : ICommandHandler<Guid, DeleteIssueCommand>
             return issueResult.Error.ToErrorList();
 
         issueResult.Value.SoftDelete();
-        
+
         await _unitOfWork.SaveChanges(cancellationToken);
 
         _logger.LogInformation(

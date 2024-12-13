@@ -9,7 +9,8 @@ public class ForceDeleteIssueTests : IssueTestsBase
 {
     private readonly ForceDeleteIssueHandler sut;
 
-    public ForceDeleteIssueTests(IntegrationTestsWebFactory factory) : base(factory)
+    public ForceDeleteIssueTests(IntegrationTestsWebFactory factory)
+        : base(factory)
     {
         sut = Scope.ServiceProvider.GetRequiredService<ForceDeleteIssueHandler>();
     }
@@ -29,7 +30,7 @@ public class ForceDeleteIssueTests : IssueTestsBase
         // act
         var result = await sut.Handle(command, cancellationToken);
 
-        //assert
+        // assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
 
@@ -38,5 +39,11 @@ public class ForceDeleteIssueTests : IssueTestsBase
             .FirstOrDefaultAsync(l => l.Id == result.Value, cancellationToken);
 
         issue.Should().BeNull();
+
+        var module = await ReadDbContext.Modules
+            .FirstOrDefaultAsync(m => m.Id == moduleId, cancellationToken);
+
+        module.Should().NotBeNull();
+        module!.IssuesPosition.Should().BeEmpty();
     }
 }

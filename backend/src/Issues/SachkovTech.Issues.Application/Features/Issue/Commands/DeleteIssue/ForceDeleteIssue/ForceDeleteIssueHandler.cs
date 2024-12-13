@@ -1,10 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
 using SachkovTech.Issues.Application.Interfaces;
+using SachkovTech.Issues.Domain.Issue.Events;
 using SachkovTech.SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Issue.Commands.DeleteIssue.ForceDeleteIssue;
@@ -12,24 +14,24 @@ namespace SachkovTech.Issues.Application.Features.Issue.Commands.DeleteIssue.For
 public class ForceDeleteIssueHandler : ICommandHandler<Guid, DeleteIssueCommand>
 {
     private readonly IIssuesRepository _issuesRepository;
-    private readonly IModulesRepository _modulesRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<DeleteIssueCommand> _validator;
     private readonly ILogger<ForceDeleteIssueHandler> _logger;
+    private readonly IPublisher _publisher;
 
     public ForceDeleteIssueHandler(
         IIssuesRepository issuesRepository,
-        IModulesRepository modulesRepository,
         [FromKeyedServices(SharedKernel.Modules.Issues)]
         IUnitOfWork unitOfWork,
         IValidator<DeleteIssueCommand> validator,
-        ILogger<ForceDeleteIssueHandler> logger)
+        ILogger<ForceDeleteIssueHandler> logger,
+        IPublisher publisher)
     {
         _issuesRepository = issuesRepository;
-        _modulesRepository = modulesRepository;
         _unitOfWork = unitOfWork;
         _validator = validator;
         _logger = logger;
+        _publisher = publisher;
     }
 
     public async Task<Result<Guid, ErrorList>> Handle(
@@ -52,13 +54,9 @@ public class ForceDeleteIssueHandler : ICommandHandler<Guid, DeleteIssueCommand>
 
         var result = _issuesRepository.Delete(issueResult.Value);
 
-        var moduleIssuesResult = await _modulesRepository.GetById(issueResult.Value.ModuleId, cancellationToken);
-        if (moduleIssuesResult.IsFailure)
-        {
-            return moduleIssuesResult.Error.ToErrorList();
-        }
+        var deletedEvent = new IssueDeletedEvent(issueResult.Value.ModuleId, command.IssueId);
 
-        moduleIssuesResult.Value.DeleteIssuePosition(command.IssueId);
+        await _publisher.Publish(deletedEvent, cancellationToken);
 
         await _unitOfWork.SaveChanges(cancellationToken);
 
