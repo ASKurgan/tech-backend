@@ -7,6 +7,7 @@ using SachkovTech.Issues.Domain.IssuesReviews.ValueObjects;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
+using SharedKernel;
 
 namespace SachkovTech.IssueReviews.UnitTests.Domain;
 

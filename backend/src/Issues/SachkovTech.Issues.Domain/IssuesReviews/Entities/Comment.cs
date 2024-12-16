@@ -2,6 +2,7 @@
 using SachkovTech.Issues.Domain.IssuesReviews.ValueObjects;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
+using SharedKernel;
 
 namespace SachkovTech.Issues.Domain.IssuesReviews.Entities;
 

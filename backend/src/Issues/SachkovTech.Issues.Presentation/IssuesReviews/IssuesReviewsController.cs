@@ -11,6 +11,7 @@ using SachkovTech.Issues.Application.Features.IssuesReviews.Commands.StartReview
 using SachkovTech.Issues.Application.Features.IssuesReviews.Queries.GetCommentsWithPagination;
 using SachkovTech.Issues.Contracts.IssueReview;
 using SachkovTech.SharedKernel;
+using SharedKernel;
 
 namespace SachkovTech.Issues.Presentation.IssuesReviews;
 
@@ -18,7 +19,7 @@ public class IssuesReviewsController : ApplicationController
 {
     [Permission(Permissions.IssuesReview.READ_REVIEW_ISSUE)]
     [Permission(Permissions.IssuesReview.COMMENT_REVIEW_ISSUE)]
-    [HttpGet("{issueReviewId:guid}/comments")]
+    [HttpGet("comments")]
     public async Task<ActionResult> GetByIssueReviewId(
         [FromServices] GetCommentsWithPaginationHandler handler,
         [FromRoute] Guid issueReviewId,
@@ -32,20 +33,21 @@ public class IssuesReviewsController : ApplicationController
     }
 
     [Permission(Permissions.IssuesReview.COMMENT_REVIEW_ISSUE)]
-    [HttpPost("{issueReviewId:guid}/comment")]
+    [HttpPost("comment")]
     public async Task<ActionResult> Comment(
         [FromServices] AddCommentHandler handler,
         [FromRoute] Guid issueReviewId,
         [FromBody] AddCommentRequest request,
         CancellationToken cancellationToken)
     {
-        var userId = HttpContext.User.FindFirstValue(CustomClaims.Id);
+        string? userId = HttpContext.User.FindFirstValue(CustomClaims.Id);
 
         if (userId == null)
             return Errors.User.InvalidCredentials().ToResponse();
 
         var result = await handler.Handle(
-            new AddCommentCommand(issueReviewId,
+            new AddCommentCommand(
+                issueReviewId,
                 Guid.Parse(userId),
                 request.Message), cancellationToken);
 
@@ -56,7 +58,7 @@ public class IssuesReviewsController : ApplicationController
     }
 
     [Permission(Permissions.IssuesReview.CREATE_REVIEW_ISSUE)]
-    [HttpPut("{issueReviewId:guid}/start-review")]
+    [HttpPut("start-review")]
     public async Task<ActionResult> StartReview(
         [FromServices] StartReviewHandler handler,
         [FromRoute] Guid issueReviewId,
@@ -68,7 +70,8 @@ public class IssuesReviewsController : ApplicationController
             return Errors.User.InvalidCredentials().ToResponse();
 
         var result = await handler.Handle(
-            new StartReviewCommand(issueReviewId,
+            new StartReviewCommand(
+                issueReviewId,
                 Guid.Parse(userId)), cancellationToken);
 
         if (result.IsFailure)
@@ -78,7 +81,7 @@ public class IssuesReviewsController : ApplicationController
     }
 
     [Permission(Permissions.IssuesReview.UPDATE_REVIEW_ISSUE)]
-    [HttpPut("{issueReviewId:guid}/revision")]
+    [HttpPut("revision")]
     public async Task<ActionResult> SendForRevision(
         [FromServices] SendForRevisionHandler handler,
         [FromRoute] Guid issueReviewId,
@@ -99,13 +102,13 @@ public class IssuesReviewsController : ApplicationController
     }
 
     [Permission(Permissions.IssuesReview.UPDATE_REVIEW_ISSUE)]
-    [HttpPut("{issueReviewId:guid}/approval")]
+    [HttpPut("approval")]
     public async Task<ActionResult> Approve(
         [FromServices] ApproveIssueReviewHandler handler,
         [FromRoute] Guid issueReviewId,
         CancellationToken cancellationToken)
     {
-        var userId = HttpContext.User.FindFirstValue(CustomClaims.Id);
+        string? userId = HttpContext.User.FindFirstValue(CustomClaims.Id);
 
         if (userId == null)
             return Errors.User.InvalidCredentials().ToResponse();
@@ -113,27 +116,26 @@ public class IssuesReviewsController : ApplicationController
         var result = await handler.Handle(
             new ApproveIssueReviewCommand(issueReviewId, Guid.Parse(userId)), cancellationToken);
 
-        if (result.IsFailure)
-            return result.Error.ToResponse();
+        return result.IsFailure ? result.Error.ToResponse() : Ok(result.Value);
 
-        return Ok(result.Value);
     }
 
     [Permission(Permissions.IssuesReview.COMMENT_REVIEW_ISSUE)]
-    [HttpDelete("{issueReviewId:guid}/comment/{commentId:guid}")]
+    [HttpDelete("comment/{commentId:guid}")]
     public async Task<ActionResult> DeleteComment(
         [FromServices] DeleteCommentHandler handler,
         [FromRoute] Guid issueReviewId,
         [FromRoute] Guid commentId,
         CancellationToken cancellationToken)
     {
-        var userId = HttpContext.User.FindFirstValue(CustomClaims.Id);
+        string? userId = HttpContext.User.FindFirstValue(CustomClaims.Id);
 
         if (userId == null)
             return Errors.User.InvalidCredentials().ToResponse();
 
         var result = await handler.Handle(
-            new DeleteCommentCommand(issueReviewId,
+            new DeleteCommentCommand(
+                issueReviewId,
                 Guid.Parse(userId),
                 commentId), cancellationToken);
 

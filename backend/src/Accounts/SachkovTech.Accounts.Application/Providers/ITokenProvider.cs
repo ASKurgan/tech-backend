@@ -3,6 +3,7 @@ using CSharpFunctionalExtensions;
 using SachkovTech.Accounts.Application.Models;
 using SachkovTech.Accounts.Domain;
 using SachkovTech.SharedKernel;
+using SharedKernel;
 
 namespace SachkovTech.Accounts.Application.Providers;
 

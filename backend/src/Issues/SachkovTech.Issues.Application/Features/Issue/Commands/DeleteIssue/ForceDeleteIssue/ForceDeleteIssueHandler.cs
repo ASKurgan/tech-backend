@@ -8,6 +8,7 @@ using SachkovTech.Core.Extensions;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Domain.Issue.Events;
 using SachkovTech.SharedKernel;
+using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Issue.Commands.DeleteIssue.ForceDeleteIssue;
 

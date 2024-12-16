@@ -2,6 +2,7 @@ using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
+using SharedKernel;
 
 namespace SachkovTech.Accounts.Domain;
 

@@ -2,8 +2,7 @@ using System.Security.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using SachkovTech.Core.Models;
-using SachkovTech.SharedKernel;
+using SharedKernel;
 
 namespace SachkovTech.Framework.Middlewares;
 

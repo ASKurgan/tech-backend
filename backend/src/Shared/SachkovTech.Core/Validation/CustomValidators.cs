@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
-using SachkovTech.SharedKernel;
+using SharedKernel;
 
 namespace SachkovTech.Core.Validation;
 
@@ -25,34 +25,5 @@ public static class CustomValidators
         this IRuleBuilderOptions<T, TProperty> rule, Error error)
     {
         return rule.WithMessage(error.Serialize());
-    }
-    
-    public static IRuleBuilderOptionsConditions<T, string> MustBeProperExtension<T>(
-        this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder.Custom((fn, context) =>
-        {
-            var result = Constants.Files.FORBIDDEN_FILE_EXTENSIONS
-                .FirstOrDefault(ext => ext == Path.GetExtension(fn)) is null;
-
-            if (result)
-                return;
-            
-            context.AddFailure(Errors.Files.InvalidExtension().Serialize());
-        });
-    }
-    
-    public static IRuleBuilderOptionsConditions<T, Stream> MustBeProperSize<T>(
-        this IRuleBuilder<T, Stream> ruleBuilder)
-    {
-        return ruleBuilder.Custom((fn, context) =>
-        {
-            var result = fn.Length < Constants.Files.MAX_FILE_SIZE;
-
-            if (result)
-                return;
-            
-            context.AddFailure(Errors.Files.InvalidSize().Serialize());
-        });
     }
 }

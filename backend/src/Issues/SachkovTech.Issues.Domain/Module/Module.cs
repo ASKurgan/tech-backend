@@ -3,6 +3,7 @@ using SachkovTech.Issues.Domain.Module.ValueObjects;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
+using SharedKernel;
 
 namespace SachkovTech.Issues.Domain.Module;
 

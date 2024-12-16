@@ -7,6 +7,7 @@ using SachkovTech.Accounts.Application.Managers;
 using SachkovTech.Accounts.Domain;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.SharedKernel;
+using SharedKernel;
 
 namespace SachkovTech.Accounts.Application.Commands.EnrollParticipant;
 

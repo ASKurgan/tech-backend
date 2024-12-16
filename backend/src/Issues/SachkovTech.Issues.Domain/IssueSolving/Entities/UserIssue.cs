@@ -2,24 +2,20 @@ using CSharpFunctionalExtensions;
 using SachkovTech.Issues.Domain.IssueSolving.DomainEvents;
 using SachkovTech.Issues.Domain.IssueSolving.Enums;
 using SachkovTech.Issues.Domain.IssueSolving.ValueObjects;
-using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
+using SharedKernel;
 
 namespace SachkovTech.Issues.Domain.IssueSolving.Entities;
 
 public class UserIssue : DomainEntity<UserIssueId>
 {
-    //ef core
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    private UserIssue(UserIssueId id) : base(id){}
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    
     public UserIssue(
         UserIssueId id,
         Guid userId,
         IssueId issueId,
-        ModuleId moduleId) : base(id)
+        ModuleId moduleId)
+        : base(id)
     {
         UserId = userId;
         IssueId = issueId;
@@ -28,11 +24,17 @@ public class UserIssue : DomainEntity<UserIssueId>
         TakeOnWork();
     }
 
+    // ef core
+    private UserIssue(UserIssueId id)
+        : base(id)
+    {
+    }
+
     public Guid UserId { get; private set; }
 
-    public IssueId IssueId { get; private set; }
+    public IssueId IssueId { get; private set; } = null!;
 
-    public ModuleId ModuleId { get; private set; }
+    public ModuleId ModuleId { get; private set; } = null!;
 
     public IssueStatus Status { get; private set; }
 

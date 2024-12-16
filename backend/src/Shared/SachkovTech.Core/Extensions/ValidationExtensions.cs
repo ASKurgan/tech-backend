@@ -1,5 +1,5 @@
 using FluentValidation.Results;
-using SachkovTech.SharedKernel;
+using SharedKernel;
 
 namespace SachkovTech.Core.Extensions;
 

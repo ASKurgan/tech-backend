@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.SharedKernel;
+using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Modules.Queries.GetIssueByPosition;
 

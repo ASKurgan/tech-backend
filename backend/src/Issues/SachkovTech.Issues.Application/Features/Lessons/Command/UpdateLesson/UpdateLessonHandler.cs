@@ -8,6 +8,7 @@ using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Domain.Issue.ValueObjects;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
+using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Command.UpdateLesson;
 

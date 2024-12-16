@@ -4,6 +4,13 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+
+      <PackageId>Framework</PackageId>
+      <Version>1.0.1</Version>
+      <Authors>SachkovTech</Authors>
+      <Company>SachkovTech</Company>
+      <PackageDescription>Framework project</PackageDescription>
+      <RepositoryUrl>https://github.com/SachkovTech/sachkov-tech-backend</RepositoryUrl>
     </PropertyGroup>
     
     <ItemGroup>
@@ -11,13 +18,12 @@
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\..\Accounts\SachkovTech.Accounts.Contracts\SachkovTech.Accounts.Contracts.csproj" />
-      <ProjectReference Include="..\SachkovTech.Core\SachkovTech.Core.csproj" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
+      
     </ItemGroup>
     
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
-      
+      <ProjectReference Include="..\SachkovTech.Core\SachkovTech.Core.csproj" />
     </ItemGroup>
 
 </Project>

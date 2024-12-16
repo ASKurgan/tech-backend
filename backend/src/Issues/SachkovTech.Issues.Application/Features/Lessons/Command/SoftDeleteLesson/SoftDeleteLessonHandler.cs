@@ -5,6 +5,7 @@ using SachkovTech.Core.Abstractions;
 using SachkovTech.Issues.Application.Features.Lessons.Command.AddIssueToLesson;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.SharedKernel;
+using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Command.SoftDeleteLesson;
 

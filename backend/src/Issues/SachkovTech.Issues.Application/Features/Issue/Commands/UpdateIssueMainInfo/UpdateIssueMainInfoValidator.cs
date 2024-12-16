@@ -2,6 +2,7 @@ using FluentValidation;
 using SachkovTech.Core.Validation;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
+using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Issue.Commands.UpdateIssueMainInfo;
 

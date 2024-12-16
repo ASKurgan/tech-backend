@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Accounts.Application.Managers;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.SharedKernel;
+using SharedKernel;
 
 namespace SachkovTech.Accounts.Application.Commands.Logout;
 

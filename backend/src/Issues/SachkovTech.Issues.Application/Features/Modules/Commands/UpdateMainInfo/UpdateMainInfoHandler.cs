@@ -7,6 +7,7 @@ using SachkovTech.Core.Extensions;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
+using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Modules.Commands.UpdateMainInfo;
 

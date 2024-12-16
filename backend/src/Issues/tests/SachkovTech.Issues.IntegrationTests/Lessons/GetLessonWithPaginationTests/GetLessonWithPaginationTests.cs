@@ -12,6 +12,7 @@ using SachkovTech.Issues.Domain.Lesson;
 using SachkovTech.Issues.Infrastructure.DbContexts;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
+using SharedKernel;
 
 namespace SachkovTech.Issues.IntegrationTests.Lessons.GetLessonWithPaginationTests;
 

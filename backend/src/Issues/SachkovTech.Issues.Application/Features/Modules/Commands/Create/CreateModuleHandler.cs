@@ -9,6 +9,7 @@ using SachkovTech.Issues.Domain.Module;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
+using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Modules.Commands.Create;
 

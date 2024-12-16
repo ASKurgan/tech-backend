@@ -6,6 +6,7 @@ using SachkovTech.Accounts.Contracts.Responses;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Caching;
 using SachkovTech.SharedKernel;
+using SharedKernel;
 
 namespace SachkovTech.Accounts.Application.Queries.GetUserById;
 
@@ -15,7 +16,7 @@ public class GetUserByIdHandler : IQueryHandlerWithResult<UserResponse, GetUserB
     {
         SlidingExpiration = TimeSpan.FromMinutes(5),
     };
-
+    
     private readonly IAccountsReadDbContext _accountsReadDbContext;
     private readonly ICacheService _cache;
 
@@ -29,6 +30,8 @@ public class GetUserByIdHandler : IQueryHandlerWithResult<UserResponse, GetUserB
         GetUserByIdQuery query,
         CancellationToken cancellationToken = default)
     {
+
+        new TimeSpan();
         string key = "users_" + query.UserId;
 
         var userResponse = await _cache.GetOrSetAsync(

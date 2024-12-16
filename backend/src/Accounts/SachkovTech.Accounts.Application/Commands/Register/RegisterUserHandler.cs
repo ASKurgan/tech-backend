@@ -13,6 +13,7 @@ using SachkovTech.Accounts.Domain;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
 using SachkovTech.SharedKernel;
+using SharedKernel;
 
 namespace SachkovTech.Accounts.Application.Commands.Register;
 
