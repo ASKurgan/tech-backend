@@ -1,7 +1,7 @@
 namespace SachkovTech.Framework.Authorization;
 
 /// <summary>
-/// Доступные пермиссии, делятся по контекстам.
+/// Доступные пермиссии.
 /// </summary>
 public static class Permissions
 {
@@ -31,7 +31,6 @@ public static class Permissions
 
     public static class SolvingIssues
     {
-        //public const string ReadSolvingIssue = "solving.issues.read";
         public const string CREATE_SOLVING_ISSUE = "solving.issues.create";
         public const string UPDATE_SOLVING_ISSUE = "solving.issues.update";
     }
@@ -42,12 +41,6 @@ public static class Permissions
         public const string CREATE_REVIEW_ISSUE = "review.issues.create";
         public const string UPDATE_REVIEW_ISSUE = "review.issues.update";
         public const string COMMENT_REVIEW_ISSUE = "review.issues.comment";
-    }
-
-    public static class Files
-    {
-        //public const string ReadFile = "files.read";
-        public const string UPLOAD = "files.create";
     }
 
     public static class Accounts

@@ -11,6 +11,7 @@ using SachkovTech.Issues.Application.Features.Lessons.Command.StartUploadVideo;
 using SachkovTech.Issues.Application.Features.Lessons.Command.UpdateLesson;
 using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonById;
 using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonsWithPagination;
+using SachkovTech.Issues.Application.Requests;
 using SachkovTech.Issues.Contracts.Lesson;
 using SachkovTech.SharedKernel.ValueObjects;
 
@@ -69,7 +70,7 @@ public class LessonsController : ApplicationController
 
         return Ok(result.Value);
     }
-    
+
     [HttpPost]
     [Permission(Permissions.Lessons.CREATE_LESSON)]
     public async Task<IActionResult> CreateLesson(
@@ -156,7 +157,7 @@ public class LessonsController : ApplicationController
 
         return Ok();
     }
-    
+
     [HttpPatch("{lessonId}/restore")]
     [Permission(Permissions.Lessons.UPDATE_LESSON)]
     public async Task<IActionResult> RestoreLesson(

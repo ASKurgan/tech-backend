@@ -3,13 +3,14 @@ using FileService.Communication;
 using FileService.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SachkovTech.Accounts.Contracts.Responses;
 using SachkovTech.Accounts.Domain;
 using SachkovTech.Core.Abstractions;
-using SachkovTech.Core.Responses;
 using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
 
 namespace SachkovTech.Accounts.Application.Commands.StartUploadFile;
+
 public class StartUploadPhotoHandler : ICommandHandler<StartUploadFileResponse, StartUploadPhotoCommand>
 {
     private readonly IFileService _fileService;
@@ -51,7 +52,7 @@ public class StartUploadPhotoHandler : ICommandHandler<StartUploadFileResponse, 
             cancellationToken);
 
         if (result.IsFailure)
-            return Errors.General.ValueIsInvalid(result.Error).ToErrorList();        
+            return Errors.General.ValueIsInvalid(result.Error).ToErrorList();
 
         return new StartUploadFileResponse(result.Value.FileId, result.Value.PresignedUrl);
     }
