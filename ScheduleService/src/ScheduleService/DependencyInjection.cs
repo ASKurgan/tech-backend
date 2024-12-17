@@ -1,4 +1,4 @@
-using ScheduleService.Infrastructure;
+﻿using ScheduleService.Infrastructure;
 using Serilog;
 using Serilog.Events;
 
@@ -13,7 +13,7 @@ public static class DependencyInjection
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
 
-        return services.AddInfrastructure()
+        return services.AddInfrastructure(configuration)
             .AddLogging(configuration);
     }
 

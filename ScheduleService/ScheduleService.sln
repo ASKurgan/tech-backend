@@ -5,33 +5,24 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B7B28F33-4ED9-4A6A-8AE1-B9CAF2AF95C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleService", "src\ScheduleService\ScheduleService.csproj", "{CF71DD62-9294-4538-A50B-21B90CF92CC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScheduleService", "src\ScheduleService\ScheduleService.csproj", "{CF71DD62-9294-4538-A50B-21B90CF92CC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleService.Domain", "src\ScheduleService.Domain\ScheduleService.Domain.csproj", "{B88D9F5E-F6C5-4737-BDCA-3CAA2DB81248}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScheduleService.Domain", "src\ScheduleService.Domain\ScheduleService.Domain.csproj", "{B88D9F5E-F6C5-4737-BDCA-3CAA2DB81248}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{C7521BE9-98F5-494A-8D77-AAC2FC4699F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleService.Domain.Tests", "src\ScheduleService.Domain.Tests\ScheduleService.Domain.Tests.csproj", "{900D74F0-CEEA-4CF1-951E-513FAEADDDC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScheduleService.Domain.Tests", "src\ScheduleService.Domain.Tests\ScheduleService.Domain.Tests.csproj", "{900D74F0-CEEA-4CF1-951E-513FAEADDDC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleService.Application", "src\ScheduleService.Application\ScheduleService.Application.csproj", "{660190A6-264F-4889-BB79-AA472A94E652}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScheduleService.Application", "src\ScheduleService.Application\ScheduleService.Application.csproj", "{660190A6-264F-4889-BB79-AA472A94E652}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleService.Infrastructure", "src\ScheduleService.Infrastructure\ScheduleService.Infrastructure.csproj", "{CA3937C4-AA6A-48BB-946A-87A81D4767C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScheduleService.Infrastructure", "src\ScheduleService.Infrastructure\ScheduleService.Infrastructure.csproj", "{CA3937C4-AA6A-48BB-946A-87A81D4767C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulerService.Infrastructure.Tests", "SchedulerService.Infrastructure.Tests\SchedulerService.Infrastructure.Tests.csproj", "{0E375251-3031-413F-934C-08EEB79F0F50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{CF71DD62-9294-4538-A50B-21B90CF92CC9} = {B7B28F33-4ED9-4A6A-8AE1-B9CAF2AF95C5}
-		{B88D9F5E-F6C5-4737-BDCA-3CAA2DB81248} = {B7B28F33-4ED9-4A6A-8AE1-B9CAF2AF95C5}
-		{C7521BE9-98F5-494A-8D77-AAC2FC4699F5} = {B7B28F33-4ED9-4A6A-8AE1-B9CAF2AF95C5}
-		{900D74F0-CEEA-4CF1-951E-513FAEADDDC8} = {C7521BE9-98F5-494A-8D77-AAC2FC4699F5}
-		{660190A6-264F-4889-BB79-AA472A94E652} = {B7B28F33-4ED9-4A6A-8AE1-B9CAF2AF95C5}
-		{CA3937C4-AA6A-48BB-946A-87A81D4767C4} = {B7B28F33-4ED9-4A6A-8AE1-B9CAF2AF95C5}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CF71DD62-9294-4538-A50B-21B90CF92CC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -54,5 +45,24 @@ Global
 		{CA3937C4-AA6A-48BB-946A-87A81D4767C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA3937C4-AA6A-48BB-946A-87A81D4767C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA3937C4-AA6A-48BB-946A-87A81D4767C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E375251-3031-413F-934C-08EEB79F0F50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E375251-3031-413F-934C-08EEB79F0F50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E375251-3031-413F-934C-08EEB79F0F50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E375251-3031-413F-934C-08EEB79F0F50}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CF71DD62-9294-4538-A50B-21B90CF92CC9} = {B7B28F33-4ED9-4A6A-8AE1-B9CAF2AF95C5}
+		{B88D9F5E-F6C5-4737-BDCA-3CAA2DB81248} = {B7B28F33-4ED9-4A6A-8AE1-B9CAF2AF95C5}
+		{C7521BE9-98F5-494A-8D77-AAC2FC4699F5} = {B7B28F33-4ED9-4A6A-8AE1-B9CAF2AF95C5}
+		{900D74F0-CEEA-4CF1-951E-513FAEADDDC8} = {C7521BE9-98F5-494A-8D77-AAC2FC4699F5}
+		{660190A6-264F-4889-BB79-AA472A94E652} = {B7B28F33-4ED9-4A6A-8AE1-B9CAF2AF95C5}
+		{CA3937C4-AA6A-48BB-946A-87A81D4767C4} = {B7B28F33-4ED9-4A6A-8AE1-B9CAF2AF95C5}
+		{0E375251-3031-413F-934C-08EEB79F0F50} = {C7521BE9-98F5-494A-8D77-AAC2FC4699F5}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CC687701-9ED2-4A1B-B667-0075E0C35566}
 	EndGlobalSection
 EndGlobal
