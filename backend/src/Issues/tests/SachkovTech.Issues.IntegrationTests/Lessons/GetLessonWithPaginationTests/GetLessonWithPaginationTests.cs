@@ -10,7 +10,6 @@ using SachkovTech.Issues.Contracts.Lesson;
 using SachkovTech.Issues.Domain.Issue.ValueObjects;
 using SachkovTech.Issues.Domain.Lesson;
 using SachkovTech.Issues.Infrastructure.DbContexts;
-using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
 using SharedKernel;
 

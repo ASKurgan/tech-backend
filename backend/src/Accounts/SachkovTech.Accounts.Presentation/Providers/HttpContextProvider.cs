@@ -2,7 +2,6 @@
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Http;
 using SachkovTech.Core.Models;
-using SachkovTech.SharedKernel;
 using SharedKernel;
 
 namespace SachkovTech.Accounts.Presentation.Providers;

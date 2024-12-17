@@ -6,7 +6,6 @@ using SachkovTech.Core.Abstractions;
 using SachkovTech.Issues.Application.DataModels;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Contracts.Lesson;
-using SachkovTech.SharedKernel;
 using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonById;

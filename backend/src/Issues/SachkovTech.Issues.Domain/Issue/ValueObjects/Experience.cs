@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using SachkovTech.SharedKernel;
 using SharedKernel;
 
 namespace SachkovTech.Issues.Domain.Issue.ValueObjects;

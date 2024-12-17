@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SachkovTech.Accounts.Domain;
 using SachkovTech.Core.Abstractions;
-using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
 using SharedKernel;
 

@@ -1,10 +1,13 @@
+using System.Security;
 using Microsoft.EntityFrameworkCore;
+using SachkovTech.Accounts.Application.Managers;
+using SachkovTech.Accounts.Contracts;
 using SachkovTech.Accounts.Domain;
 using SachkovTech.Accounts.Infrastructure.DbContexts;
 
 namespace SachkovTech.Accounts.Infrastructure.IdentityManagers;
 
-public class PermissionManager(AccountsWriteDbContext accountsWriteContext)
+public class PermissionManager(AccountsWriteDbContext accountsWriteContext) : IPermissionManager
 {
     public async Task<Permission?> FindByCode(string code)
         => await accountsWriteContext.Permissions.FirstOrDefaultAsync(p => p.Code == code);

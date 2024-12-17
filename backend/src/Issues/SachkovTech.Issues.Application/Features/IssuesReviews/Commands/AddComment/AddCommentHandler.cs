@@ -7,7 +7,6 @@ using SachkovTech.Core.Extensions;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Domain.IssuesReviews.Entities;
 using SachkovTech.Issues.Domain.IssuesReviews.ValueObjects;
-using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 using SharedKernel;
 

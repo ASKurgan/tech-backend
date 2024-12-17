@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
 using SachkovTech.Issues.Application.Interfaces;
-using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
 using SharedKernel;
 

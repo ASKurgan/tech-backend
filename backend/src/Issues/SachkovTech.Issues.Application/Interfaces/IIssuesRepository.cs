@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using SachkovTech.Issues.Domain.Issue;
-using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 using SharedKernel;

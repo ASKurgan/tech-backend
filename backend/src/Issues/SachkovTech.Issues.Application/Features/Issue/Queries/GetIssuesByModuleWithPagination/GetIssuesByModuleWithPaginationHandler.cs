@@ -5,7 +5,6 @@ using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Models;
 using SachkovTech.Issues.Application.Features.Issue.Queries.GetIssuesWithPagination;
 using SachkovTech.Issues.Contracts.Issue;
-using SachkovTech.SharedKernel;
 using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Issue.Queries.GetIssuesByModuleWithPagination;

@@ -7,7 +7,6 @@ using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Contracts.Issue;
 using SachkovTech.Issues.Domain.IssueSolving.Entities;
 using SachkovTech.Issues.Domain.IssueSolving.Enums;
-using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 using SharedKernel;
 

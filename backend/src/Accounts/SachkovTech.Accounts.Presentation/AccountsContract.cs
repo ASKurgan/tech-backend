@@ -1,13 +1,13 @@
-﻿using SachkovTech.Accounts.Contracts;
-using SachkovTech.Accounts.Infrastructure.IdentityManagers;
+﻿using SachkovTech.Accounts.Application.Managers;
+using SachkovTech.Accounts.Contracts;
 
 namespace SachkovTech.Accounts.Presentation;
 
 public class AccountsContract : IAccountsContract
 {
-    private readonly PermissionManager _permissionManager;
+    private readonly IPermissionManager _permissionManager;
 
-    public AccountsContract(PermissionManager permissionManager)
+    public AccountsContract(IPermissionManager permissionManager)
     {
         _permissionManager = permissionManager;
     }

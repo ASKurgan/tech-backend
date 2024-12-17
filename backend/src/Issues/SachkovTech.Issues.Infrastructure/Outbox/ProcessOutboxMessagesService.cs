@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
 using SachkovTech.Issues.Application.Interfaces;
-using SachkovTech.Issues.Contracts;
 using SachkovTech.Issues.Infrastructure.DbContexts;
 
 namespace SachkovTech.Issues.Infrastructure.Outbox;

@@ -10,6 +10,7 @@ using SachkovTech.Accounts.Infrastructure.DbContexts;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Infrastructure.DbContexts;
+using SachkovTech.Web;
 using Testcontainers.PostgreSql;
 
 namespace SachkovTech.Issues.IntegrationTests;

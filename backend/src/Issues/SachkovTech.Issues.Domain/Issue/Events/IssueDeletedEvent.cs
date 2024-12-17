@@ -1,5 +1,4 @@
-﻿using SachkovTech.SharedKernel;
-using SharedKernel;
+﻿using SharedKernel;
 
 namespace SachkovTech.Issues.Domain.Issue.Events;
 

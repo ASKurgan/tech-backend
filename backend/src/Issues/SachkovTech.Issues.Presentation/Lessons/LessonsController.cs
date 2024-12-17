@@ -11,9 +11,7 @@ using SachkovTech.Issues.Application.Features.Lessons.Command.StartUploadVideo;
 using SachkovTech.Issues.Application.Features.Lessons.Command.UpdateLesson;
 using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonById;
 using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonsWithPagination;
-using SachkovTech.Issues.Application.Requests;
 using SachkovTech.Issues.Contracts.Lesson;
-using SachkovTech.SharedKernel.ValueObjects;
 
 namespace SachkovTech.Issues.Presentation.Lessons;
 
@@ -62,12 +60,12 @@ public class LessonsController : ApplicationController
             request.FileName,
             request.ContentType,
             request.FileSize);
-
+    
         var result = await handler.Handle(command, cancellationToken);
-
+    
         if (result.IsFailure)
             result.Error.ToResponse();
-
+    
         return Ok(result.Value);
     }
 

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using SachkovTech.Core.Models;
 using SharedKernel;
 
 namespace SachkovTech.Framework;

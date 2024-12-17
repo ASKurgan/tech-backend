@@ -10,7 +10,6 @@ using SachkovTech.Issues.Application.Features.IssuesReviews.Commands.DeleteComme
 using SachkovTech.Issues.Application.Features.IssuesReviews.Commands.StartReview;
 using SachkovTech.Issues.Application.Features.IssuesReviews.Queries.GetCommentsWithPagination;
 using SachkovTech.Issues.Contracts.IssueReview;
-using SachkovTech.SharedKernel;
 using SharedKernel;
 
 namespace SachkovTech.Issues.Presentation.IssuesReviews;

@@ -4,7 +4,6 @@ using SachkovTech.Issues.Domain.IssuesReviews.Entities;
 using SachkovTech.Issues.Domain.IssuesReviews.Enums;
 using SachkovTech.Issues.Domain.IssuesReviews.Events;
 using SachkovTech.Issues.Domain.IssuesReviews.ValueObjects;
-using SachkovTech.SharedKernel;
 using SachkovTech.SharedKernel.ValueObjects;
 using SachkovTech.SharedKernel.ValueObjects.Ids;
 using SharedKernel;

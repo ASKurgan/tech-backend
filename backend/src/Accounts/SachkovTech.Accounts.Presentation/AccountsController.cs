@@ -13,13 +13,11 @@ using SachkovTech.Accounts.Application.Commands.StartUploadFile;
 using SachkovTech.Accounts.Application.Commands.VerifyConfirmationLink;
 using SachkovTech.Accounts.Application.Queries.GetUserById;
 using SachkovTech.Accounts.Application.Queries.GetUsers;
-using SachkovTech.Accounts.Application.Requests;
 using SachkovTech.Accounts.Contracts.Requests;
 using SachkovTech.Accounts.Presentation.Providers;
 using SachkovTech.Framework;
 using SachkovTech.Framework.Authorization;
 using SachkovTech.Framework.Models;
-using SachkovTech.SharedKernel.ValueObjects;
 
 namespace SachkovTech.Accounts.Presentation;
 

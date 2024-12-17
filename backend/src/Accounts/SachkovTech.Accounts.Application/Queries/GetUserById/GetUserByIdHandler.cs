@@ -5,7 +5,6 @@ using SachkovTech.Accounts.Application.Database;
 using SachkovTech.Accounts.Contracts.Responses;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Caching;
-using SachkovTech.SharedKernel;
 using SharedKernel;
 
 namespace SachkovTech.Accounts.Application.Queries.GetUserById;

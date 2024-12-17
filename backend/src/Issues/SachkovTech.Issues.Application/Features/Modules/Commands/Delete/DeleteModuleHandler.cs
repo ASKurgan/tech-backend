@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Extensions;
 using SachkovTech.Issues.Application.Interfaces;
-using SachkovTech.SharedKernel;
 using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Modules.Commands.Delete;

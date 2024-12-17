@@ -12,7 +12,6 @@ using SachkovTech.Accounts.Infrastructure.IdentityManagers;
 using SachkovTech.Core.Models;
 using SachkovTech.Core.Options;
 using SachkovTech.Framework;
-using SachkovTech.SharedKernel;
 using SharedKernel;
 
 namespace SachkovTech.Accounts.Infrastructure.Providers;
