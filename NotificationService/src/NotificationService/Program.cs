@@ -1,8 +1,14 @@
+using AccountService.Communication;
 using MassTransit;
 using NotificationService.Consumers;
 using NotificationService.Extensions;
 using NotificationService.Infrastructure;
-using SachkovTech.Accounts.Communication;
+using Npgsql;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using SachkovTech.Framework.Authorization;
+using SachkovTech.Framework.HttpHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +47,26 @@ builder.Services.AddMassTransit(configure =>
     });
 });
 
-builder.Services.AddAccountHttpCommunication(configuration);
+builder.Services
+    .AddAuthServices(configuration)
+    .AddAccountHttpCommunication(configuration)
+    .AddHttpMessageHandler<HttpTrackerHandler>();
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService("SachkovTech.Notifications.Api"))
+    .WithMetrics(metrics => metrics
+        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("SachkovTech.Notifications.Api"))
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddRuntimeInstrumentation()
+        .AddProcessInstrumentation()
+        .AddPrometheusExporter())
+    .WithTracing(tracing => tracing
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddNpgsql()
+        .AddSource(MassTransit.Logging.DiagnosticHeaders.DefaultListenerName)
+        .AddOtlpExporter(c => c.Endpoint = new Uri("http://localhost:4317")));
 
 var app = builder.Build();
 
@@ -50,6 +75,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))
     app.UseSwagger();
     app.UseSwaggerUI();
 
+    app.UseOpenTelemetryPrometheusScrapingEndpoint();
     //await app.AddMigrations();
 }
 

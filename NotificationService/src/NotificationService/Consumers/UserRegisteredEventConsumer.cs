@@ -1,40 +1,40 @@
-﻿using EmailNotification.Contacts;
+﻿using AccountService.Communication;
+using AccountService.Contracts.Messaging;
+using EmailNotification.Contacts;
 using MassTransit;
-using SachkovTech.Accounts.Communication;
-using SachkovTech.Accounts.Contracts.Messaging;
 
 namespace NotificationService.Consumers;
 
 public class UserRegisteredEventConsumer : IConsumer<UserRegisteredEvent>
 {
-    private readonly AccountHttpClient _httpClient;
+    private readonly IAccountService _accountService;
 
-    public UserRegisteredEventConsumer(AccountHttpClient httpClient)
+    public UserRegisteredEventConsumer(IAccountService accountService)
     {
-        _httpClient = httpClient;
+        _accountService = accountService;
     }
+
     public async Task Consume(ConsumeContext<UserRegisteredEvent> context)
     {
         if (context.Message.UserId == Guid.Empty) return;
 
-        var result = await _httpClient.GetConfirmationLink(context.Message.UserId);
+        var result = await _accountService.GetConfirmationLink(context.Message.UserId);
 
         if (result.IsFailure)
         {
             throw new Exception(result.Error);
         }
-        
+
         var sendEmailCommand = new SendEmailCommand(
             result.Value.Email,
             "Подтверждение почты!",
             "registration-confirmation",
             new
             {
-                ConfirmationLink = result.Value.ConfirmationLink
+                result.Value.ConfirmationLink
             }
         );
 
         await context.Publish(sendEmailCommand, context.CancellationToken);
     }
 }
-

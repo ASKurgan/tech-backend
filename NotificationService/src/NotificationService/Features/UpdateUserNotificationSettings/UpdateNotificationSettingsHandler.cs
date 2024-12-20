@@ -1,7 +1,8 @@
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using NotificationService.Infrastructure;
-using NotificationService.SharedKernel;
+
+using SharedKernel;
 
 namespace NotificationService.Features.UpdateUserNotificationSettings;
 

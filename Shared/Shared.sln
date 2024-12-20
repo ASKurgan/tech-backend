@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Framework", "SachkovTech.Framework\SachkovTech.Framework.csproj", "{341F7BF2-B7E0-4157-9960-B78711E022A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SachkovTech.Core", "SachkovTech.Core\SachkovTech.Core.csproj", "{B95D92FD-2A7E-4AAC-B1C2-3E4720C0CE0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedKernel", "SachkovTech.SharedKernel\SharedKernel.csproj", "{D8D0A73A-AFB0-4D81-A683-60CBA7702CF3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{341F7BF2-B7E0-4157-9960-B78711E022A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{341F7BF2-B7E0-4157-9960-B78711E022A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{341F7BF2-B7E0-4157-9960-B78711E022A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{341F7BF2-B7E0-4157-9960-B78711E022A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B95D92FD-2A7E-4AAC-B1C2-3E4720C0CE0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B95D92FD-2A7E-4AAC-B1C2-3E4720C0CE0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B95D92FD-2A7E-4AAC-B1C2-3E4720C0CE0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B95D92FD-2A7E-4AAC-B1C2-3E4720C0CE0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8D0A73A-AFB0-4D81-A683-60CBA7702CF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8D0A73A-AFB0-4D81-A683-60CBA7702CF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8D0A73A-AFB0-4D81-A683-60CBA7702CF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8D0A73A-AFB0-4D81-A683-60CBA7702CF3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,7 +1,7 @@
 using CSharpFunctionalExtensions;
 using NotificationService.Entities;
 using NotificationService.Entities.ValueObjects;
-using NotificationService.SharedKernel;
+using SharedKernel;
 
 namespace NotificationService.Services.Senders;
 

@@ -488,4 +488,6 @@ $RECYCLE.BIN/
 /FaqService/src/SharedKernel/obj
 /FaqService/src/SharedKernel/obj
 /FaqService/src/SharedKernel/obj/Debug
-/backend/nuget.config
+
+nuget.config
+

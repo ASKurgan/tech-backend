@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
 using System.Text.RegularExpressions;
-using NotificationService.SharedKernel;
+using SharedKernel;
 
 namespace NotificationService.Entities.ValueObjects;
 
@@ -16,10 +16,10 @@ public class Email : ComparableValueObject
 
     public static Result<Email, Error> Create(string email)
     {
-        Regex regex = new Regex(REGEX);
+        Regex regex = new(REGEX);
 
         if (regex.IsMatch(email) == false)
-            return Error.Validation($"Specified email address is invalid! : {email}");
+            return Errors.General.ValueIsInvalid($"Specified email address is invalid! : {email}");
 
         return new Email(email);
     }

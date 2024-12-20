@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using NotificationService.Api.Contracts;
-using NotificationService.Extensions;
 using NotificationService.Features.GetNotificationSettings;
 using NotificationService.Features.UpdateUserNotificationSettings;
-using NotificationService.SharedKernel;
+using SachkovTech.Framework;
+using SharedKernel;
 
 namespace NotificationService.Api;
 
@@ -26,7 +26,7 @@ public class NotificationSettingsController : ControllerBase
         var envelope = Envelope.Ok(result.Value);
         return Ok(envelope);
     }
-    
+
     [HttpPatch]
     public async Task<IActionResult> Patch(
         [FromRoute] Guid id,

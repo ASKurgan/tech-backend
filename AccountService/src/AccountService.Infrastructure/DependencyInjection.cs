@@ -1,0 +1,121 @@
+using MassTransit;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using ProjectTemplate.Application.Database;
+using ProjectTemplate.Application.Managers;
+using ProjectTemplate.Application.Providers;
+using ProjectTemplate.Domain;
+using ProjectTemplate.Infrastructure.DbContexts;
+using ProjectTemplate.Infrastructure.IdentityManagers;
+using ProjectTemplate.Infrastructure.Migrator;
+using ProjectTemplate.Infrastructure.Options;
+using ProjectTemplate.Infrastructure.Providers;
+using ProjectTemplate.Infrastructure.Seeding;
+using SachkovTech.Core.Database;
+using SachkovTech.Framework.Authorization;
+
+namespace ProjectTemplate.Infrastructure;
+
+public static class DependencyInjection
+{
+    public static IServiceCollection AddAccountsInfrastructure(
+        this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddIdentity()
+            .AddDbContexts(configuration)
+            .AddSeeding()
+            .ConfigureCustomOptions(configuration)
+            .AddMessageBus(configuration)
+            .AddProviders()
+            .AddMigrators();
+
+        return services;
+    }
+
+    private static IServiceCollection AddMessageBus(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddMassTransit(configure =>
+        {
+            configure.SetKebabCaseEndpointNameFormatter();
+
+            configure.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host(new Uri(configuration["RabbitMQ:Host"]!), h =>
+                {
+                    h.Username(configuration["RabbitMQ:UserName"]!);
+                    h.Password(configuration["RabbitMQ:Password"]!);
+                });
+
+                cfg.ConfigureEndpoints(context);
+            });
+        });
+
+        return services;
+    }
+
+    private static IServiceCollection AddMigrators(this IServiceCollection services)
+    {
+        services.AddScoped<IMigrator, AccountsMigrator>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddIdentity(this IServiceCollection services)
+    {
+        services
+            .AddIdentity<User, Role>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                options.Password.RequireNonAlphanumeric = false;
+            })
+            .AddEntityFrameworkStores<AccountsWriteDbContext>()
+            .AddDefaultTokenProviders();
+
+        services.AddScoped<RolePermissionManager>();
+        services.AddScoped<IAccountsManager, AccountsManager>();
+        services.AddScoped<IPermissionManager, PermissionManager>();
+        services.AddScoped<AccountsManager>();
+        services.AddScoped<IRefreshSessionManager, RefreshSessionManager>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddDbContexts(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        services.AddScoped<AccountsWriteDbContext>(_ =>
+            new AccountsWriteDbContext(configuration.GetConnectionString("Database")!));
+
+        services.AddScoped<IAccountsReadDbContext, AccountsReadDbContext>();
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddSeeding(this IServiceCollection services)
+    {
+        services.AddSingleton<IAutoSeeder, AccountsSeeder>();
+        services.AddScoped<AccountsSeederService>();
+
+        return services;
+    }
+
+    private static IServiceCollection ConfigureCustomOptions(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        services.Configure<AdminOptions>(configuration.GetSection(AdminOptions.ADMIN));
+
+        return services;
+    }
+
+    private static IServiceCollection AddProviders(this IServiceCollection services)
+    {
+        services.AddTransient<ITokenProvider, JwtTokenProvider>();
+
+        return services;
+    }
+}

@@ -27,7 +27,7 @@ jobs:
 
       - name: Restore dependencies
         run: |
-          dotnet restore ./backend/SachkovTech.sln
+          dotnet restore ./IssueService/IssueService.sln
           dotnet restore ./CommentService/CommentService.sln
           dotnet restore ./EmailNotificationService/EmailNotificationService.sln
           dotnet restore ./FileService/FileService.sln
@@ -38,7 +38,7 @@ jobs:
           
       - name: Build
         run: |
-          dotnet build ./backend/SachkovTech.sln --configuration Release --no-restore
+          dotnet build ./IssueService/IssueService.sln --configuration Release --no-restore
           dotnet build ./CommentService/CommentService.sln --configuration Release --no-restore
           dotnet build ./EmailNotificationService/EmailNotificationService.sln --configuration Release --no-restore
           dotnet build ./FileService/FileService.sln --configuration Release --no-restore
@@ -49,7 +49,7 @@ jobs:
 
       - name: Services_Tests
         run: |
-          dotnet test ./backend/SachkovTech.sln --configuration Release --no-restore
+          dotnet test ./IssueService/IssueService.sln --configuration Release --no-restore
           dotnet test ./CommentService/CommentService.sln --configuration Release --no-restore
           dotnet test ./EmailNotificationService/EmailNotificationService.sln --configuration Release --no-restore
           dotnet test ./NotificationService/NotificationService.sln --configuration Release --no-restore

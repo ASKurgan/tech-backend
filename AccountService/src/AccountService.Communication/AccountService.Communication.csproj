@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <PackageId>Accounts.Communication</PackageId>
+    <Version>1.1.4</Version>
+    <Authors>SachkovTech</Authors>
+    <Company>SachkovTech</Company>
+    <RepositoryUrl>https://github.com/SachkovTech/sachkov-tech-backend</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CSharpFunctionalExtensions" Version="3.2.0"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AccountService.Contracts\AccountService.Contracts.csproj"/>
+  </ItemGroup>
+
+</Project>
