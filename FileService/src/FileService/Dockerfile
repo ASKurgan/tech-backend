@@ -1,27 +1,33 @@
-# См. статью по ссылке https://aka.ms/customizecontainer, чтобы узнать как настроить контейнер отладки и как Visual Studio использует этот Dockerfile для создания образов для ускорения отладки.
-
-# Этот этап используется при запуске из VS в быстром режиме (по умолчанию для конфигурации отладки)
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
-EXPOSE 8080
+EXPOSE 8003
 
-# Этот этап используется для сборки проекта службы
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
+ARG NUGET_USERNAME
+ARG NUGET_PASSWORD
 WORKDIR /src
+
+RUN dotnet nuget add source https://nuget.pkg.github.com/SachkovTech/index.json \
+    -n github \
+    --username $NUGET_USERNAME \
+    --password $NUGET_PASSWORD \
+    --store-password-in-clear-text
+
+
 COPY ["src/FileService/FileService.csproj", "src/FileService/"]
-RUN dotnet restore "./src/FileService/FileService.csproj"
+COPY ["src/FileService.Contracts/FileService.Contracts.csproj", "src/FileService.Contracts/"]
+RUN dotnet restore "src/FileService/FileService.csproj"
 COPY . .
 WORKDIR "/src/src/FileService"
-RUN dotnet build "./FileService.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "FileService.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Этот этап используется для публикации проекта службы, который будет скопирован на последний этап
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./FileService.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "FileService.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Этот этап используется в рабочей среде или при запуске из VS в обычном режиме (по умолчанию, когда конфигурация отладки не используется)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .

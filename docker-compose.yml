@@ -1,17 +1,37 @@
 services:
+  accounts:
+    build:
+      context: ./AccountService
+      dockerfile: ./src/AccountService.Api/Dockerfile
+      args:
+        NUGET_USERNAME: ${NUGET_USERNAME}
+        NUGET_PASSWORD: ${NUGET_PASSWORD}
+    ports:
+      - "8001:8001"
+    depends_on:
+      - postgres
+      - minio
+      - elasticsearch
+      - rabbitmq
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+
   issues:
     build:
-      context: ./backend
+      context: ./IssueService
       dockerfile: ./src/SachkovTech.Web/Dockerfile
       args:
         NUGET_USERNAME: ${NUGET_USERNAME}
         NUGET_PASSWORD: ${NUGET_PASSWORD}
     ports:
-      - "58080:8080"
+      - "8002:8002"
     depends_on:
       - postgres
       - minio
-      - seq
+      - elasticsearch
+      - rabbitmq
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
@@ -25,10 +45,11 @@ services:
         NUGET_USERNAME: ${NUGET_USERNAME}
         NUGET_PASSWORD: ${NUGET_PASSWORD}
     ports:
-      - "58081:8080"
+      - "8003:8003"
     depends_on:
       - minio
       - postgres
+      - elasticsearch
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
@@ -41,9 +62,9 @@ services:
         NUGET_USERNAME: ${NUGET_USERNAME}
         NUGET_PASSWORD: ${NUGET_PASSWORD}
     ports:
-      - "58082:8080"
+      - "8004:8004"
     depends_on:
-      - seq
+      - elasticsearch
       - rabbitmq
     restart: always
     environment:
@@ -57,9 +78,9 @@ services:
         NUGET_USERNAME: ${NUGET_USERNAME}
         NUGET_PASSWORD: ${NUGET_PASSWORD}
     ports:
-      - "58083:8080"
+      - "8005:8005"
     depends_on:
-      - issues
+      - elasticsearch
       - rabbitmq
     restart: always
     environment:
@@ -187,16 +208,6 @@ services:
       - prometheus
     restart: always
     
-  seq:
-    image: datalust/seq:latest
-    container_name: seq-logs
-    restart: always
-    environment:
-      - ACCEPT_EULA=Y
-    ports:
-      - 5341:5341
-      - 8081:80
-  
   redis:
     image: redis:latest
     container_name: redis
@@ -211,9 +222,10 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf # Mount the nginx.conf file
+      - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - issues
+      - accounts
       - files
       - emails
       - notifications
@@ -228,4 +240,4 @@ volumes:
   prometheus_data:
   grafana_data:
   redis_data:
-  # rabbitmq_data:
+  rabbitmq_data:
