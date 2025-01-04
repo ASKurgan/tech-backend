@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CSharpFunctionalExtensions" Version="3.2.0" />
+        <PackageReference Include="CSharpFunctionalExtensions" Version="3.4.3" />
         <PackageReference Include="DotNetEnv" Version="3.1.1" />
         <PackageReference Include="Elastic.Serilog.Sinks" Version="8.12.3" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
