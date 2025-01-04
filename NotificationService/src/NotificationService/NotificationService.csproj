@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Accounts.Communication" Version="1.2.0"/>
-    <PackageReference Include="Accounts.Contracts" Version="1.2.0" />
+    <PackageReference Include="Accounts.Contracts" Version="1.2.1" />
     <PackageReference Include="Core" Version="1.0.7" />
     <PackageReference Include="CSharpFunctionalExtensions" Version="3.2.0"/>
     <PackageReference Include="EmailNotification.Contracts" Version="1.1.0"/>
