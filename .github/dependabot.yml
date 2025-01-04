@@ -39,7 +39,6 @@ updates:
       - "/EmailNotificationService/"
       - "/FaqService/"
       - "/FileService/"
-      - "/KeyGen/"
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 100     
