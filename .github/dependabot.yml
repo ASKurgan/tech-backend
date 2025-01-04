@@ -36,9 +36,10 @@ updates:
   - package-ecosystem: "nuget"
     registries: "*"
     directories:
-      - "/IssueService/"
-      - "/AccountService/"
-      - "/CommentService/"
+      - "/EmailNotificationService/"
+      - "/FaqService/"
+      - "/FileService/"
+      - "/KeyGen/"
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 100     
