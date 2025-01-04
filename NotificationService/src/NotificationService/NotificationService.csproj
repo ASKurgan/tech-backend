@@ -21,7 +21,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.8"/>
-    <PackageReference Include="sachkovtech.issues.contracts" Version="1.1.0"/>
+    <PackageReference Include="sachkovtech.issues.contracts" Version="1.1.1"/>
     <PackageReference Include="SharedKernel" Version="1.0.6"/>
     <PackageReference Include="Npgsql.OpenTelemetry" Version="8.0.6"/>
     <PackageReference Include="Elastic.Serilog.Sinks" Version="8.12.3" />
