@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
@@ -13,10 +13,10 @@
 
     <ItemGroup>
       <Reference Include="SachkovTech.Core">
-        <HintPath>..\SachkovTech.Issues.Infrastructure\bin\Release\net8.0\SachkovTech.Core.dll</HintPath>
+        <HintPath>..\SachkovTech.Issues.Infrastructure\bin\Release\net9.0\SachkovTech.Core.dll</HintPath>
       </Reference>
       <Reference Include="SachkovTech.Framework">
-        <HintPath>bin\Release\net8.0\SachkovTech.Framework.dll</HintPath>
+        <HintPath>bin\Release\net9.0\SachkovTech.Framework.dll</HintPath>
       </Reference>
     </ItemGroup>
 

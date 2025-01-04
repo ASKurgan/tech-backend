@@ -10,6 +10,5 @@ public class CommentResponse
 
     public required string Message { get; init; }
 
-
     public DateTime CreatedAt { get; init; }
 }

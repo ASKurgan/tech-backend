@@ -17,7 +17,6 @@ internal class AccountHttpClient(HttpClient httpClient) : IAccountService
         var payload = await response.Content.ReadFromJsonAsync<ResponseWrapper<ConfirmationLinkResponse>>(cancellationToken)
                       ?? throw new Exception("ConfirmationLinkResponse can't be null");
 
-
         if (!response.IsSuccessStatusCode)
         {
             return payload.Errors.ToString()!;

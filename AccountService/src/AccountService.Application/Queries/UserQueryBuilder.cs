@@ -8,12 +8,12 @@ namespace ProjectTemplate.Application.Queries;
 internal class UserQueryBuilder
 {
     private IQueryable<UserDataModel> _userQuery;
-    
+
     public UserQueryBuilder(IQueryable<UserDataModel> userQuery)
     {
         _userQuery = userQuery;
     }
-    
+
     /// <summary>
     /// Get users with the specified id
     /// </summary>
@@ -21,9 +21,10 @@ internal class UserQueryBuilder
     /// <returns></returns>
     public UserQueryBuilder WithId(Guid? id)
     {
-        _userQuery = _userQuery.WhereIf(id is not null && id != Guid.Empty,
+        _userQuery = _userQuery.WhereIf(
+            id is not null && id != Guid.Empty,
             ud => ud.Id == id!.Value);
-        
+
         return this;
     }
 
@@ -34,12 +35,13 @@ internal class UserQueryBuilder
     /// <returns></returns>
     public UserQueryBuilder WithRole(string? roleName)
     {
-        _userQuery = _userQuery.WhereIf(string.IsNullOrWhiteSpace(roleName) == false,
+        _userQuery = _userQuery.WhereIf(
+            string.IsNullOrWhiteSpace(roleName) == false,
             ud => ud.Roles.Any(r => r.Name.ToLower() == roleName!.ToLower()));
-        
+
         return this;
     }
-    
+
     /// <summary>
     /// Get users with more than one role
     /// </summary>
@@ -47,10 +49,10 @@ internal class UserQueryBuilder
     public UserQueryBuilder WithMoreThanOneRole()
     {
         _userQuery = _userQuery.Where(ud => ud.Roles.Count > 1);
-        
+
         return this;
     }
-    
+
     /// <summary>
     /// Get users excluding specific role
     /// </summary>
@@ -58,12 +60,13 @@ internal class UserQueryBuilder
     /// <returns></returns>
     public UserQueryBuilder ExcludeRole(string? roleName)
     {
-        _userQuery = _userQuery.WhereIf(string.IsNullOrWhiteSpace(roleName) == false, 
+        _userQuery = _userQuery.WhereIf(
+            string.IsNullOrWhiteSpace(roleName) == false,
             ud => ud.Roles.All(r => r.Name.ToLower() != roleName!.ToLower()));
-        
+
         return this;
     }
-    
+
     /// <summary>
     /// Get users with the specified first name
     /// </summary>
@@ -71,12 +74,13 @@ internal class UserQueryBuilder
     /// <returns></returns>
     public UserQueryBuilder WithFirstName(string? firstName)
     {
-        _userQuery = _userQuery.WhereIf(string.IsNullOrWhiteSpace(firstName) == false,
+        _userQuery = _userQuery.WhereIf(
+            string.IsNullOrWhiteSpace(firstName) == false,
             ud => ud.FirstName == firstName);
-        
+
         return this;
     }
-    
+
     /// <summary>
     /// Get users with the first name which starts with the specified sequence
     /// </summary>
@@ -84,12 +88,13 @@ internal class UserQueryBuilder
     /// <returns></returns>
     public UserQueryBuilder WithFirstNameStartingWith(string? sequence)
     {
-        _userQuery = _userQuery.WhereIf(string.IsNullOrWhiteSpace(sequence) == false,
+        _userQuery = _userQuery.WhereIf(
+            string.IsNullOrWhiteSpace(sequence) == false,
             ud => ud.FirstName.StartsWith(sequence!));
-        
+
         return this;
     }
-    
+
     /// <summary>
     /// Get users with the specified second name
     /// </summary>
@@ -97,12 +102,13 @@ internal class UserQueryBuilder
     /// <returns></returns>
     public UserQueryBuilder WithSecondName(string? secondName)
     {
-        _userQuery = _userQuery.WhereIf(string.IsNullOrWhiteSpace(secondName) == false, 
+        _userQuery = _userQuery.WhereIf(
+            string.IsNullOrWhiteSpace(secondName) == false,
             ud => ud.SecondName == secondName);
-        
+
         return this;
     }
-    
+
     /// <summary>
     /// Get users with the specified third name
     /// </summary>
@@ -110,12 +116,13 @@ internal class UserQueryBuilder
     /// <returns></returns>
     public UserQueryBuilder WithThirdName(string? thirdName)
     {
-        _userQuery = _userQuery.WhereIf(string.IsNullOrWhiteSpace(thirdName) == false, 
+        _userQuery = _userQuery.WhereIf(
+            string.IsNullOrWhiteSpace(thirdName) == false,
             ud => ud.ThirdName == thirdName);
-        
+
         return this;
     }
-    
+
     /// <summary>
     /// Get users with the specified email
     /// </summary>
@@ -123,12 +130,13 @@ internal class UserQueryBuilder
     /// <returns></returns>
     public UserQueryBuilder WithEmail(string? email)
     {
-        _userQuery = _userQuery.WhereIf(string.IsNullOrWhiteSpace(email) == false,
+        _userQuery = _userQuery.WhereIf(
+            string.IsNullOrWhiteSpace(email) == false,
             ud => ud.Email == email);
-        
+
         return this;
     }
-    
+
     /// <summary>
     /// Get users that were registered after the specified date
     /// </summary>
@@ -136,12 +144,13 @@ internal class UserQueryBuilder
     /// <returns></returns>
     public UserQueryBuilder WithRegistrationAfter(DateTime? registrationDate)
     {
-        _userQuery = _userQuery.WhereIf(registrationDate is not null && registrationDate != DateTime.MinValue,
+        _userQuery = _userQuery.WhereIf(
+            registrationDate is not null && registrationDate != DateTime.MinValue,
             ud => ud.RegistrationDate.Date < registrationDate!.Value.Date);
-        
+
         return this;
     }
-    
+
     /// <summary>
     /// Get users that have been on the platform longer than the specified number of days
     /// </summary>
@@ -150,10 +159,10 @@ internal class UserQueryBuilder
     public UserQueryBuilder OnPlatformLongerThan(int daysNumber)
     {
         _userQuery = _userQuery.Where(ud => DateTime.UtcNow.Day - ud.RegistrationDate.Day > daysNumber);
-        
+
         return this;
     }
-    
+
     /// <summary>
     /// Sort users by the specified field
     /// </summary>
@@ -162,10 +171,10 @@ internal class UserQueryBuilder
     public UserQueryBuilder SortAscendingBy(string? sortBy)
     {
         _userQuery = _userQuery.OrderBy(KeySelector(sortBy));
-        
+
         return this;
     }
-    
+
     /// <summary>
     /// Sort users by the specified field in descending order
     /// </summary>
@@ -174,10 +183,10 @@ internal class UserQueryBuilder
     public UserQueryBuilder SortDescendingBy(string? sortBy)
     {
         _userQuery = _userQuery.OrderByDescending(KeySelector(sortBy));
-        
+
         return this;
     }
-    
+
     /// <summary>
     /// Sort users by the specified field and direction
     /// </summary>
@@ -189,7 +198,7 @@ internal class UserQueryBuilder
         _userQuery = sortDirection?.ToLower() == "desc"
             ? _userQuery.OrderByDescending(KeySelector(sortBy))
             : _userQuery.OrderBy(KeySelector(sortBy));
-        
+
         return this;
     }
 
@@ -203,7 +212,7 @@ internal class UserQueryBuilder
 
         return this;
     }
-    
+
     /// <summary>
     /// Include support account
     /// </summary>
@@ -214,7 +223,7 @@ internal class UserQueryBuilder
 
         return this;
     }
-    
+
     /// <summary>
     /// Include admin account
     /// </summary>
@@ -225,7 +234,7 @@ internal class UserQueryBuilder
 
         return this;
     }
-    
+
     /// <summary>
     /// Include roles
     /// </summary>
@@ -255,7 +264,7 @@ internal class UserQueryBuilder
             "second_name" => (user) => user.SecondName,
             "third_name" => (user) => user.ThirdName,
             _ => (user) => user.Id
-       
-    }
 
+        };
+    }
 }
