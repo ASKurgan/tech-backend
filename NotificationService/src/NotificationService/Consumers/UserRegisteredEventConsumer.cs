@@ -1,6 +1,6 @@
 ﻿using AccountService.Communication;
 using AccountService.Contracts.Messaging;
-using EmailNotification.Contacts;
+using EmailNotification.Contracts;
 using MassTransit;
 
 namespace NotificationService.Consumers;
