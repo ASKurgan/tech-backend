@@ -6,10 +6,10 @@
 version: 2
 updates:
   - package-ecosystem: "dotnet-sdk"
-    directory: "/"
+    directory: "/.."
     schedule:
       interval: "monthly"
   - package-ecosystem: "nuget"
-    directory: "/"
+    directory: "/.."
     schedule:
       interval: "monthly"
