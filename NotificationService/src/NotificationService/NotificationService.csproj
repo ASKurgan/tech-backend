@@ -12,7 +12,7 @@
     <PackageReference Include="Accounts.Communication" Version="1.2.0"/>
     <PackageReference Include="Accounts.Contracts" Version="1.2.1" />
     <PackageReference Include="Core" Version="1.0.7" />
-    <PackageReference Include="CSharpFunctionalExtensions" Version="3.2.0"/>
+    <PackageReference Include="CSharpFunctionalExtensions" Version="3.4.3"/>
     <PackageReference Include="EmailNotification.Contracts" Version="1.1.0"/>
     <PackageReference Include="Framework" Version="1.0.18" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.4"/>
