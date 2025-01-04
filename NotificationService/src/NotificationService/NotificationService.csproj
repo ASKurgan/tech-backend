@@ -15,7 +15,7 @@
     <PackageReference Include="CSharpFunctionalExtensions" Version="3.2.0"/>
     <PackageReference Include="EmailNotification.Contracts" Version="1.1.0"/>
     <PackageReference Include="Framework" Version="1.0.18" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.2"/>
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.4"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
