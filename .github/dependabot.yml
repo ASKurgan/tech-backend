@@ -30,8 +30,8 @@ updates:
       - "/UserProgressService/"
       - "/tests/CodeAnalyzer.Tests/"
     schedule:
-      interval: "monthly"
-    open-pull-requests-limit: 100
+      interval: "weekly"
+    open-pull-requests-limit: 10
 
   - package-ecosystem: "nuget"
     registries: "*"
@@ -51,5 +51,5 @@ updates:
         - "/UserProgressService/"
         - "/tests/CodeAnalyzer.Tests/"
     schedule:
-      interval: "monthly"
-    open-pull-requests-limit: 100     
+      interval: "weekly"
+    open-pull-requests-limit: 10    
