@@ -255,7 +255,7 @@ internal class UserQueryBuilder
             "second_name" => (user) => user.SecondName,
             "third_name" => (user) => user.ThirdName,
             _ => (user) => user.Id
-        };
+       
     }
 
 }

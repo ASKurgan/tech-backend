@@ -1,4 +1,4 @@
-﻿using EmailNotification.Contacts;
+﻿using EmailNotification.Contracts;
 using MassTransit;
 
 namespace EmailNotificationService.API.Consumers;

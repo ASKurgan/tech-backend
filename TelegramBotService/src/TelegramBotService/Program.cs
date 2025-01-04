@@ -1,3 +1,8 @@
+using System.Reflection;
+using Elastic.CommonSchema.Serilog;
+using Elastic.Ingest.Elasticsearch;
+using Elastic.Ingest.Elasticsearch.DataStreams;
+using Elastic.Serilog.Sinks;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Events;
@@ -11,11 +16,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+string indexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:dd-MM-yyyy}";
+
 Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
     .WriteTo.Console()
     .WriteTo.Debug()
-    .WriteTo.Seq(builder.Configuration.GetConnectionString("Seq")
-                 ?? throw new ArgumentNullException("Seq"))
+    .WriteTo.Elasticsearch(
+        [new Uri("http://localhost:9200")],
+        options =>
+        {
+            options.DataStream = new DataStreamName(indexFormat);
+            options.TextFormatting = new EcsTextFormatterConfiguration();
+            options.BootstrapMethod = BootstrapMethod.Silent;
+        })
     .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
     .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
     .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)

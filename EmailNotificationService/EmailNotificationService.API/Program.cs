@@ -1,4 +1,9 @@
-﻿using EmailNotificationService.API;
+﻿using System.Reflection;
+using Elastic.CommonSchema.Serilog;
+using Elastic.Ingest.Elasticsearch;
+using Elastic.Ingest.Elasticsearch.DataStreams;
+using Elastic.Serilog.Sinks;
+using EmailNotificationService.API;
 using EmailNotificationService.API.Consumers;
 using Serilog.Events;
 using Serilog;
@@ -30,14 +35,23 @@ services.AddScoped<HandlebarsTemplateService>();
 services.AddScoped<SendEmailConfirmation>();
 services.AddMemoryCache();
 
+string indexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:dd-MM-yyyy}";
+
 Log.Logger = new LoggerConfiguration()
+    .Enrich.FromLogContext()
     .WriteTo.Console()
     .WriteTo.Debug()
-    .WriteTo.Seq(config.GetConnectionString("Seq")
-                 ?? throw new ArgumentNullException("Seq connection string was not found"))
-    .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Information)
-    .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Information)
-    .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Information)
+    .WriteTo.Elasticsearch(
+        [new Uri("http://localhost:9200")],
+        options =>
+        {
+            options.DataStream = new DataStreamName(indexFormat);
+            options.TextFormatting = new EcsTextFormatterConfiguration();
+            options.BootstrapMethod = BootstrapMethod.Silent;
+        })
+    .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)
     .CreateLogger();
 
 services.AddSerilog();

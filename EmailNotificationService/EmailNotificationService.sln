@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailNotificationService.API", "EmailNotificationService.API\EmailNotificationService.API.csproj", "{0305AFE9-99C0-4A32-8746-840E5B01B3FE}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{CEEDAF20-13C6-4550-BCB1-4F5DB034C6D5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailNotification.Contracts", "EmailNotification.Contracts\EmailNotification.Contracts.csproj", "{F77AFC87-5DDD-4165-9F92-CDB094C9BDD3}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{0305AFE9-99C0-4A32-8746-840E5B01B3FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0305AFE9-99C0-4A32-8746-840E5B01B3FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0305AFE9-99C0-4A32-8746-840E5B01B3FE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CEEDAF20-13C6-4550-BCB1-4F5DB034C6D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CEEDAF20-13C6-4550-BCB1-4F5DB034C6D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CEEDAF20-13C6-4550-BCB1-4F5DB034C6D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CEEDAF20-13C6-4550-BCB1-4F5DB034C6D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F77AFC87-5DDD-4165-9F92-CDB094C9BDD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F77AFC87-5DDD-4165-9F92-CDB094C9BDD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F77AFC87-5DDD-4165-9F92-CDB094C9BDD3}.Release|Any CPU.ActiveCfg = Release|Any CPU

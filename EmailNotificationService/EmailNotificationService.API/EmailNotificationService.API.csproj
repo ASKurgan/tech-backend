@@ -11,13 +11,13 @@
 
   <ItemGroup>
     <PackageReference Include="CSharpFunctionalExtensions" Version="3.1.0" />
+    <PackageReference Include="Elastic.Serilog.Sinks" Version="8.12.3" />
     <PackageReference Include="Handlebars.Net" Version="2.1.6" />
     <PackageReference Include="MailKit" Version="4.8.0" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.2" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
-    <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
   </ItemGroup>
 
