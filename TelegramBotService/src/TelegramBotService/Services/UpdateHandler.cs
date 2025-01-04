@@ -32,6 +32,10 @@ public class UpdateHandler : IUpdateHandler
         });
     }
 
+    public Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, HandleErrorSource source,
+        CancellationToken cancellationToken) =>
+        throw new NotImplementedException();
+
     private async Task OnMessage(Message message)
     {
         _logger.LogInformation("Receive message type: {MessageType}", message.Type);
