@@ -14,11 +14,22 @@ registries:
 
 updates:
   - package-ecosystem: "dotnet-sdk"
-    directory: "/"
+    directories:
+        - "/IssueService/"
+        - "/AccountService/"
+        - "/CommentService/"
+        - "/EmailNotificationService/"
+        - "/FaqService/"
+        - "/FileService/"
+        - "/KeyGen/"
+        - "/NotificationService/"
+        - "/ScheduleService/"
+        - "/Shared/"
+        - "/TagService/"
+        - "/TelegramBotService/"
+        - "/UserProgressService/"
+        - "/tests/CodeAnalyzer.Tests/"
     schedule:
       interval: "monthly"
-  - package-ecosystem: "nuget"
-    registries: "*"
-    directory: "/IssueService/"
-    schedule:
-      interval: "monthly"
+    open-pull-requests-limit: 100
+  
