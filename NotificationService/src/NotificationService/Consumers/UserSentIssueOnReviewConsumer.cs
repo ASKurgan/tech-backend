@@ -3,7 +3,7 @@ using SachkovTech.Issues.Contracts.Messaging;
 
 namespace NotificationService.Consumers;
 
-public class UserSentIssueOnReviewConsumer : IConsumer<UserSentIssueOnReviewEvent>
+public class UserSentIssueOnReviewConsumer : IConsumer<IssueSentOnReviewEvent>
 {
     private readonly ILogger<UserSentIssueOnReviewConsumer> _logger;
     public UserSentIssueOnReviewConsumer(ILogger<UserSentIssueOnReviewConsumer> logger)
@@ -11,7 +11,7 @@ public class UserSentIssueOnReviewConsumer : IConsumer<UserSentIssueOnReviewEven
         _logger = logger;
     }
 
-    public Task Consume(ConsumeContext<UserSentIssueOnReviewEvent> context)
+    public Task Consume(ConsumeContext<IssueSentOnReviewEvent> context)
     {
         return Task.CompletedTask;
     }
