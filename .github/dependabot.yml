@@ -10,6 +10,6 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "nuget"
-      directory: "/"
-      schedule:
-        interval: "monthly"
+    directory: "/"
+    schedule:
+      interval: "monthly"
