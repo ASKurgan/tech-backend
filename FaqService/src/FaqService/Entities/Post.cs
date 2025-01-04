@@ -1,10 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.InteropServices.JavaScript;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using FaqService.Enums;
-using NpgsqlTypes;
 using SharedKernel;
+using static FaqService.Constants.Constants;
 
 namespace FaqService.Entities;
 
@@ -56,12 +54,12 @@ public class Post : Entity<Guid>
         Guid? lessonId,
         List<Guid>? tags)
     {
-        if (string.IsNullOrWhiteSpace(title) || title.Length > Constants.LOW_TEXT_LENGTH)
-            return Error.Validation("Title");
-        if (string.IsNullOrWhiteSpace(description) || description.Length > Constants.MAX_TEXT_LENGTH)
-            return Error.Validation("Description");
-        if (string.IsNullOrWhiteSpace(replLink) || !Regex.IsMatch(replLink, Constants.patternRepLink))
-            return Error.Validation("Repository Link");
+        if (string.IsNullOrWhiteSpace(title) || title.Length > LOW_TEXT_LENGTH)
+            return Error.Validation("title.length", "Invalid title length");
+        if (string.IsNullOrWhiteSpace(description) || description.Length > MAX_TEXT_LENGTH)
+            return Error.Validation("description.length", "Invalid description length");
+        if (string.IsNullOrWhiteSpace(replLink) || !Regex.IsMatch(replLink, patternRepLink))
+            return Error.Validation("repLink.length", "Invalid repLink length");
         return new Post(
             id,
             title,
@@ -83,10 +81,10 @@ public class Post : Entity<Guid>
         string title,
         string description)
     {
-        if (string.IsNullOrWhiteSpace(title) || title.Length > Constants.LOW_TEXT_LENGTH)
-            return Error.Validation("Title");
-        if (string.IsNullOrWhiteSpace(description) || description.Length > Constants.MAX_TEXT_LENGTH)
-            return Error.Validation("Description");
+        if (string.IsNullOrWhiteSpace(title) || title.Length > LOW_TEXT_LENGTH)
+            return Error.Validation("title.length", "Invalid title length");
+        if (string.IsNullOrWhiteSpace(description) || description.Length > MAX_TEXT_LENGTH)
+            return Error.Validation("description.length", "Invalid description length");
         Title = title;
         Description = description;
         return Result.Success<Error>();
@@ -108,7 +106,7 @@ public class Post : Entity<Guid>
     {
         var answerRes = _answers.FirstOrDefault(a => a.Id == answerId);
         if (answerRes == null)
-            return Error.NotFound("Answer");
+            return Error.NotFound("answer", "Answer not found");
         answerRes.ChangeIsSolution(true);
         AnswerId = answerId;
         Status = Status.Closed;

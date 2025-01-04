@@ -1,10 +1,8 @@
-﻿
-using FaqService.Entities;
+﻿using FaqService.Entities;
 using FaqService.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using NpgsqlTypes;
-using SharedKernel;
+using static FaqService.Constants.Constants;
 
 namespace FaqService.Infrastructure.Configuration;
 
@@ -17,17 +15,17 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
         builder.HasKey(x => x.Id);
 
         builder.Property(p => p.Title)
-            .HasMaxLength(Constants.LOW_TEXT_LENGTH)
+            .HasMaxLength(LOW_TEXT_LENGTH)
             .HasColumnName("title")
             .IsRequired();
 
         builder.Property(p => p.Description)
-            .HasMaxLength(Constants.MAX_TEXT_LENGTH)
+            .HasMaxLength(MAX_TEXT_LENGTH)
             .HasColumnName("description")
             .IsRequired();
 
         builder.Property(p => p.ReplLink)
-            .HasMaxLength(Constants.LOW_TEXT_LENGTH)
+            .HasMaxLength(LOW_TEXT_LENGTH)
             .HasColumnName("rep_link")
             .IsRequired();
 

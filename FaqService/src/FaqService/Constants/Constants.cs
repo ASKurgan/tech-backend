@@ -1,6 +1,6 @@
-﻿namespace SharedKernel;
+﻿namespace FaqService.Constants;
 
-public class Constants
+public static class Constants
 {
     public const int MAX_TEXT_LENGTH = 5000;
     public const int LOW_TEXT_LENGTH = 255;

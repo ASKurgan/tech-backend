@@ -25,7 +25,7 @@ public class DecreaseAnswerRatingHandler
 
         var answer = post.Value.Answers.FirstOrDefault(a => a.Id == command.AnswerId);
         if (answer is null)
-            return Error.NotFound("Answer");
+            return Error.NotFound("answer", "Answer not found");
 
         answer.DecreaseRating();
 

@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using SharedKernel;
+using static FaqService.Constants.Constants;
 
 namespace FaqService.Entities;
 
@@ -30,15 +31,15 @@ public class Answer : Entity<Guid>
         string text,
         Guid userId)
     {
-        if (string.IsNullOrWhiteSpace(text) || text.Length >= Constants.MAX_TEXT_LENGTH)
-            return Error.Validation("Text");
+        if (string.IsNullOrWhiteSpace(text) || text.Length >= MAX_TEXT_LENGTH)
+            return Error.Validation("text.length", "Invalid text length");
         return new Answer(id, postId, text, userId);
     }
 
     public UnitResult<Error> UpdateMainInfo(string text)
     {
-        if (string.IsNullOrWhiteSpace(text) || text.Length >= Constants.MAX_TEXT_LENGTH)
-            return Error.Validation("Text");
+        if (string.IsNullOrWhiteSpace(text) || text.Length >= MAX_TEXT_LENGTH)
+            return Error.Validation("text.length", "Invalid text length");
         Text = text;
         return Result.Success<Error>();
     }

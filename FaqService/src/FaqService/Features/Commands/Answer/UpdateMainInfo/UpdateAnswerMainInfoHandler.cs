@@ -25,7 +25,7 @@ public class UpdateAnswerMainInfoHandler
 
         var answer = post.Value.Answers.FirstOrDefault(a => a.Id == command.AnswerId);
         if (answer is null)
-            return Error.NotFound("Answer");
+            return Error.NotFound("answer", "Answer not found");
 
         var result = answer.UpdateMainInfo(command.Text);
         if (result.IsFailure)

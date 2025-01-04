@@ -35,7 +35,7 @@ public class PostsRepository
             .Include(p => p.Answers)
             .FirstOrDefaultAsync(p => p.Id == postId, cancellationToken);
         if (post == null)
-            return Error.NotFound("postId");
+            return Error.NotFound("post","Post not found");
         return post;
     }
 
@@ -45,7 +45,7 @@ public class PostsRepository
             .Include(p => p.Answers)
             .FirstOrDefaultAsync(p => p.Id == postId, cancellationToken);
         if (post == null)
-            return Error.NotFound("postId");
+            return Error.NotFound("post","Post not found");
         _dbContext.Posts.Remove(post);
         return Result.Success<Error>();
     }
