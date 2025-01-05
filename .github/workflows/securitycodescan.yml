@@ -33,10 +33,36 @@ jobs:
         uses: security-code-scan/security-code-scan-add-action@f8ff4f2763ed6f229eded80b1f9af82ae7f32a0d
 
       - name: Restore dependencies
-        run: dotnet restore
-
+        run: |
+          dotnet restore ./AccountService/AccountService.sln
+          dotnet restore ./IssueService/IssueService.sln
+          dotnet restore ./CommentService/CommentService.sln
+          dotnet restore ./EmailNotificationService/EmailNotificationService.sln
+          dotnet restore ./FaqService/FaqService.sln
+          dotnet restore ./FileService/FileService.sln
+          dotnet restore ./ScheduleService/ScheduleService.sln
+          dotnet restore ./Shared/Shared.sln
+          dotnet restore ./UserProgressService/UserProgressService.sln
+          dotnet restore ./NotificationService/NotificationService.sln
+          dotnet restore ./TagService/TagService.sln
+          dotnet restore ./TelegramBotService/TelegramBotService.sln
+          dotnet restore ./tests/CodeAnalyzer.Tests/CodeAnalyzer.Tests.sln
+          
       - name: Build
-        run: dotnet build --no-restore
+        run: |
+          dotnet restore ./AccountService/AccountService.sln
+          dotnet restore ./IssueService/IssueService.sln
+          dotnet restore ./CommentService/CommentService.sln
+          dotnet restore ./EmailNotificationService/EmailNotificationService.sln
+          dotnet restore ./FaqService/FaqService.sln
+          dotnet restore ./FileService/FileService.sln
+          dotnet restore ./ScheduleService/ScheduleService.sln
+          dotnet restore ./Shared/Shared.sln
+          dotnet restore ./UserProgressService/UserProgressService.sln
+          dotnet restore ./NotificationService/NotificationService.sln
+          dotnet restore ./TagService/TagService.sln
+          dotnet restore ./TelegramBotService/TelegramBotService.sln
+          dotnet restore ./tests/CodeAnalyzer.Tests/CodeAnalyzer.Tests.sln
 
       - name: Convert sarif for uploading to GitHub
         uses: security-code-scan/security-code-scan-results-action@cdb3d5e639054395e45bf401cba8688fcaf7a687
