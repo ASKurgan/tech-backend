@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using NotificationService.Entities;
 
 namespace NotificationService.Infrastructure;
@@ -13,6 +14,8 @@ public class NotificationSettingsDbContext(IConfiguration configuration) : DbCon
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(configuration.GetConnectionString(DATABASE));
+        optionsBuilder.ConfigureWarnings(warnings =>
+            warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
 
         base.OnConfiguring(optionsBuilder);
     }

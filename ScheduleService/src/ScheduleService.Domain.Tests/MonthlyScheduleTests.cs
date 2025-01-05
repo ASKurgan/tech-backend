@@ -5,6 +5,7 @@ using ScheduleService.Domain.Ids;
 using ScheduleService.Domain.Shared;
 using ScheduleService.Domain.TypeSchedules;
 using ScheduleService.Domain.ValueObjects;
+using SharedKernel;
 
 namespace ScheduleService.Domain.Tests;
 
@@ -168,7 +169,7 @@ public class MonthlyScheduleTests
 
         // Assert
         result.IsFailure.Should().BeTrue();
-        result.Error.Should().Be(Errors.Schedule.RenewalIsDisabled());
+        result.Error.Should().Be(ErrorsSchedule.Schedule.RenewalIsDisabled());
     }
 
     [Theory]

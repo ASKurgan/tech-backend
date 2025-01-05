@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using ScheduleService.Application;
 using ScheduleService.Domain.Entities;
 using ScheduleService.Domain.Ids;
 using ScheduleService.Domain.Shared;
@@ -54,7 +53,7 @@ public abstract class Schedule : DomainEntity<ScheduleId>
             return Errors.General.AlreadyExist();
 
         if (eventInstance.Start < StartDate && eventInstance.Start > EndDate)
-            return Errors.Schedule.InvalidPlannedEvent();
+            return ErrorsSchedule.Schedule.InvalidPlannedEvent();
 
         _plannedEvents.Add(eventInstance);
 
@@ -85,7 +84,7 @@ public abstract class Schedule : DomainEntity<ScheduleId>
     public UnitResult<Error> UnableAutomaticRenewal()
     {
         if (IsAutomaticRenewal)
-            return Errors.Schedule.RenewalIsEnabled();
+            return ErrorsSchedule.Schedule.RenewalIsEnabled();
 
         IsAutomaticRenewal = true;
         return UnitResult.Success<Error>();
@@ -94,7 +93,7 @@ public abstract class Schedule : DomainEntity<ScheduleId>
     public UnitResult<Error> DisableAutomaticRenewal()
     {
         if (!IsAutomaticRenewal)
-            return Errors.Schedule.RenewalIsDisabled();
+            return ErrorsSchedule.Schedule.RenewalIsDisabled();
 
         IsAutomaticRenewal = false;
         return UnitResult.Success<Error>();

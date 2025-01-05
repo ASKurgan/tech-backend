@@ -94,7 +94,7 @@ public class WeeklySchedule : Schedule
     public UnitResult<Error> ExtendEvents()
     {
         if (!IsAutomaticRenewal)
-            return Errors.Schedule.RenewalIsDisabled();
+            return ErrorsSchedule.Schedule.RenewalIsDisabled();
 
         var events = ExtendSchedule(EndDate.AddDays(1));
         foreach (var newEvent in events)

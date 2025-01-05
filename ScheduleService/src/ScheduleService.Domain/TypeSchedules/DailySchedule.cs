@@ -79,7 +79,7 @@ public sealed class DailySchedule : Schedule
     public UnitResult<Error> ExtendEvents()
     {
         if (!IsAutomaticRenewal)
-            return Errors.Schedule.RenewalIsDisabled();
+            return ErrorsSchedule.Schedule.RenewalIsDisabled();
         
         var events = ExtendSchedule(EndDate);
         foreach (var newEvent in events)
