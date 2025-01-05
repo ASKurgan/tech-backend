@@ -53,3 +53,23 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10    
+
+  - package-ecosystem: "docker"
+    directories:
+      - "/IssueService/"
+      - "/AccountService/"
+      - "/CommentService/"
+      - "/EmailNotificationService/"
+      - "/FaqService/"
+      - "/FileService/"
+      - "/KeyGen/"
+      - "/NotificationService/"
+      - "/ScheduleService/"
+      - "/Shared/"
+      - "/TagService/"
+      - "/TelegramBotService/"
+      - "/UserProgressService/"
+      - "/tests/CodeAnalyzer.Tests/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
