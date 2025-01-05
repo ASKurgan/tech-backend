@@ -8,6 +8,10 @@
 
 name: SecurityCodeScan
 
+env:
+  NUGET_USERNAME: ${{ secrets.NUGET_USERNAME }}
+  NUGET_PASSWORD: ${{ secrets.NUGET_PASSWORD }}
+  
 on:
   push:
     branches: [ "dev" ]
