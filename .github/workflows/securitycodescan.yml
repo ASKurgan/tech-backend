@@ -23,6 +23,7 @@ on:
 
 jobs:
   SCS:
+    permissions: write-all
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
