@@ -21,8 +21,8 @@
 
     <ItemGroup>
       <PackageReference Include="CSharpFunctionalExtensions" Version="3.4.3" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
     </ItemGroup>
 
 </Project>
