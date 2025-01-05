@@ -56,7 +56,20 @@ updates:
 
   - package-ecosystem: "docker"
     directories:
-      - "/"
+        - "/IssueService/src/SachkovTech.Web"
+        - "/AccountService/src/AccountService.Api"
+        #- "/CommentService/"
+        - "/EmailNotificationService/EmailNotificationService.API"
+        - "/FaqService/src/FaqService"
+        - "/FileService/src/FileService"
+        #- "/KeyGen/"
+        - "/NotificationService/src/NotificationService"
+        #- "/ScheduleService/"
+        #- "/Shared/"
+        #- "/TagService/"
+        - "/TelegramBotService/src/TelegramBotService"
+        #- "/UserProgressService/"
+        #- "/tests/CodeAnalyzer.Tests/"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
