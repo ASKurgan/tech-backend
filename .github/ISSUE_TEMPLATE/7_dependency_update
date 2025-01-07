@@ -1,0 +1,21 @@
+name: Использовать для обновления библиотек
+title: "[Dependency UPDATE]: "
+description: Обновление библиотек.
+labels: ["dependencies"]
+projects: ["SachkovTech"]
+body:
+  - type: textarea
+    id: dependency-date
+    attributes:
+      label: Дата обновления
+      description: Когда обновляете библиотеку?
+    validations:
+      required: true
+  - type: textarea
+    id: dependency-description
+    attributes:
+      label: Название библиотеки
+      description: Название библиотеки
+      placeholder: Название библиотеки
+    validations:
+      required: true
