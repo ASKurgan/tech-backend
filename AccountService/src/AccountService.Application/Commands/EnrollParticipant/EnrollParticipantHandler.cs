@@ -70,7 +70,7 @@ public class EnrollParticipantHandler : ICommandHandler<EnrollParticipantCommand
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Can not enroll participant with email {userEmail}", command.Email);
+            _logger.LogError(ex, "Can not enroll participant with email {userEmail}", command.Email.Replace(Environment.NewLine, "").Replace("\n", "").Replace("\r", ""));
 
             await transaction.RollbackAsync(cancellationToken);
 
