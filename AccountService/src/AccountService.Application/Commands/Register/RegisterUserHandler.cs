@@ -85,7 +85,8 @@ public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
 
             await _publishEndpoint.Publish(new UserRegisteredEvent(user.Id), cancellationToken);
 
-            _logger.LogInformation("User was created with name {userName}", command.UserName);
+            var sanitizedUserName = command.UserName.Replace(Environment.NewLine, "").Replace("\n", "").Replace("\r", "");
+            _logger.LogInformation("User was created with name {userName}", sanitizedUserName);
 
             return Result.Success<ErrorList>();
         }
