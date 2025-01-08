@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using Dapper;
 using SachkovTech.Core.Abstractions;
@@ -52,7 +53,10 @@ public class GetIssuesByModuleWithPaginationHandler
             parameters.Add("@Title", $"%{query.Title}%");
         }
 
-        sqlBuilder.ApplySorting(query.SortBy, query.SortDirection);
+        var allowedSortColumns = new List<string> { "Id", "LessonId", "ModuleId", "Position", "Files", "IsDeleted", "Description", "Title" };
+        var sortBy = allowedSortColumns.Contains(query.SortBy) ? query.SortBy : "Id";
+        var sortDirection = query.SortDirection?.ToUpper() == "DESC" ? "DESC" : "ASC";
+        sqlBuilder.ApplySorting(sortBy, sortDirection);
         sqlBuilder.ApplyPagination(parameters, query.Page, query.PageSize);
 
         var totalCountSql = new StringBuilder(
