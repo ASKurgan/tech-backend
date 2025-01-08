@@ -1,31 +1,27 @@
 ﻿using CSharpFunctionalExtensions;
-using UserProgressService.Domain.Enums;
 using UserProgressService.Domain.ValueObjects;
 using UserProgressService.Domain.ValueObjects.Ids;
 
 namespace UserProgressService.Domain.Progress;
 
-public class UserProgress : Entity<UserProgressId>
+public sealed class UserProgress : Entity<UserProgressId>
 {
     private readonly List<AchievementId> _achievements = [];
     private readonly List<IssueProgress> _issueProgresses = [];
     private readonly List<LessonProgress> _lessonProgresses = [];
 
-    // EF Core конструктор
-    private UserProgress(UserProgressId id) : base(id)
-    {
-    }
+    // EF Core
+    private UserProgress(UserProgressId id) : base(id) { }
 
-    public UserProgress(UserProgressId id, Level level, int experience) : base(id)
+    public UserProgress(UserProgressId id, Level level) : base(id)
     {
         Level = level;
-        Experience = experience;
+        UserActivityDate = DateOnly.FromDateTime(DateTime.Now);
     }
 
     public Guid UserId { get; private set; }
-    public Level Level { get; private set; }
-    public int Experience { get; private set; }
     public DateOnly UserActivityDate { get; private set; }
+    public Level Level { get; private set; }
     public IReadOnlyList<AchievementId> Achievements => _achievements;
     public IReadOnlyList<IssueProgress> IssueProgresses => _issueProgresses;
     public IReadOnlyList<LessonProgress> LessonProgresses => _lessonProgresses;
@@ -33,7 +29,7 @@ public class UserProgress : Entity<UserProgressId>
     public void GainExperience(int experience)
     {
         var newExperience = Level.CurrentExperience + experience;
-        Level = new Level(newExperience);
+        Level = Level.Create(newExperience).Value;
     }
 
     public void AddIssueProgress(IssueProgress issueProgress)

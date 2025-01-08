@@ -1,9 +1,9 @@
 using UserProgressService.Domain.Achievements;
 using UserProgressService.Domain.DomainServices;
-using UserProgressService.Domain.Enums;
 using UserProgressService.Domain.Progress;
 using UserProgressService.Domain.ValueObjects;
 using UserProgressService.Domain.ValueObjects.Conditions;
+using UserProgressService.Domain.ValueObjects.Ids;
 
 namespace UserProgressService.UnitTests.Domain;
 
@@ -20,7 +20,7 @@ public class CheckConditionsServiceTests
     public void CheckConditions_AchievementIssueCondition_ShouldAddAchievement()
     {
         // Arrange
-        var userProgress = new UserProgress(Guid.NewGuid(), new Level(1), 0);
+        var userProgress = new UserProgress(Guid.NewGuid(), Level.Create(1).Value);
 
         var issueId = Guid.NewGuid();
 
@@ -29,22 +29,20 @@ public class CheckConditionsServiceTests
             Guid.NewGuid(),
             issueId,
             1,
-            DateTime.Now,
             TimeSpan.FromMinutes(30),
-            Difficulty.Medium));
+            Difficulty.Create(Difficulty.Medium).Value));
 
-        var condition = new IssueCondition(
+        var condition = IssueCondition.Create(
             TimeSpan.FromMinutes(60),
-            Difficulty.Medium,
+            Difficulty.Create(Difficulty.Medium).Value,
             1,
-            1);
+            1).Value;
 
         var achievement = new Achievement(
             Guid.NewGuid(),
             Guid.NewGuid(),
             "",
             "",
-            DateOnly.FromDateTime(DateTime.Now),
             condition,
             0);
 
@@ -61,7 +59,7 @@ public class CheckConditionsServiceTests
     public void CheckConditions_AchievementIssueCondition_ShouldNotAddAchievement()
     {
         // Arrange
-        var userProgress = new UserProgress(Guid.NewGuid(), new Level(1), 10);
+        var userProgress = new UserProgress(Guid.NewGuid(), Level.Create(1).Value);
 
         var issueId = Guid.NewGuid();
         userProgress.AddIssueProgress(new IssueProgress(
@@ -69,22 +67,20 @@ public class CheckConditionsServiceTests
             Guid.NewGuid(),
             issueId,
             1,
-            DateTime.Now,
             TimeSpan.FromMinutes(120),
-            Difficulty.Medium));
+            Difficulty.Create(Difficulty.Medium).Value));
 
-        var condition = new IssueCondition(
+        var condition = IssueCondition.Create(
             TimeSpan.FromMinutes(60),
-            Difficulty.Medium,
+            Difficulty.Create(Difficulty.Medium).Value,
             1,
-            1);
+            1).Value;
 
         var achievement = new Achievement(
             Guid.NewGuid(),
             Guid.NewGuid(),
             "",
             "",
-            DateOnly.FromDateTime(DateTime.Now),
             condition,
             0);
 
@@ -101,25 +97,25 @@ public class CheckConditionsServiceTests
     public void CheckConditions_AchievementLessonCondition_ShouldAddAchievement()
     {
         // Arrange
-        var userProgress = new UserProgress(Guid.NewGuid(), new Level(1), 10);
+        var userProgress = new UserProgress(Guid.NewGuid(), Level.Create(1).Value);
 
         var lessonId = Guid.NewGuid();
         userProgress.AddLessonProgress(new LessonProgress(
+            LessonProgressId.NewId(),
             Guid.NewGuid(),
             lessonId,
             true)); // Завершённый урок
 
-        var condition = new LessonCondition(
+        var condition = LessonCondition.Create(
             TimeSpan.FromMinutes(30),
-            Difficulty.Easy,
-            1); // Условие: посмотреть 1 урок
+            Difficulty.Create(Difficulty.Easy).Value,
+            1).Value; // Условие: посмотреть 1 урок
 
         var achievement = new Achievement(
             Guid.NewGuid(),
             Guid.NewGuid(),
             "",
             "",
-            DateOnly.FromDateTime(DateTime.Now),
             condition,
             0);
 
@@ -136,25 +132,25 @@ public class CheckConditionsServiceTests
     public void CheckConditions_AchievementLessonCondition_ShouldNotAddAchievement()
     {
         // Arrange
-        var userProgress = new UserProgress(Guid.NewGuid(), new Level(1), 10);
+        var userProgress = new UserProgress(Guid.NewGuid(), Level.Create(1).Value);
 
         var lessonId = Guid.NewGuid();
         userProgress.AddLessonProgress(new LessonProgress(
+            LessonProgressId.NewId(),
             Guid.NewGuid(),
             lessonId,
             false)); // Не завершённый урок
 
-        var condition = new LessonCondition(
+        var condition = LessonCondition.Create(
             TimeSpan.FromMinutes(30),
-            Difficulty.Easy,
-            1); // Условие: посмотреть 1 урок
+            Difficulty.Create(Difficulty.Easy).Value,
+            1).Value; // Условие: посмотреть 1 урок
 
         var achievement = new Achievement(
             Guid.NewGuid(),
             Guid.NewGuid(),
             "",
             "",
-            DateOnly.FromDateTime(DateTime.Now),
             condition,
             0);
 
@@ -171,7 +167,7 @@ public class CheckConditionsServiceTests
     public void CheckConditions_AchievementCondition_WithMultipleConditions_ShouldAddAchievement()
     {
         // Arrange
-        var userProgress = new UserProgress(Guid.NewGuid(), new Level(1), 10);
+        var userProgress = new UserProgress(Guid.NewGuid(), Level.Create(1).Value);
 
         var issueId = Guid.NewGuid();
 
@@ -180,33 +176,32 @@ public class CheckConditionsServiceTests
             Guid.NewGuid(),
             issueId,
             1,
-            DateTime.Now,
             TimeSpan.FromMinutes(30),
-            Difficulty.Medium)); // Добавляем завершённую задачу
+            Difficulty.Create(Difficulty.Medium).Value)); // Добавляем завершённую задачу
 
         var lessonId = Guid.NewGuid();
         userProgress.AddLessonProgress(new LessonProgress(
+            LessonProgressId.NewId(),
             Guid.NewGuid(),
             lessonId,
             true)); // Завершённый урок
 
-        var issueCondition = new IssueCondition(
+        var issueCondition = IssueCondition.Create(
             TimeSpan.FromMinutes(60),
-            Difficulty.Medium,
+            Difficulty.Create(Difficulty.Medium).Value,
             1,
-            1); // Условие: выполнить 1 задачу за 60 минут
+            1).Value; // Условие: выполнить 1 задачу за 60 минут
 
-        var lessonCondition = new LessonCondition(
+        var lessonCondition = LessonCondition.Create(
             TimeSpan.FromMinutes(30),
-            Difficulty.Easy,
-            1); // Условие: посмотреть 1 урок
+            Difficulty.Create(Difficulty.Easy).Value,
+            1).Value; // Условие: посмотреть 1 урок
 
         var lessonAchievement = new Achievement(
             Guid.NewGuid(),
             Guid.NewGuid(),
             "",
             "",
-            DateOnly.FromDateTime(DateTime.Now),
             lessonCondition,
             0);
 
@@ -215,7 +210,6 @@ public class CheckConditionsServiceTests
             Guid.NewGuid(),
             "",
             "",
-            DateOnly.FromDateTime(DateTime.Now),
             issueCondition,
             0);
 

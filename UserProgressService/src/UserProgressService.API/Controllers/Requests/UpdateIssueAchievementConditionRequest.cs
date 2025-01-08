@@ -1,0 +1,5 @@
+﻿using UserProgressService.Application.Dtos;
+
+namespace UserProgressService.API.Controllers.Requests;
+
+public record UpdateIssueAchievementConditionRequest(IssueConditionDto IssueCondition);

@@ -1,10 +1,19 @@
 using Serilog;
 using Serilog.Events;
+using UserProgressService.Application;
+using UserProgressService.Infrastructure;
 
 namespace UserProgressService.API;
 
 public static class DependencyInjection
 {
+    public static void AddProgramDependencies(this IServiceCollection services)
+    {
+        services
+            .AddInfrastructure()
+            .AddApplication();
+    }
+    
     public static IServiceCollection AddLogging(
         this IServiceCollection services, IConfiguration configuration)
     {

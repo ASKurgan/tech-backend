@@ -4,7 +4,7 @@ namespace UserProgressService.Domain.ValueObjects.Ids;
 
 public sealed class UserProgressId : ComparableValueObject
 {
-    public UserProgressId(Guid value)
+    private UserProgressId(Guid value)
     {
         Value = value;
     }

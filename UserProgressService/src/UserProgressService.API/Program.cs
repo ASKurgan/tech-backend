@@ -1,14 +1,17 @@
+using Serilog;
 using UserProgressService.API;
 using UserProgressService.API.Middlewares;
-using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddLogging(builder.Configuration);
 
 builder.Services.AddControllers();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddProgramDependencies();
 
 var app = builder.Build();
 

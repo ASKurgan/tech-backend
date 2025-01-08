@@ -1,23 +1,47 @@
-﻿using UserProgressService.Domain.Enums;
+﻿
+
+using CSharpFunctionalExtensions;
+using Newtonsoft.Json;
+using SharedKernel;
 using UserProgressService.Domain.Progress;
 
 namespace UserProgressService.Domain.ValueObjects.Conditions;
 
-public class IssueCondition : Condition
+public sealed class IssueCondition : Condition
 {
-    public IssueCondition(
+    [JsonConstructor]
+    private IssueCondition(
         TimeSpan? timeToComplete,
         Difficulty difficulty,
-        int attempts,
-        int issueCount)
+        int? attempts,
+        int? issueCount)
         : base(timeToComplete, difficulty)
     {
         Attempts = attempts;
         IssueCount = issueCount;
     }
 
-    public int? IssueCount { get; }
     public int? Attempts { get; }
+
+    public int? IssueCount { get; }
+
+    public static Result<IssueCondition, Error> Create(
+        TimeSpan? timeToComplete,
+        Difficulty difficulty,
+        int? attempts,
+        int? issueCount)
+    {
+        if (timeToComplete.HasValue && timeToComplete.Value <= TimeSpan.Zero)
+            return Errors.General.ValueIsInvalid("TimeToComplete");
+
+        if (issueCount.HasValue && issueCount.Value <= 0)
+            return Errors.General.ValueIsInvalid("IssueCount");
+
+        if (attempts.HasValue && attempts.Value <= 0)
+            return Errors.General.ValueIsInvalid("Attempts");
+
+        return new IssueCondition(timeToComplete, difficulty, attempts, issueCount);
+    }
 
     public override bool IsSatisfiedBy(UserProgress progress)
     {
