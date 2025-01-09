@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using NSubstitute;
 using ScheduleService.Application;
 using ScheduleService.Domain.Ids;

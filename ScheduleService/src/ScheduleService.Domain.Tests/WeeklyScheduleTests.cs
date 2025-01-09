@@ -60,7 +60,7 @@ public class WeeklyScheduleTests
         result.Value.Should().NotBeNull();
         result.Value.PlannedEvents.Should().HaveCount(countExpectedEvents);
         result.Value.RepeatInterval.Should().Be(repeatInterval);
-        result.Value.ExecutedDays.Should().BeEquivalentTo(executionDays);
+        result.Value.ExecutionDays.Should().BeEquivalentTo(executionDays);
     }
 
     [Fact]

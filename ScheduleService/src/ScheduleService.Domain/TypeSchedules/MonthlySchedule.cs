@@ -29,7 +29,7 @@ public sealed class MonthlySchedule : Schedule
         _executionDays = executionDays;
     }
 
-    public int RepeatInterval { get; }
+    public int RepeatInterval { get; private set; }
 
     private readonly List<DateTime> _executionDays = [];
 
@@ -61,13 +61,13 @@ public sealed class MonthlySchedule : Schedule
         bool isAutomaticRenewal)
     {
         if (!executionDays.Any())
-            return Errors.General.ValueIsInvalid("executionTimeList");
+            return SharedKernel.Errors.General.ValueIsInvalid("executionTimeList");
 
         if (endDate < startDate)
-            return Errors.General.ValueIsInvalid("endDate");
+            return SharedKernel.Errors.General.ValueIsInvalid("endDate");
 
         if (repeatInterval < 0)
-            return Errors.General.ValueIsInvalid("repeatInterval");
+            return SharedKernel.Errors.General.ValueIsInvalid("repeatInterval");
 
         // Создаем объект расписания
         var schedule = new MonthlySchedule(id,

@@ -50,7 +50,7 @@ public abstract class Schedule : DomainEntity<ScheduleId>
     public UnitResult<Error> AddEvent(EventInstance eventInstance)
     {
         if (_plannedEvents.Any(e => e.Id == eventInstance.Id))
-            return Errors.General.AlreadyExist();
+            return SharedKernel.Errors.General.AlreadyExist();
 
         if (eventInstance.Start < StartDate && eventInstance.Start > EndDate)
             return ErrorsSchedule.Schedule.InvalidPlannedEvent();
@@ -64,7 +64,7 @@ public abstract class Schedule : DomainEntity<ScheduleId>
     {
         var eventInstanceToUpdate = _plannedEvents.FirstOrDefault(e => e.Id == eventInstance.Id);
         if (eventInstanceToUpdate is null)
-            return Errors.General.NotFound(eventInstance.Id.Value, "event instance");
+            return SharedKernel.Errors.General.NotFound(eventInstance.Id.Value, "event instance");
 
         eventInstanceToUpdate.Reschedule(newDate);
 
@@ -74,7 +74,7 @@ public abstract class Schedule : DomainEntity<ScheduleId>
     public UnitResult<Error> RemoveEvent(EventInstance eventInstance)
     {
         if (_plannedEvents.Any(e => e.Id == eventInstance.Id) == false)
-            return Errors.General.NotFound(eventInstance.Id.Value, "event instance");
+            return SharedKernel.Errors.General.NotFound(eventInstance.Id.Value, "event instance");
 
         _plannedEvents.Remove(eventInstance);
 

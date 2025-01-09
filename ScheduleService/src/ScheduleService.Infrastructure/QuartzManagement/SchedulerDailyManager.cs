@@ -6,6 +6,18 @@ namespace ScheduleService.Infrastructure.QuartzManagement;
 
 public class SchedulerDailyManager(ISchedulerFactory schedulerFactory)
 {
+    /// <summary>
+    ///    Метод для планирования ежедневной задачи.
+    /// </summary>
+    /// <param name="schedulerDate">время выполнения задачи</param>
+    /// <param name="startDate">дата начала планирования задачи</param>
+    /// <param name="endDate">дата завершения планирования задачи, 
+    /// разница между startDate и endDate определяет сколько дней задача будет повторяться</param>
+    /// <param name="jobId">Id выполняемой задачи</param>
+    /// <param name="triggerId">Id объекта-триггера, который обеспечивает выполнение задачи по времени</param>
+    /// <param name="jobDescription">краткое описание задачи</param>
+    /// <param name="cancellationToken">токен отмены выполнения асинхронной операции</param>
+    /// <returns>Возвращает объект Task.</returns>
     public async Task SchedulerJob(
         DateTime schedulerDate,
         DateTime startDate,
@@ -33,6 +45,18 @@ public class SchedulerDailyManager(ISchedulerFactory schedulerFactory)
         await schedulerInstance.ScheduleJob(job, trigger, cancellationToken);
     }
 
+    /// <summary>
+    ///    Метод для планирования ежедневной задачи.
+    /// </summary>
+    /// <param name="schedulerDate">период времени до начала выполнения задачи</param>
+    /// <param name="startDate">дата начала планирования задачи</param>
+    /// <param name="endDate">дата завершения планирования задачи, 
+    /// разница между startDate и endDate определяет сколько дней задача будет повторяться</param>
+    /// <param name="jobId">Id выполняемой задачи</param>
+    /// <param name="triggerId">Id объекта-триггера, который обеспечивает выполнение задачи по времени</param>
+    /// <param name="jobDescription">краткое описание задачи</param>
+    /// <param name="cancellationToken">токен отмены выполнения асинхронной операции</param>
+    /// <returns>Возвращает объект Task.</returns>
     public async Task SchedulerJob(
         TimeSpan spanDuration,
         DateTime startDate,
@@ -62,6 +86,18 @@ public class SchedulerDailyManager(ISchedulerFactory schedulerFactory)
         await schedulerInstance.ScheduleJob(job, trigger, cancellationToken);
     }
 
+    /// <summary>
+    ///    Метод для планирования ежедневных задач.
+    /// </summary>
+    /// <param name="schedulerDates">список времен выполнения задачи</param>
+    /// <param name="startDate">дата начала планирования задачи</param>
+    /// <param name="endDate">дата завершения планирования задачи, 
+    /// разница между startDate и endDate определяет сколько дней каждая задача будет повторяться</param>
+    /// <param name="jobId">Id выполняемой задачи</param>
+    /// <param name="triggerId">Id объекта-триггера, который обеспечивает выполнение задачи по времени</param>
+    /// <param name="jobDescription">краткое описание задачи</param>
+    /// <param name="cancellationToken">токен отмены выполнения асинхронной операции</param>
+    /// <returns>Возвращает объект Task.</returns>
     public async Task SchedulerJob(
         List<DateTime> schedulerDates,
         DateTime startDate,
@@ -92,6 +128,18 @@ public class SchedulerDailyManager(ISchedulerFactory schedulerFactory)
         }
     }
 
+    /// <summary>
+    ///    Метод для планирования ежедневных задач.
+    /// </summary>
+    /// <param name="schedulerDates">список периодов времени до начала выполнения задачи</param>
+    /// <param name="startDate">дата начала планирования задачи</param>
+    /// <param name="endDate">дата завершения планирования задачи, 
+    /// разница между startDate и endDate определяет сколько дней каждая задача будет повторяться</param>
+    /// <param name="jobId">Id выполняемой задачи</param>
+    /// <param name="triggerId">Id объекта-триггера, который обеспечивает выполнение задачи по времени</param>
+    /// <param name="jobDescription">краткое описание задачи</param>
+    /// <param name="cancellationToken">токен отмены выполнения асинхронной операции</param>
+    /// <returns>Возвращает объект Task.</returns>
     public async Task SchedulerJob(
         List<TimeSpan> schedulerDates,
         DateTime startDate,

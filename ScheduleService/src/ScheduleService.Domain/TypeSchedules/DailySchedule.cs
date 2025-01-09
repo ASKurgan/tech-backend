@@ -51,10 +51,10 @@ public sealed class DailySchedule : Schedule
         bool isAutomaticRenewal)
     {
         if (!executionTimeList.Any())
-            return Errors.General.ValueIsInvalid("executionTimeList");
+            return SharedKernel.Errors.General.ValueIsInvalid("executionTimeList");
 
         if (startDate > endDate)
-            return Errors.General.ValueIsInvalid("endDate");
+            return SharedKernel.Errors.General.ValueIsInvalid("endDate");
 
         var schedule = new DailySchedule(id,
             startDate,

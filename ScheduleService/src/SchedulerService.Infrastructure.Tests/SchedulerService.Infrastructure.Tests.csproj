@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\ScheduleService.Infrastructure\ScheduleService.Infrastructure.csproj" />
+    <ProjectReference Include="..\ScheduleService.Infrastructure\ScheduleService.Infrastructure.csproj" />    
   </ItemGroup>
 
   <ItemGroup>

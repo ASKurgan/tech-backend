@@ -64,7 +64,7 @@ updates:
         - "/FileService/src/FileService"
         #- "/KeyGen/"
         - "/NotificationService/src/NotificationService"
-        #- "/ScheduleService/"
+        - "/ScheduleService/"
         #- "/Shared/"
         #- "/TagService/"
         - "/TelegramBotService/src/TelegramBotService"

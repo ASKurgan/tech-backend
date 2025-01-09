@@ -31,11 +31,11 @@ public class WeeklySchedule : Schedule
         _executionDays = executionDays;
     }
 
-    private readonly List<EventTime> _executionDays;
+    private List<EventTime> _executionDays;
+    public int RepeatInterval { get; private set; }
 
-    public int RepeatInterval { get; }
+    public IReadOnlyCollection<EventTime> ExecutionDays => _executionDays;
 
-    public IReadOnlyCollection<EventTime> ExecutedDays => _executionDays;
 
     /// <summary>
     ///    Создание еженедельного расписания.
@@ -116,7 +116,7 @@ public class WeeklySchedule : Schedule
     /// <param name="startDay">Дата начала продления.</param>
     private IEnumerable<EventInstance> ExtendSchedule(DateTime startDay)
     {
-        return _executionDays.Select(executionDay =>
+        return ExecutionDays.Select(executionDay =>
         {
             var targetDate = CalculateDateTime(startDay.AddDays(1 * DAYS_IN_WEEK + 1),
                 executionDay.Day,
@@ -146,7 +146,7 @@ public class WeeklySchedule : Schedule
     /// <param name="startDateOfWeek">Дата начала недели, с которой начинается расчет.</param>
     private IEnumerable<EventInstance> GeneratePlannedEvents(DateTime startDateOfWeek)
     {
-        return ExecutedDays.Select(executionDay =>
+        return ExecutionDays.Select(executionDay =>
         {
             var targetDate = CalculateDateTime(startDateOfWeek, executionDay.Day, executionDay.Time);
             return new EventInstance(EventId.New(),

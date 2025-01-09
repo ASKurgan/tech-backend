@@ -10,7 +10,7 @@ public class DateToCronConvertorTest
     public void GetDailyCron_ItShould_Return_Right_Expression()
     {
         //Arrange 
-        var dateTimeProvider = Substitute.For<IDateTimeProvider>();        
+        var dateTimeProvider = Substitute.For<IDateTimeProvider>();
         dateTimeProvider.UtcNow.Returns(
             new DateTime(2024, 11, 5, 15, 35, 0, DateTimeKind.Utc));
         var testExpression = "0 35 15 1/1 * ? *";

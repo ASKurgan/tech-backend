@@ -14,9 +14,10 @@ public class EventJobFactory : IJobFactory
     }
 
     //result needs to check null
-    public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
+    public IJob? NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
     {
         using var scope = _scopeFactory.CreateScope();
+
         return ActivatorUtilities.CreateInstance(
             scope.ServiceProvider,
             bundle.JobDetail.JobType) as IJob;
