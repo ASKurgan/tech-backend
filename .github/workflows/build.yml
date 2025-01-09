@@ -35,6 +35,8 @@ jobs:
           dotnet restore ./NotificationService/NotificationService.sln
           dotnet restore ./TagService/TagService.sln
           dotnet restore ./TelegramBotService/TelegramBotService.sln
+          dotnet restore ./ScheduleService/ScheduleService.sln
+          dotnet restore ./UserProgressService/UserProgressService.sln
           dotnet restore ./tests/CodeAnalyzer.Tests/CodeAnalyzer.Tests.sln
           
       - name: Build
@@ -46,6 +48,8 @@ jobs:
           dotnet build ./NotificationService/NotificationService.sln --configuration Release --no-restore
           dotnet build ./TagService/TagService.sln --configuration Release --no-restore
           dotnet build ./TelegramBotService/TelegramBotService.sln --configuration Release --no-restore
+          dotnet build ./ScheduleService/ScheduleService.sln --configuration Release --no-restore
+          dotnet build ./UserProgressService/UserProgressService.sln --configuration Release --no-restore
           dotnet build ./tests/CodeAnalyzer.Tests/CodeAnalyzer.Tests.sln
 
       - name: Services_Tests
@@ -56,6 +60,8 @@ jobs:
           dotnet test ./NotificationService/NotificationService.sln --configuration Release --no-restore
           dotnet test ./TagService/TagService.sln --configuration Release --no-restore
           dotnet test ./TelegramBotService/TelegramBotService.sln --configuration Release --no-restore
+          dotnet test ./ScheduleService/ScheduleService.sln --configuration Release --no-restore
+          dotnet test ./UserProgressService/UserProgressService.sln --configuration Release --no-restore
           dotnet test ./FileService/FileService.sln --configuration Release --no-restore
           
       - name: General_Tests
