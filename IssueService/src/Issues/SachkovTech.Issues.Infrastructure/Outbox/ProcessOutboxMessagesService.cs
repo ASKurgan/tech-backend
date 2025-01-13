@@ -47,10 +47,13 @@ public class ProcessOutboxMessagesService
                 ShouldHandle = new PredicateBuilder().Handle<Exception>(),
                 OnRetry = retryArguments =>
                 {
-                    _logger.LogCritical(retryArguments.Outcome.Exception, "Current attempt: {attemptNumber}", retryArguments.AttemptNumber);
+                    _logger.LogCritical(
+                        retryArguments.Outcome.Exception,
+                        "Current attempt: {attemptNumber}",
+                        retryArguments.AttemptNumber);
 
                     return ValueTask.CompletedTask;
-                }
+                },
             })
             .Build();
 
@@ -67,7 +70,10 @@ public class ProcessOutboxMessagesService
         }
     }
 
-    private async Task ProcessMessageAsync(OutboxMessage message, ResiliencePipeline pipeline, CancellationToken cancellationToken)
+    private async Task ProcessMessageAsync(
+        OutboxMessage message,
+        ResiliencePipeline pipeline,
+        CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -79,7 +85,8 @@ public class ProcessOutboxMessagesService
             var deserializedMessage = JsonSerializer.Deserialize(message.Payload, messageType)
                                       ?? throw new NullReferenceException("Message payload not found");
 
-            await pipeline.ExecuteAsync(async token =>
+            await pipeline.ExecuteAsync(
+                async token =>
             {
                 await _publisher.Publish(deserializedMessage, messageType, token);
 

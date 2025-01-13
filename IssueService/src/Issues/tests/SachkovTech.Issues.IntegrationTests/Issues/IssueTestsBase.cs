@@ -53,27 +53,29 @@ public class IssueTestsBase : IClassFixture<IntegrationTestsWebFactory>, IAsyncL
 
         return module.Id;
     }
-    
+
     protected async Task<Guid> SeedIssue(Guid moduleId = default, Guid lessonId = default)
     {
-        var issue = new Issue(IssueId.NewIssueId(),
+        var issue = new Issue(
+            IssueId.NewIssueId(),
             Title.Create("title").Value,
             Description.Create("description").Value,
             lessonId,
             moduleId,
             Experience.Create(5).Value,
             null);
-        
+
         await WriteDbContext.Issues.AddAsync(issue);
 
         await WriteDbContext.SaveChangesAsync();
 
         return issue.Id;
     }
-    
+
     protected async Task<Guid> SeedSoftDeletedIssue()
     {
-        var issue = new Issue(IssueId.NewIssueId(),
+        var issue = new Issue(
+            IssueId.NewIssueId(),
             Title.Create("title").Value,
             Description.Create("description").Value,
             Guid.NewGuid(),
@@ -81,25 +83,27 @@ public class IssueTestsBase : IClassFixture<IntegrationTestsWebFactory>, IAsyncL
             Experience.Create(5).Value,
             null);
 
-        issue.SoftDelete(); 
-        
+        issue.SoftDelete();
+
         await WriteDbContext.Issues.AddAsync(issue);
 
         await WriteDbContext.SaveChangesAsync();
 
         return issue.Id;
     }
-    
+
     protected async Task<Guid> SeedLesson(Guid moduleId)
     {
-        var lesson = new Lesson(LessonId.NewLessonId(), 
+        var lesson = new Lesson(
+            LessonId.NewLessonId(),
             moduleId,
             Title.Create("title").Value,
             Description.Create("description").Value,
             Experience.Create(5).Value,
             new Video(Guid.NewGuid()),
-            Guid.NewGuid(), 
-            [],[]);
+            Guid.NewGuid(),
+            [],
+            []);
 
         await WriteDbContext.Lessons.AddAsync(lesson);
 

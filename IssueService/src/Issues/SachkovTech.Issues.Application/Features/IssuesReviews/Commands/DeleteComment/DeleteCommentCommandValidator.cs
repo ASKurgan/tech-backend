@@ -10,6 +10,7 @@ public class DeleteCommentCommandValidator : AbstractValidator<DeleteCommentComm
     {
         RuleFor(c => c.IssueReviewId)
             .NotEmpty().WithError(Errors.General.ValueIsInvalid("id"));
+
         RuleFor(c => c.CommentId)
             .NotEmpty().WithError(Errors.General.ValueIsInvalid("comment_id"));
     }

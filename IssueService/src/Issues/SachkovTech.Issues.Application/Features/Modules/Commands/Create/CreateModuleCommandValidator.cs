@@ -8,7 +8,10 @@ public class CreateModuleCommandValidator : AbstractValidator<CreateModuleComman
 {
     public CreateModuleCommandValidator()
     {
-        RuleFor(c => c.Title).MustBeValueObject(Title.Create);
-        RuleFor(c => c.Description).MustBeValueObject(Description.Create);
+        RuleFor(c => c.Title)
+            .MustBeValueObject(Title.Create);
+
+        RuleFor(c => c.Description)
+            .MustBeValueObject(Description.Create);
     }
 }

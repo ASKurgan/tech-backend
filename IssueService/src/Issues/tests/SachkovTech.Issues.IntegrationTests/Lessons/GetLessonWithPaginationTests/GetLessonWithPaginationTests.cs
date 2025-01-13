@@ -17,7 +17,8 @@ namespace SachkovTech.Issues.IntegrationTests.Lessons.GetLessonWithPaginationTes
 
 public class GetLessonWithPaginationTests : LessonsTestsBase
 {
-    public GetLessonWithPaginationTests(LessonTestWebFactory factory) : base(factory)
+    public GetLessonWithPaginationTests(LessonTestWebFactory factory)
+        : base(factory)
     {
         _sut = Scope.ServiceProvider
             .GetRequiredService<IQueryHandlerWithResult<PagedList<LessonResponse>, GetLessonsWithPaginationQuery>>();
@@ -28,7 +29,7 @@ public class GetLessonWithPaginationTests : LessonsTestsBase
     [Fact]
     public async Task Get_lessons_with_pagination()
     {
-        // arrange
+        // Arrange
         var cancellationToken = new CancellationTokenSource().Token;
 
         var countLessons = 5;
@@ -41,10 +42,10 @@ public class GetLessonWithPaginationTests : LessonsTestsBase
         var pageSize = countLessons;
         var query = Fixture.CreateGetLessonsWithPaginationQuery(page, pageSize);
 
-        // act
+        // Act
         var result = await _sut.Handle(query, cancellationToken);
 
-        // assert
+        // Assert
         result.IsSuccess.Should().BeTrue();
         var pagedList = result.Value;
         pagedList.Should().NotBeNull();
@@ -56,19 +57,19 @@ public class GetLessonWithPaginationTests : LessonsTestsBase
     [Fact]
     public async Task Cant_get_lessons_with_invalid_query()
     {
-        // arrange
+        // Arrange
         var cancellationToken = new CancellationTokenSource().Token;
-        
+
         var invalidPage = -1;
         var invalidPageSize = -1;
         var invalidQuery = new GetLessonsWithPaginationQuery(invalidPage, invalidPageSize);
 
         SetupFailureValidationResult(invalidQuery, cancellationToken);
 
-        // act
+        // Act
         var result = await _sut.Handle(invalidQuery, cancellationToken);
 
-        // assert
+        // Assert
         result.IsFailure.Should().BeTrue();
         result.Error.Should().NotBeNull();
         result.Error.Should().ContainSingle(e => e.Message == "Page is invalid");
@@ -96,7 +97,8 @@ public class GetLessonWithPaginationTests : LessonsTestsBase
         int count,
         CancellationToken cancellationToken = default)
     {
-        var lessons = Enumerable.Range(0, count).Select(_ => new Lesson(Guid.NewGuid(),
+        var lessons = Enumerable.Range(0, count).Select(_ => new Lesson(
+            Guid.NewGuid(),
             Guid.NewGuid(),
             Title.Create("test title").Value,
             Description.Create("test description").Value,

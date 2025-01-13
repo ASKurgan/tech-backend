@@ -9,6 +9,7 @@ using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonsWithPagi
 using SachkovTech.Issues.Application.Features.Modules.Commands.Create;
 using SachkovTech.Issues.Application.Features.Modules.Commands.Delete;
 using SachkovTech.Issues.Application.Features.Modules.Commands.UpdateIssuePosition;
+using SachkovTech.Issues.Application.Features.Modules.Commands.UpdateLessonPosition;
 using SachkovTech.Issues.Application.Features.Modules.Commands.UpdateMainInfo;
 using SachkovTech.Issues.Application.Features.Modules.Queries.GetModulesWithPagination;
 using SachkovTech.Issues.Domain.Module;
@@ -30,7 +31,7 @@ public static class FixtureExtensions
             .With(c => c.FileSize, 1024)
             .Create();
     }
-    
+
     public static CreateIssueCommand CreateAddIssueCommand(
         this IFixture fixture,
         Guid moduleId,
@@ -42,7 +43,7 @@ public static class FixtureExtensions
             .With(c => c.Experience, 5)
             .Create();
     }
-    
+
     public static UpdateIssueMainInfoCommand CreateUpdateIssueMainInfoCommand(
         this IFixture fixture,
         Guid issueId,
@@ -56,7 +57,7 @@ public static class FixtureExtensions
             .With(c => c.Experience, 5)
             .Create();
     }
-    
+
     public static DeleteIssueCommand CreateDeleteIssueCommand(
         this IFixture fixture,
         Guid issueId)
@@ -65,7 +66,7 @@ public static class FixtureExtensions
             .With(c => c.IssueId, issueId)
             .Create();
     }
-    
+
     public static RestoreIssueCommand CreateRestoreIssueCommand(
         this IFixture fixture,
         Guid issueId)
@@ -99,21 +100,21 @@ public static class FixtureExtensions
     {
         return fixture.Create<CreateModuleCommand>();
     }
-    
+
     public static DeleteModuleCommand CreateDeleteModuleCommand(this IFixture fixture, Guid moduleId)
     {
         return fixture.Build<DeleteModuleCommand>()
             .With(c => c.ModuleId, moduleId)
             .Create();
     }
-    
+
     public static UpdateMainInfoCommand CreateUpdateMainInfoCommand(this IFixture fixture, Guid moduleId)
     {
         return fixture.Build<UpdateMainInfoCommand>()
             .With(c => c.ModuleId, moduleId)
             .Create();
     }
-    
+
     public static UpdateIssuePositionCommand CreateUpdateIssuePositionCommand(
         this IFixture fixture,
         Guid moduleId,
@@ -126,7 +127,20 @@ public static class FixtureExtensions
             .With(c => c.NewPosition, position)
             .Create();
     }
-    
+
+    public static UpdateLessonPositionCommand CreateUpdateLessonPositionCommand(
+        this IFixture fixture,
+        Guid moduleId,
+        Guid lessonId,
+        int position)
+    {
+        return fixture.Build<UpdateLessonPositionCommand>()
+            .With(c => c.ModuleId, moduleId)
+            .With(c => c.LessonId, lessonId)
+            .With(c => c.Position, position)
+            .Create();
+    }
+
     public static GetModulesWithPaginationQuery CreateGetModulesQuery(this IFixture fixture)
     {
         return fixture.Build<GetModulesWithPaginationQuery>()
@@ -137,7 +151,7 @@ public static class FixtureExtensions
     {
         return new Module(
             ModuleId.NewModuleId(),
-            Title.Create(fixture.Create<String>()).Value,
-            Description.Create(fixture.Create<String>()).Value);
+            Title.Create(fixture.Create<string>()).Value,
+            Description.Create(fixture.Create<string>()).Value);
     }
 }

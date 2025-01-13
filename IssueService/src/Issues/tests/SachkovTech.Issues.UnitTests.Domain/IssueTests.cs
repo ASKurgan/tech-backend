@@ -32,19 +32,14 @@ public class IssueTests
         issue.ModuleId.Should().Be(newModuleId);
         issue.Experience.Value.Should().Be(newExperience.Value);
     }
-    
+
     [Fact]
     public void Add_files_to_issue()
     {
         // Arrange
         var issue = CreateAndFillIssue();
 
-        var files = new List<FileId>
-        {
-            FileId.NewFileId(),
-            FileId.NewFileId(),
-            FileId.NewFileId()
-        };
+        var files = new List<FileId> { FileId.NewFileId(), FileId.NewFileId(), FileId.NewFileId() };
 
         // Act
         issue.UpdateFiles(files);
@@ -60,20 +55,11 @@ public class IssueTests
         // Arrange
         var issue = CreateAndFillIssue();
 
-        var initialFiles = new List<FileId>
-        {
-            FileId.NewFileId(),
-            FileId.NewFileId()
-        };
+        var initialFiles = new List<FileId> { FileId.NewFileId(), FileId.NewFileId() };
 
         issue.UpdateFiles(initialFiles);
 
-        var updatedFiles = new List<FileId>
-        {
-            FileId.NewFileId(),
-            FileId.NewFileId(),
-            FileId.NewFileId()
-        };
+        var updatedFiles = new List<FileId> { FileId.NewFileId(), FileId.NewFileId(), FileId.NewFileId() };
 
         // Act
         issue.UpdateFiles(updatedFiles);
@@ -115,7 +101,7 @@ public class IssueTests
         // Assert
         result.Should().BeFalse();
     }
-    
+
     private Issue CreateAndFillIssue()
     {
         var issue = new Issue(
@@ -123,7 +109,7 @@ public class IssueTests
             Title.Create("test title").Value,
             Description.Create("test description").Value,
             LessonId.NewLessonId(),
-            ModuleId.NewModuleId(), 
+            ModuleId.NewModuleId(),
             Experience.Create(1).Value);
 
         return issue;

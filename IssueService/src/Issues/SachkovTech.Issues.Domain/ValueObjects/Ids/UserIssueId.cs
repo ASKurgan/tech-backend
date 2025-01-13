@@ -12,9 +12,11 @@ public class UserIssueId : ComparableValueObject
     public Guid Value { get; init; }
 
     public static UserIssueId NewIssueId() => new(Guid.NewGuid());
+
     public static UserIssueId Empty() => new(Guid.Empty);
+
     public static UserIssueId Create(Guid id) => new(id);
-    
+
     public static implicit operator UserIssueId(Guid id) => new(id);
 
     public static implicit operator Guid(UserIssueId userIssueId)

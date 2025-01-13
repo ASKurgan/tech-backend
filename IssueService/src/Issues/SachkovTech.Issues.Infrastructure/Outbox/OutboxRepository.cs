@@ -7,6 +7,7 @@ namespace SachkovTech.Issues.Infrastructure.Outbox;
 public class OutboxRepository : IOutboxRepository
 {
     private readonly IssuesWriteDbContext _dbContext;
+
     public OutboxRepository(IssuesWriteDbContext dbContext)
     {
         _dbContext = dbContext;
@@ -19,7 +20,7 @@ public class OutboxRepository : IOutboxRepository
             Id = Guid.NewGuid(),
             OccurredOnUtc = DateTime.Now,
             Type = typeof(T).FullName!,
-            Payload = JsonSerializer.Serialize(message)
+            Payload = JsonSerializer.Serialize(message),
         };
 
         await _dbContext.AddAsync(outboxMessages, cancellationToken);

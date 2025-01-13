@@ -38,7 +38,8 @@ public class ModulesRepository : IModulesRepository
     }
 
     public async Task<Result<Module, Error>> GetById(
-        ModuleId moduleId, CancellationToken cancellationToken = default)
+        ModuleId moduleId,
+        CancellationToken cancellationToken = default)
     {
         var module = await _dbContext.Modules
             .FirstOrDefaultAsync(m => m.Id == moduleId, cancellationToken);

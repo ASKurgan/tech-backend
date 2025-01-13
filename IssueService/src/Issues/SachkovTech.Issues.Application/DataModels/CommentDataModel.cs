@@ -3,6 +3,6 @@
 public record CommentDataModel(
     Guid Id,
     Guid UserId,
-    string Message, 
+    string Message,
     DateTime CreatedAt,
     Guid IssueReviewId);

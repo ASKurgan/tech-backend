@@ -21,7 +21,7 @@ public class UserIssueConfiguration : IEntityTypeConfiguration<UserIssue>
         builder.Property(u => u.UserId)
             .IsRequired()
             .HasColumnName("user_id");
-        
+
         builder.ComplexProperty(u => u.IssueId, pb =>
         {
             pb.Property(a => a.Value)
@@ -57,6 +57,5 @@ public class UserIssueConfiguration : IEntityTypeConfiguration<UserIssue>
                 .IsRequired()
                 .HasColumnName("pull_request_url");
         });
-
     }
 }

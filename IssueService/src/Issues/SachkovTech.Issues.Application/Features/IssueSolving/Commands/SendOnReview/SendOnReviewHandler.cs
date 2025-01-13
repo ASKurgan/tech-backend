@@ -42,9 +42,7 @@ public class SendOnReviewHandler : ICommandHandler<SendOnReviewCommand>
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
 
         if (validationResult.IsValid == false)
-        {
             return validationResult.ToList();
-        }
 
         (_, bool isFailure, UserIssue? userIssue, Error? error) = await _userIssueRepository
             .GetUserIssueById(UserIssueId.Create(command.UserIssueId), cancellationToken);
@@ -60,9 +58,7 @@ public class SendOnReviewHandler : ICommandHandler<SendOnReviewCommand>
         var sendOnReviewResult = userIssue.SendOnReview(pullRequestUrl);
 
         if (sendOnReviewResult.IsFailure)
-        {
             return sendOnReviewResult.Error.ToErrorList();
-        }
 
         await _publisher.PublishDomainEvents(userIssue, cancellationToken);
 

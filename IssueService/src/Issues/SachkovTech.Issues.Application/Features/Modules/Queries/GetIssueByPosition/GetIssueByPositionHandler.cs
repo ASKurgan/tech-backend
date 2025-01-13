@@ -21,10 +21,10 @@ public class GetIssueByPositionHandler : IQueryHandlerWithResult<Guid, GetIssueB
     {
         var module = await _readDbContext.Modules
             .FirstOrDefaultAsync(i => i.Id == query.ModuleId, cancellationToken);
-        
+
         if (module is null)
             return Errors.General.NotFound().ToErrorList();
-        
+
         var issueDto = module.IssuesPosition
             .FirstOrDefault(i => i.Position == query.Position);
 

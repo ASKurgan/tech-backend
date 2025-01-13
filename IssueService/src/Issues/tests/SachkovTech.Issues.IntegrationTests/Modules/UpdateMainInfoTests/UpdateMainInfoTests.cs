@@ -9,7 +9,9 @@ namespace SachkovTech.Issues.IntegrationTests.Modules.UpdateMainInfoTests;
 public class UpdateMainInfoTests : ModuleTestsBase
 {
     private readonly ICommandHandler<Guid, UpdateMainInfoCommand> _sut;
-    public UpdateMainInfoTests(ModuleTestWebFactory factory) : base(factory)
+
+    public UpdateMainInfoTests(ModuleTestWebFactory factory)
+        : base(factory)
     {
         _sut = Scope.ServiceProvider.GetRequiredService<ICommandHandler<Guid, UpdateMainInfoCommand>>();
     }
@@ -26,7 +28,7 @@ public class UpdateMainInfoTests : ModuleTestsBase
         // Act
         var result = await _sut.Handle(command, cancellationToken);
 
-        //Assert
+        // Assert
         result.Should().NotBeNull();
         result.IsSuccess.Should().BeTrue();
 

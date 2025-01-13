@@ -7,14 +7,25 @@ using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Command.AddTagToLesson;
 
-public class AddTagToLessonHandler(
-    ILessonsRepository lessonsRepository,
-    IUnitOfWork unitOfWork,
-    ILogger<AddTagToLessonHandler> logger) : ICommandHandler<AddTagToLessonCommand>
+public class AddTagToLessonHandler : ICommandHandler<AddTagToLessonCommand>
 {
+    private readonly ILessonsRepository _lessonsRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly ILogger<AddTagToLessonHandler> _logger;
+
+    public AddTagToLessonHandler(
+        ILessonsRepository lessonsRepository,
+        IUnitOfWork unitOfWork,
+        ILogger<AddTagToLessonHandler> logger)
+    {
+        _lessonsRepository = lessonsRepository;
+        _unitOfWork = unitOfWork;
+        _logger = logger;
+    }
+
     public async Task<UnitResult<ErrorList>> Handle(AddTagToLessonCommand command, CancellationToken cancellationToken = default)
     {
-        var lesson = await lessonsRepository.GetById(command.LessonId, cancellationToken);
+        var lesson = await _lessonsRepository.GetById(command.LessonId, cancellationToken);
         if (lesson.IsFailure)
             return Errors.General.NotFound().ToErrorList();
 
@@ -22,9 +33,9 @@ public class AddTagToLessonHandler(
         if (result.IsFailure)
             return result.Error.ToErrorList();
 
-        await unitOfWork.SaveChanges(cancellationToken);
+        await _unitOfWork.SaveChanges(cancellationToken);
 
-        logger.Log(LogLevel.Information, "Added new tag with {TagId} to {LessonId}", command.TagId, command.LessonId);
+        _logger.Log(LogLevel.Information, "Added new tag with {TagId} to {LessonId}", command.TagId, command.LessonId);
 
         return UnitResult.Success<ErrorList>();
     }

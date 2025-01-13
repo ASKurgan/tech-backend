@@ -35,24 +35,18 @@ public class CompleteIssueHandler : ICommandHandler<Guid, CompleteIssueCommand>
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (validationResult.IsValid == false)
-        {
             return validationResult.ToList();
-        }
 
         var userIssueResult = await _userIssueRepository
             .GetUserIssueById(UserIssueId.Create(command.UserIssueId), cancellationToken);
 
         if (userIssueResult.IsFailure)
-        {
             return userIssueResult.Error.ToErrorList();
-        }
 
         var completeIssueResult = userIssueResult.Value.CompleteIssue();
 
         if (completeIssueResult.IsFailure)
-        {
             return completeIssueResult.Error.ToErrorList();
-        }
 
         await _unitOfWork.SaveChanges(cancellationToken);
 

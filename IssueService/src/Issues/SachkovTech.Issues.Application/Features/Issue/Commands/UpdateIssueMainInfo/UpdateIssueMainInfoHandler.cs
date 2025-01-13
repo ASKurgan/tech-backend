@@ -43,9 +43,7 @@ public class UpdateIssueMainInfoHandler : ICommandHandler<Guid, UpdateIssueMainI
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (validationResult.IsValid == false)
-        {
             return validationResult.ToList();
-        }
 
         var issueResult = await _issuesRepository.GetById(command.IssueId, false, cancellationToken);
         if (issueResult.IsFailure)

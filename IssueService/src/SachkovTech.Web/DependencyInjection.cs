@@ -89,7 +89,8 @@ public static class DependencyInjection
     private static IServiceCollection AddLogging(
         this IServiceCollection services, IConfiguration configuration)
     {
-        string indexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:dd-MM-yyyy}";
+        string indexFormat =
+            $"{Assembly.GetExecutingAssembly().GetName().Name?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:dd-MM-yyyy}";
 
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
@@ -123,10 +124,7 @@ public static class DependencyInjection
 
     private static IServiceCollection AddApplicationLayers(this IServiceCollection services)
     {
-        var assemblies = new[]
-        {
-            typeof(SachkovTech.Issues.Application.DependencyInjection).Assembly,
-        };
+        var assemblies = new[] { typeof(SachkovTech.Issues.Application.DependencyInjection).Assembly, };
 
         services.Scan(scan => scan.FromAssemblies(assemblies)
             .AddClasses(classes => classes
@@ -148,11 +146,9 @@ public static class DependencyInjection
     {
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo
-            {
-                Title = "My API", Version = "v1"
-            });
-            c.AddSecurityDefinition("Bearer",
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+            c.AddSecurityDefinition(
+                "Bearer",
                 new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
@@ -165,10 +161,7 @@ public static class DependencyInjection
                 {
                     new OpenApiSecurityScheme
                     {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme, Id = "Bearer",
-                        },
+                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer", },
                     },
                     []
                 },

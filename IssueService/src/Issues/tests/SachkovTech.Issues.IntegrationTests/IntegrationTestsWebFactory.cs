@@ -74,11 +74,9 @@ public class IntegrationTestsWebFactory : WebApplicationFactory<Program>, IAsync
     private async Task InitializeRespawner()
     {
         await _dbConnection.OpenAsync();
-        _respawner = await Respawner.CreateAsync(_dbConnection, new RespawnerOptions
-            {
-                DbAdapter = DbAdapter.Postgres, SchemasToInclude = ["issues"],
-            }
-        );
+        _respawner = await Respawner.CreateAsync(
+            _dbConnection,
+            new RespawnerOptions { DbAdapter = DbAdapter.Postgres, SchemasToInclude = ["issues"] });
     }
 }
 

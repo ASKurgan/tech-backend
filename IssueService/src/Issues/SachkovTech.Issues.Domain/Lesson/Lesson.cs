@@ -9,13 +9,11 @@ namespace SachkovTech.Issues.Domain.Lesson;
 public class Lesson : Entity<LessonId>, ISoftDeletable
 {
     // EF CORE
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     private Lesson(LessonId id)
         : base(id)
     {
     }
 
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public Guid ModuleId { get; private set; }
 
     public Title Title { get; private set; }
@@ -59,15 +57,15 @@ public class Lesson : Entity<LessonId>, ISoftDeletable
     }
 
     /// <summary>
-    /// Метод, который полностью обновляет урок
+    /// Метод, который полностью обновляет урок.
     /// </summary>
-    /// <param name="title">Название</param>
-    /// <param name="description">Описание</param>
-    /// <param name="experience">Опыт за урок</param>
-    /// <param name="video">Ссылка на видео</param>
-    /// <param name="fileId">Ссылка на файл</param>
-    /// <param name="tags">Список тегов к уроку</param>
-    /// <param name="issues">Список задач к уроку</param>
+    /// <param name="title">Название.</param>
+    /// <param name="description">Описание.</param>
+    /// <param name="experience">Опыт за урок.</param>
+    /// <param name="video">Ссылка на видео.</param>
+    /// <param name="fileId">Ссылка на файл.</param>
+    /// <param name="tags">Список тегов к уроку.</param>
+    /// <param name="issues">Список задач к уроку.</param>
     public void Update(
         Title title,
         Description description,
@@ -99,10 +97,10 @@ public class Lesson : Entity<LessonId>, ISoftDeletable
     }
 
     /// <summary>
-    /// Добавить задачку к уроку
+    /// Добавить задачку к уроку.
     /// </summary>
-    /// <param name="issueId">Ссылка на задачу</param>
-    /// <returns>Выполненную операцию либо ошибку, что такая задача уже есть</returns>
+    /// <param name="issueId">Ссылка на задачу.</param>
+    /// <returns>Выполненную операцию либо ошибку, что такая задача уже есть.</returns>
     public UnitResult<Error> AddIssue(Guid issueId)
     {
         if (Issues.Contains(issueId))
@@ -113,10 +111,10 @@ public class Lesson : Entity<LessonId>, ISoftDeletable
     }
 
     /// <summary>
-    /// Добавить тег к уроку
+    /// Добавить тег к уроку.
     /// </summary>
-    /// <param name="tagId">Ссылка на тег</param>
-    /// <returns>Выполненную операцию либо ошибку, что такой тег уже есть</returns>
+    /// <param name="tagId">Ссылка на тег.</param>
+    /// <returns>Выполненную операцию либо ошибку, что такой тег уже есть.</returns>
     public UnitResult<Error> AddTag(Guid tagId)
     {
         if (Tags.Contains(tagId))
@@ -127,10 +125,10 @@ public class Lesson : Entity<LessonId>, ISoftDeletable
     }
 
     /// <summary>
-    /// Удалить тег у урока
+    /// Удалить тег у урока.
     /// </summary>
-    /// <param name="tagId">Ссылка на тег</param>
-    /// <returns>Выполненную операцию либо ошибку, что такой тег отсутствует</returns>
+    /// <param name="tagId">Ссылка на тег.</param>
+    /// <returns>Выполненную операцию либо ошибку, что такой тег отсутствует.</returns>
     public UnitResult<Error> RemoveTag(Guid tagId)
     {
         if (!Tags.Contains(tagId))
@@ -141,10 +139,10 @@ public class Lesson : Entity<LessonId>, ISoftDeletable
     }
 
     /// <summary>
-    /// Удалить задачу у урока
+    /// Удалить задачу у урока.
     /// </summary>
-    /// <param name="issueId">Ссылка на задачу</param>
-    /// <returns>Выполненную операцию либо ошибку, что такая задача отсутствует</returns>
+    /// <param name="issueId">Ссылка на задачу.</param>
+    /// <returns>Выполненную операцию либо ошибку, что такая задача отсутствует.</returns>
     public UnitResult<Error> RemoveIssue(Guid issueId)
     {
         if (!Issues.Contains(issueId))

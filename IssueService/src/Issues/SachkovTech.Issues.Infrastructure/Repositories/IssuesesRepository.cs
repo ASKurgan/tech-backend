@@ -12,6 +12,7 @@ namespace SachkovTech.Issues.Infrastructure.Repositories;
 public class IssuesesRepository : IIssuesRepository
 {
     private readonly IssuesWriteDbContext _dbContext;
+
     public IssuesesRepository(IssuesWriteDbContext dbContext)
     {
         _dbContext = dbContext;
@@ -44,9 +45,7 @@ public class IssuesesRepository : IIssuesRepository
         IQueryable<Issue> query = _dbContext.Issues;
 
         if (includeDeletedOption)
-        {
             query = query.IgnoreQueryFilters();
-        }
 
         var issue = await query
             .FirstOrDefaultAsync(m => m.Id == issueId, cancellationToken);

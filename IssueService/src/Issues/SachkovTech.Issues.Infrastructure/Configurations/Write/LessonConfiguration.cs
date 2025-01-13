@@ -15,7 +15,8 @@ public class LessonConfiguration : IEntityTypeConfiguration<Lesson>
         builder.HasKey(l => l.Id);
 
         builder.Property(i => i.Id)
-            .HasConversion(id => id.Value,
+            .HasConversion(
+                id => id.Value,
                 value => LessonId.Create(value));
 
         builder.Property(l => l.ModuleId)
@@ -52,7 +53,7 @@ public class LessonConfiguration : IEntityTypeConfiguration<Lesson>
         builder.Property(x => x.Tags)
             .HasColumnName("tags")
             .HasColumnType("uuid[]");
-        
+
         builder.Property(x => x.Issues)
             .HasColumnName("issues")
             .HasColumnType("uuid[]");

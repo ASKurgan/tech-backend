@@ -10,7 +10,8 @@ public class UpdateIssueTests : IssueTestsBase
 {
     private readonly ICommandHandler<Guid, UpdateIssueMainInfoCommand> sut;
 
-    public UpdateIssueTests(IntegrationTestsWebFactory factory) : base(factory)
+    public UpdateIssueTests(IntegrationTestsWebFactory factory)
+        : base(factory)
     {
         sut = Scope.ServiceProvider.GetRequiredService<ICommandHandler<Guid, UpdateIssueMainInfoCommand>>();
     }
@@ -18,7 +19,7 @@ public class UpdateIssueTests : IssueTestsBase
     [Fact]
     public async Task Update_issue_successfully()
     {
-        // arrange
+        // Arrange
         var cancellationToken = new CancellationTokenSource().Token;
 
         var oldModuleId = await SeedModule();
@@ -33,10 +34,10 @@ public class UpdateIssueTests : IssueTestsBase
 
         var command = Fixture.CreateUpdateIssueMainInfoCommand(issueId, newLessonId, newModuleId);
 
-        // act
+        // Act
         var result = await sut.Handle(command, cancellationToken);
 
-        //assert
+        // Assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
 

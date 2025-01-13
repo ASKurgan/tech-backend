@@ -45,16 +45,6 @@ public class Module : Entity<ModuleId>, ISoftDeletable
         DeletionDate = null;
     }
 
-    public void UpdateIssuesPosition(IEnumerable<IssuePosition> issuesPosition)
-    {
-        IssuesPosition = issuesPosition.ToList();
-    }
-
-    public void UpdateLessonsPosition(IEnumerable<LessonPosition> lessonsPosition)
-    {
-        LessonsPosition = lessonsPosition.ToList();
-    }
-
     public void UpdateMainInfo(Title title, Description description)
     {
         Title = title;
@@ -67,12 +57,9 @@ public class Module : Entity<ModuleId>, ISoftDeletable
             issueId,
             Position.Create(IssuesPosition.Count + 1).Value);
 
-        var newIssuesPosition = new List<IssuePosition>(IssuesPosition)
-        {
-            newIssuePosition,
-        };
+        var newIssuesPosition = new List<IssuePosition>(IssuesPosition) { newIssuePosition, };
 
-        UpdateIssuesPosition(newIssuesPosition);
+        IssuesPosition = newIssuesPosition;
     }
 
     public void AddLesson(LessonId lessonId)
@@ -81,156 +68,132 @@ public class Module : Entity<ModuleId>, ISoftDeletable
             lessonId,
             Position.Create(LessonsPosition.Count + 1).Value);
 
-        var newLessonsPosition = new List<LessonPosition>(LessonsPosition)
-        {
-            newLessonPosition,
-        };
+        var newLessonsPosition = new List<LessonPosition>(LessonsPosition) { newLessonPosition, };
 
-        UpdateLessonsPosition(newLessonsPosition);
+        LessonsPosition = newLessonsPosition;
     }
 
-    public UnitResult<Error> MoveIssue(IssuePosition issuePosition, int newPosition)
+    public UnitResult<Error> MoveIssue(IssuePosition issuePosition, Position newPosition)
     {
-        if (issuePosition.Position.Value == newPosition)
-            return Result.Success<Error>();
+        var updatedListResult = ChangePosition(IssuesPosition, issuePosition.Position, newPosition);
 
-        var rearrangedIssuesPositionResult = ChangePosition(
-            IssuesPosition,
-            issuePosition.Position.Value,
-            newPosition);
-        if (rearrangedIssuesPositionResult.IsFailure)
-            return rearrangedIssuesPositionResult.Error;
+        if (updatedListResult.IsFailure)
+            return updatedListResult.Error;
 
-        if (rearrangedIssuesPositionResult.Value.Count != IssuesPosition.Count)
-        {
-            return Errors.General.Failure();
-        }
-
-        UpdateIssuesPosition(rearrangedIssuesPositionResult.Value);
+        IssuesPosition = updatedListResult.Value;
         return Result.Success<Error>();
     }
 
     public UnitResult<Error> MoveLesson(LessonPosition lessonPosition, Position newPosition)
     {
-        if (lessonPosition.Position.Value == newPosition)
-            return Result.Success<Error>();
+        var updatedListResult = ChangePosition(LessonsPosition, lessonPosition.Position, newPosition);
 
-        var rearrangedLessonsPositionResult = ChangePosition(
-            LessonsPosition,
-            lessonPosition.Position.Value,
-            newPosition.Value);
-        if (rearrangedLessonsPositionResult.IsFailure)
-            return rearrangedLessonsPositionResult.Error;
+        if (updatedListResult.IsFailure)
+            return updatedListResult.Error;
 
-        if (rearrangedLessonsPositionResult.Value.Count != LessonsPosition.Count)
-            return Errors.General.Failure();
-
-        UpdateLessonsPosition(rearrangedLessonsPositionResult.Value);
+        LessonsPosition = updatedListResult.Value;
         return Result.Success<Error>();
     }
 
     /// <summary>
-    /// Generic method to change position for IPositionable in collection 
+    /// Удаляет позицию задачи по её IssueId. После удаления пересчитывает позиции оставшихся задач
+    /// и обновляет список позиций.
     /// </summary>
-    /// <param name="items"></param>
-    /// <param name="positionFrom"></param>
-    /// <param name="positionTo"></param>
-    /// <returns></returns>
-    private Result<List<T>, Error> ChangePosition<T>(
-        IReadOnlyList<T> items, int positionFrom, int positionTo) where T : IPositionable
-    {
-        if (positionFrom == positionTo
-            || positionFrom < 1
-            || positionTo < 1
-            || positionFrom > items.Count
-            || positionTo > items.Count)
-        {
-            return Errors.General.ValueIsInvalid(nameof(Position)); // No adjustment needed or invalid positions
-        }
-
-        var increment = positionFrom > positionTo ? 1 : -1;
-        var start = int.Min(positionFrom, positionTo);
-        var end = int.Max(positionFrom, positionTo);
-
-        List<T> rearrangedItems = [];
-
-        foreach (var currentItem in items)
-        {
-            var currentPosition = currentItem.Position.Value;
-
-            if (currentPosition >= start && currentPosition <= end)
-            {
-                if (currentPosition == positionFrom)
-                {
-                    var newItem = (T)currentItem.Move(Position.Create(positionTo).Value);
-                    rearrangedItems.Add(newItem);
-                }
-                else
-                {
-                    var newItem = (T)currentItem.Move(
-                        Position.Create(currentItem.Position.Value + increment).Value);
-                    rearrangedItems.Add(newItem);
-                }
-            }
-            else
-            {
-                rearrangedItems.Add(currentItem);
-            }
-        }
-
-        rearrangedItems = rearrangedItems.OrderBy(i => i.Position.Value).ToList();
-        return rearrangedItems;
-    }
-
-    public UnitResult<Error> DeleteLessonPosition(LessonPosition lessonPosition)
-    {
-        var copiedList = LessonsPosition.ToList();
-        var updateListResult = DeleteItemFromIPositionableCollection(copiedList, lessonPosition);
-        if (updateListResult.IsFailure)
-            return updateListResult.Error;
-
-        if (updateListResult.Value.Count != (LessonsPosition.Count - 1))
-            return Errors.General.Failure();
-
-        UpdateLessonsPosition(updateListResult.Value);
-        return Result.Success<Error>();
-    }
-
-    public UnitResult<Error> DeleteIssuePosition(Guid issueId)
+    /// <param name="issueId">Идентификатор задачи, позиция которой будет удалена.</param>
+    /// <returns>Успешный результат операции или ошибка, если задача не найдена.</returns>
+    public UnitResult<Error> DeleteIssuePosition(IssueId issueId)
     {
         var issuePosition = IssuesPosition.FirstOrDefault(x => x.IssueId == issueId);
         if (issuePosition == null)
             return Errors.General.NotFound();
 
-        var copiedList = IssuesPosition.ToList();
-        var updateListResult = DeleteItemFromIPositionableCollection(copiedList, issuePosition);
-        if (updateListResult.IsFailure)
-            return updateListResult.Error;
+        var updatedListResult = RemovePositionAndReorder(IssuesPosition, issuePosition);
+        if (updatedListResult.IsFailure)
+            return updatedListResult.Error;
 
-        if (updateListResult.Value.Count != (IssuesPosition.Count - 1))
-            return Errors.General.Failure();
-
-        UpdateIssuesPosition(updateListResult.Value);
+        IssuesPosition = updatedListResult.Value.Cast<IssuePosition>().ToList();
         return Result.Success<Error>();
     }
 
-    private Result<List<T>, Error> DeleteItemFromIPositionableCollection<T>(
-        List<T> items,
-        T itemToDelete) where T : IPositionable
+    /// <summary>
+    /// Удаляет позицию урока по его LessonId. После удаления пересчитывает позиции оставшихся уроков
+    /// и обновляет список позиций.
+    /// </summary>
+    /// <param name="lessonId">Идентификатор урока, позиция которого будет удалена.</param>
+    /// <returns>Успешный результат операции или ошибка, если урок не найден.</returns>
+    public UnitResult<Error> DeleteLessonPosition(LessonId lessonId)
     {
-        var result = items.Remove(itemToDelete);
-        if (result == false)
-            return Errors.General.Failure();
+        var lessonPosition = LessonsPosition.FirstOrDefault(x => x.LessonId == lessonId);
+        if (lessonPosition == null)
+            return Errors.General.NotFound();
 
-        items = items.OrderBy(i => i.Position.Value).ToList();
+        var updateListResult = RemovePositionAndReorder(LessonsPosition, lessonPosition);
+        if (updateListResult.IsFailure)
+            return updateListResult.Error;
 
-        for (int i = 0; i < items.Count; i++)
+        LessonsPosition = updateListResult.Value.Cast<LessonPosition>().ToList();
+        return Result.Success<Error>();
+    }
+
+    /// <summary>
+    /// Перемещает элемент в коллекции на новую позицию, при этом пересчитывает позиции других элементов.
+    /// Возвращает новую отсортированную коллекцию.
+    /// </summary>
+    /// <param name="items">Коллекция элементов, которые нужно отсортировать и переместить.</param>
+    /// <param name="positionFrom">Позиция элемента, который нужно переместить.</param>
+    /// <param name="positionTo">Новая позиция для перемещения элемента.</param>
+    /// <returns>Отсортированную коллекцию с измененными позициями или ошибку если что-то пошло не так.</returns>
+    private Result<List<T>, Error> ChangePosition<T>(
+        IReadOnlyList<T> items, Position positionFrom, Position positionTo)
+        where T : IPositionable
+    {
+        if (positionTo == positionFrom)
+            return items.ToList();
+
+        if (positionFrom < 1
+            || positionTo < 1
+            || positionFrom > items.Count
+            || positionTo > items.Count)
         {
-            if (items[i].Position.Value < itemToDelete.Position.Value)
-                continue;
-            items[i] = (T)items[i].Move(Position.Create(i + 1).Value);
+            return Errors.General.ValueIsInvalid(nameof(Position));
         }
 
-        return items;
+        var reorderedList = items
+            .Select((item, index) => new { Item = item, Index = index + 1 })
+            .OrderBy(x =>
+            {
+                if (x.Index == positionFrom) return positionTo;
+                if (x.Index >= Math.Min(positionFrom, positionTo) && x.Index <= Math.Max(positionFrom, positionTo))
+                {
+                    return x.Index < positionFrom ? x.Index + 1 : x.Index - 1;
+                }
+
+                return x.Index;
+            })
+            .Select((x, newIndex) => (T)x.Item.Move(Position.Create(newIndex + 1).Value))
+            .ToList();
+
+        return reorderedList;
+    }
+
+    /// <summary>
+    /// Удаляет указанный элемент из коллекции и пересчитывает позиции оставшихся элементов.
+    /// Возвращает обновленный список.
+    /// </summary>
+    /// <param name="items">Коллекция элементов, из которой будет удален элемент.</param>
+    /// <param name="itemToRemove">Элемент, который будет удален.</param>
+    /// <returns>Обновленный список элементов с пересчитанными позициями или ошибку если что-то пошло не так.</returns>
+    private Result<List<IPositionable>, Error> RemovePositionAndReorder(
+        IReadOnlyList<IPositionable> items, IPositionable itemToRemove)
+    {
+        if (!items.Contains(itemToRemove))
+            return Errors.General.NotFound();
+
+        var reorderedList = items
+            .Where(x => x != itemToRemove)
+            .Select((item, index) => item.Move(Position.Create(index + 1).Value))
+            .ToList();
+
+        return reorderedList;
     }
 }

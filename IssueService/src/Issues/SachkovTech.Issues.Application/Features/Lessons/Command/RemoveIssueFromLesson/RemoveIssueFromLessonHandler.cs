@@ -8,21 +8,34 @@ using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Command.RemoveIssueFromLesson;
 
-public class RemoveIssueFromLessonHandler(
-    IReadDbContext readDbContext,
-    ILessonsRepository lessonsRepository,
-    IUnitOfWork unitOfWork,
-    ILogger<RemoveIssueFromLessonHandler> logger) : ICommandHandler<RemoveIssueFromLessonCommand>
+public class RemoveIssueFromLessonHandler : ICommandHandler<RemoveIssueFromLessonCommand>
 {
+    private readonly IReadDbContext _readDbContext;
+    private readonly ILessonsRepository _lessonsRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly ILogger<RemoveIssueFromLessonHandler> _logger;
+
+    public RemoveIssueFromLessonHandler(
+        IReadDbContext readDbContext,
+        ILessonsRepository lessonsRepository,
+        IUnitOfWork unitOfWork,
+        ILogger<RemoveIssueFromLessonHandler> logger)
+    {
+        _readDbContext = readDbContext;
+        _lessonsRepository = lessonsRepository;
+        _unitOfWork = unitOfWork;
+        _logger = logger;
+    }
+
     public async Task<UnitResult<ErrorList>> Handle(
         RemoveIssueFromLessonCommand command, CancellationToken cancellationToken = default)
     {
-        var lesson = await lessonsRepository.GetById(command.LessonId, cancellationToken);
+        var lesson = await _lessonsRepository.GetById(command.LessonId, cancellationToken);
         if (lesson.IsFailure)
             return Errors.General.NotFound(command.LessonId, "lesson").ToErrorList();
 
         var isIssueExists
-            = await readDbContext.Issues.FirstOrDefaultAsync(i => i.Id == command.IssueId, cancellationToken);
+            = await _readDbContext.Issues.FirstOrDefaultAsync(i => i.Id == command.IssueId, cancellationToken);
         if (isIssueExists is null)
             return Errors.General.NotFound(command.IssueId, "issue").ToErrorList();
 
@@ -30,9 +43,9 @@ public class RemoveIssueFromLessonHandler(
         if (result.IsFailure)
             return result.Error.ToErrorList();
 
-        await unitOfWork.SaveChanges(cancellationToken);
+        await _unitOfWork.SaveChanges(cancellationToken);
 
-        logger.Log(LogLevel.Information, "Remove issue with {IssueId} from {LessonId}", command.IssueId, command.LessonId);
+        _logger.Log(LogLevel.Information, "Remove issue with {IssueId} from {LessonId}", command.IssueId, command.LessonId);
 
         return UnitResult.Success<ErrorList>();
     }

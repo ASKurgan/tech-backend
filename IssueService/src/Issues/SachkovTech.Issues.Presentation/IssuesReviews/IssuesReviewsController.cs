@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using SachkovTech.Framework;
 using SachkovTech.Framework.Authorization;
-using SachkovTech.Issues.Application.Features.IssuesReviews.Commands.SendForRevision;
 using SachkovTech.Issues.Application.Features.IssuesReviews.Commands.AddComment;
 using SachkovTech.Issues.Application.Features.IssuesReviews.Commands.Approve;
 using SachkovTech.Issues.Application.Features.IssuesReviews.Commands.DeleteComment;
+using SachkovTech.Issues.Application.Features.IssuesReviews.Commands.SendForRevision;
 using SachkovTech.Issues.Application.Features.IssuesReviews.Commands.StartReview;
 using SachkovTech.Issues.Application.Features.IssuesReviews.Queries.GetCommentsWithPagination;
 using SachkovTech.Issues.Contracts.IssueReview;
@@ -119,7 +119,6 @@ public class IssuesReviewsController : ApplicationController
             new ApproveIssueReviewCommand(issueReviewId, Guid.Parse(userId)), cancellationToken);
 
         return result.IsFailure ? result.Error.ToResponse() : Ok(result.Value);
-
     }
 
     [Permission(Permissions.IssuesReview.COMMENT_REVIEW_ISSUE)]

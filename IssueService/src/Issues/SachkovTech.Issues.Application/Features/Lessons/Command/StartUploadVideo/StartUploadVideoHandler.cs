@@ -17,7 +17,9 @@ public class StartUploadVideoHandler : ICommandHandler<StartUploadFileResponse, 
         _fileService = fileService;
     }
 
-    public async Task<Result<StartUploadFileResponse, ErrorList>> Handle(StartUploadVideoCommand command, CancellationToken cancellationToken = default)
+    public async Task<Result<StartUploadFileResponse, ErrorList>> Handle(
+        StartUploadVideoCommand command,
+        CancellationToken cancellationToken = default)
     {
         var validateResult = Video.Validate(
             command.FileName,

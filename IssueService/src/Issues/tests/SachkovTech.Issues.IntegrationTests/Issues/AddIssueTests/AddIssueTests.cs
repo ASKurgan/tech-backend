@@ -19,7 +19,7 @@ public class AddIssueTests : IssueTestsBase
     [Fact]
     public async Task Add_issue_to_database()
     {
-        // arrange
+        // Arrange
         var cancellationToken = new CancellationTokenSource().Token;
 
         var moduleId = await SeedModule();
@@ -28,10 +28,10 @@ public class AddIssueTests : IssueTestsBase
 
         var command = Fixture.CreateAddIssueCommand(moduleId, lessonId);
 
-        // act
+        // Act
         var result = await sut.Handle(command, cancellationToken);
 
-        // assert
+        // Assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
 
@@ -50,7 +50,7 @@ public class AddIssueTests : IssueTestsBase
     [Fact]
     public async Task Cant_add_issue_to_database_due_to_not_existing_lesson()
     {
-        // arrange
+        // Arrange
         var cancellationToken = new CancellationTokenSource().Token;
 
         var moduleId = await SeedModule();
@@ -61,10 +61,10 @@ public class AddIssueTests : IssueTestsBase
 
         var sut = Scope.ServiceProvider.GetRequiredService<ICommandHandler<Guid, CreateIssueCommand>>();
 
-        // act
+        // Act
         var result = await sut.Handle(command, cancellationToken);
 
-        // assert
+        // Assert
         var issue = await ReadDbContext.Issues
             .FirstOrDefaultAsync(cancellationToken);
 

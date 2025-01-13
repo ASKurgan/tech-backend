@@ -15,14 +15,14 @@ public class IssuesReviewTests
     [Fact]
     public void Start_review_by_reviewer()
     {
-        //Arrange
+        // Arrange
         var validReviewerId = UserId.NewUserId();
         var issueReview = CreateAndFillIssueReview();
 
-        //Act
+        // Act
         issueReview.StartReview(validReviewerId);
 
-        //Assert
+        // Assert
         issueReview.ReviewerId.Should().Be(validReviewerId);
         issueReview.IssueReviewStatus.Should().Be(IssueReviewStatus.OnReview);
         issueReview.ReviewerId.Should().NotBeNull();
@@ -31,15 +31,15 @@ public class IssuesReviewTests
     [Fact]
     public void Send_issue_for_revision_by_reviewer()
     {
-        //Arrange
+        // Arrange
         var reviewerId = UserId.NewUserId();
         var issueReview = CreateAndFillIssueReview();
         issueReview.StartReview(reviewerId);
 
-        //Act
+        // Act
         var result = issueReview.SendIssueForRevision(reviewerId);
 
-        //Assert
+        // Assert
         var domainEvent = issueReview.DomainEvents.SingleOrDefault() as IssueSentForRevisionEvent;
 
         result.IsSuccess.Should().BeTrue();

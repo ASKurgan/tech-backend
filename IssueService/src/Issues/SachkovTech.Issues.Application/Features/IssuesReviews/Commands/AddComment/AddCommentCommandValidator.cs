@@ -11,6 +11,8 @@ public class AddCommentCommandValidator : AbstractValidator<AddCommentCommand>
     {
         RuleFor(c => c.IssueReviewId)
             .NotEmpty().WithError(Errors.General.ValueIsInvalid("id"));
-        RuleFor(c => c.Message).MustBeValueObject(Message.Create);
+
+        RuleFor(c => c.Message)
+            .MustBeValueObject(Message.Create);
     }
 }

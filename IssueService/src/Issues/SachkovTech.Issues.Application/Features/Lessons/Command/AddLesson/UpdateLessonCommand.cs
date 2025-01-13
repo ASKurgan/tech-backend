@@ -1,5 +1,4 @@
-﻿
-using FileService.Contracts;
+﻿using FileService.Contracts;
 using SachkovTech.Core.Abstractions;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Command.AddLesson;

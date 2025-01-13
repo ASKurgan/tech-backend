@@ -6,20 +6,22 @@ using SachkovTech.Issues.Application.Features.Modules.Commands.Delete;
 
 namespace SachkovTech.Issues.IntegrationTests.Modules.DeleteModuleTests;
 
-public class DeleteModuleTests: ModuleTestsBase
+public class DeleteModuleTests : ModuleTestsBase
 {
     private readonly ICommandHandler<Guid, DeleteModuleCommand> _sut;
-    public DeleteModuleTests(ModuleTestWebFactory factory) : base(factory)
+
+    public DeleteModuleTests(ModuleTestWebFactory factory)
+        : base(factory)
     {
         _sut = Scope.ServiceProvider.GetRequiredService<ICommandHandler<Guid, DeleteModuleCommand>>();
     }
-    
+
     [Fact]
     public async Task DeleteModule_should_be_success()
     {
         // Arrange
         var cancellationToken = new CancellationTokenSource().Token;
-        
+
         var moduleId = await SeedModule();
         var command = Fixture.CreateDeleteModuleCommand(moduleId);
 
@@ -32,7 +34,7 @@ public class DeleteModuleTests: ModuleTestsBase
 
         var modules = await ReadDbContext.Modules
             .ToListAsync(cancellationToken);
-        
+
         modules.Should().BeNullOrEmpty();
     }
 }

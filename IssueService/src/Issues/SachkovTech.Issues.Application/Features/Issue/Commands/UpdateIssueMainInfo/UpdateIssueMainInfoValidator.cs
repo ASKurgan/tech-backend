@@ -9,9 +9,16 @@ public class UpdateIssueMainInfoValidator : AbstractValidator<UpdateIssueMainInf
 {
     public UpdateIssueMainInfoValidator()
     {
-        RuleFor(u => u.IssueId).NotEmpty().WithError(Errors.General.ValueIsRequired());
-        RuleFor(u => u.Title).MustBeValueObject(Title.Create);
-        RuleFor(u => u.Description).MustBeValueObject(Description.Create);
-        RuleFor(u => u.Experience).GreaterThanOrEqualTo(1).LessThanOrEqualTo(1000);
+        RuleFor(u => u.IssueId)
+            .NotEmpty().WithError(Errors.General.ValueIsRequired());
+
+        RuleFor(u => u.Title)
+            .MustBeValueObject(Title.Create);
+
+        RuleFor(u => u.Description)
+            .MustBeValueObject(Description.Create);
+
+        RuleFor(u => u.Experience)
+            .GreaterThanOrEqualTo(1).LessThanOrEqualTo(1000);
     }
 }

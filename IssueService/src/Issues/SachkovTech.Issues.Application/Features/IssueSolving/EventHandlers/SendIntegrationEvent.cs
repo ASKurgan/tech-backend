@@ -7,6 +7,7 @@ namespace SachkovTech.Issues.Application.Features.IssueSolving.EventHandlers;
 public class SendIntegrationEvent : INotificationHandler<IssueSentOnReviewEvent>
 {
     private readonly IOutboxRepository _outboxRepository;
+
     public SendIntegrationEvent(IOutboxRepository outboxRepository)
     {
         _outboxRepository = outboxRepository;

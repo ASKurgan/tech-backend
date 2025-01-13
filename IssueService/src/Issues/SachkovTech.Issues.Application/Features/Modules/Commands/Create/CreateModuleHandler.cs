@@ -36,9 +36,7 @@ public class CreateModuleHandler : ICommandHandler<Guid, CreateModuleCommand>
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (validationResult.IsValid == false)
-        {
             return validationResult.ToList();
-        }
 
         var title = Title.Create(command.Title).Value;
         var description = Description.Create(command.Description).Value;

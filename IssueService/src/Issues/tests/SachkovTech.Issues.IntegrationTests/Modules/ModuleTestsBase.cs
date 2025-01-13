@@ -39,42 +39,61 @@ public class ModuleTestsBase : IClassFixture<ModuleTestWebFactory>, IAsyncLifeti
     protected async Task<Guid> SeedModule()
     {
         var module = Fixture.CreateModule();
-        
+
         await WriteDbContext.Modules.AddAsync(module);
 
         await WriteDbContext.SaveChangesAsync();
 
         return module.Id;
     }
-    
+
     protected async Task<List<Module>> SeedModules(int count)
     {
         List<Module> modulesToSeed = [];
-        
+
         for (var i = 0; i < count; i++)
         {
             modulesToSeed.Add(Fixture.CreateModule());
         }
-        
+
         await WriteDbContext.Modules.AddRangeAsync(modulesToSeed);
 
         await WriteDbContext.SaveChangesAsync();
 
         return modulesToSeed;
     }
-    
+
     protected async Task<Guid> SeedIssuePositions(Guid moduleId, CancellationToken cancellationToken = default)
     {
         var module = await WriteDbContext.Modules
             .FirstOrDefaultAsync(x => x.Id == moduleId, cancellationToken);
-        if (module is  null)
+        if (module is null)
             throw new Exception($"Seeded Module {moduleId} not found, something wrong with DB");
-            
+
         for (var i = 0; i < 4; i++)
         {
-            module.AddIssue(IssueId.NewIssueId()); 
+            module.AddIssue(IssueId.NewIssueId());
         }
+
         await WriteDbContext.SaveChangesAsync(cancellationToken);
+
         return module.IssuesPosition[3].IssueId;
-    }    
+    }
+
+    protected async Task<Guid> SeedLessonPositions(Guid moduleId, CancellationToken cancellationToken = default)
+    {
+        var module = await WriteDbContext.Modules
+            .FirstOrDefaultAsync(x => x.Id == moduleId, cancellationToken);
+        if (module is null)
+            throw new Exception($"Seeded Module {moduleId} not found, something wrong with DB");
+
+        for (var i = 0; i < 4; i++)
+        {
+            module.AddLesson(LessonId.NewLessonId());
+        }
+
+        await WriteDbContext.SaveChangesAsync(cancellationToken);
+
+        return module.LessonsPosition[3].LessonId;
+    }
 }

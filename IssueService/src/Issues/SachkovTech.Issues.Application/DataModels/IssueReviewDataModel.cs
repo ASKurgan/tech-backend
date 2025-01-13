@@ -3,7 +3,7 @@
 public record IssueReviewDataModel
 {
     public Guid Id { get; init; }
-    
+
     public Guid UserIssueId { get; init; }
 
     public Guid UserId { get; init; }
@@ -21,6 +21,6 @@ public record IssueReviewDataModel
     public DateTime? IssueApprovedTime { get; init; }
 
     public string PullRequestLink { get; init; } = string.Empty;
-    
+
     public Guid IssueReviewId { get; init; }
 }

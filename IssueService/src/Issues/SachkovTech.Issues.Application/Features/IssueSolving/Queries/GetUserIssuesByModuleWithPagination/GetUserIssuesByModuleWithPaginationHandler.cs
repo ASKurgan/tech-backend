@@ -10,7 +10,7 @@ public class GetUserIssuesByModuleWithPaginationHandler
     : IQueryHandler<PagedList<UserIssueResponse>, GetUserIssuesByModuleWithPaginationQuery>
 {
     private readonly IReadDbContext _readDbContext;
-    
+
     public GetUserIssuesByModuleWithPaginationHandler(IReadDbContext readDbContext)
     {
         _readDbContext = readDbContext;
@@ -20,12 +20,12 @@ public class GetUserIssuesByModuleWithPaginationHandler
         GetUserIssuesByModuleWithPaginationQuery query,
         CancellationToken cancellationToken)
     {
-        var userIssuesQuery = 
-            from userIssue in _readDbContext.UserIssues 
+        var userIssuesQuery =
+            from userIssue in _readDbContext.UserIssues
             join issue in _readDbContext.Issues
                 on userIssue.IssueId equals issue.Id
-            where userIssue.UserId == query.UserId 
-                  && userIssue.ModuleId == query.ModuleId 
+            where userIssue.UserId == query.UserId
+                  && userIssue.ModuleId == query.ModuleId
                   && userIssue.Status == query.Status
             orderby Enum.Parse<IssueStatus>(userIssue.Status)
             select new UserIssueResponse()
@@ -40,9 +40,9 @@ public class GetUserIssuesByModuleWithPaginationHandler
                 StartDateOfExecution = userIssue.StartDateOfExecution,
                 EndDateOfExecution = userIssue.EndDateOfExecution,
                 Attempts = userIssue.Attempts,
-                PullRequestUrl = userIssue.PullRequestUrl
+                PullRequestUrl = userIssue.PullRequestUrl,
             };
-        
+
         return await userIssuesQuery
             .ToPagedList(query.Page, query.PageSize, cancellationToken);
     }

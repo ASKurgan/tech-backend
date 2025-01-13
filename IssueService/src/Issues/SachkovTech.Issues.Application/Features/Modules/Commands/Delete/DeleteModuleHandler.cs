@@ -34,9 +34,7 @@ public class DeleteModuleHandler : ICommandHandler<Guid, DeleteModuleCommand>
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (validationResult.IsValid == false)
-        {
             return validationResult.ToList();
-        }
 
         var moduleResult = await _modulesRepository.GetById(command.ModuleId, cancellationToken);
         if (moduleResult.IsFailure)

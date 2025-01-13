@@ -12,7 +12,8 @@ namespace SachkovTech.Issues.IntegrationTests.Lessons.GetLessonByIdTests;
 
 public class GetLessonByIdTest : LessonsTestsBase
 {
-    public GetLessonByIdTest(LessonTestWebFactory factory) : base(factory)
+    public GetLessonByIdTest(LessonTestWebFactory factory)
+        : base(factory)
     {
         _sut = Scope.ServiceProvider.GetRequiredService<IQueryHandlerWithResult<LessonResponse, GetLessonByIdQuery>>();
     }
@@ -22,8 +23,7 @@ public class GetLessonByIdTest : LessonsTestsBase
     [Fact]
     public async Task Get_existing_lesson_by_id()
     {
-        // arrange
-
+        // Arrange
         var cancellationToken = new CancellationTokenSource().Token;
 
         var lesson = await SeedLessonToDatabase(WriteDbContext, cancellationToken);
@@ -31,11 +31,11 @@ public class GetLessonByIdTest : LessonsTestsBase
         var query = Fixture.CreateGetLessonByIdQuery(lesson.Id);
 
         Factory.SetupSuccessFileServiceMock([lesson.PreviewId, lesson.Video.FileId]);
-        
-        // act
+
+        // Act
         var result = await _sut.Handle(query, cancellationToken);
 
-        // assert
+        // Assert
         result.IsSuccess.Should().BeTrue();
         var lessonResponse = result.Value;
         lessonResponse.Should().NotBeNull();
@@ -47,7 +47,7 @@ public class GetLessonByIdTest : LessonsTestsBase
     [Fact]
     public async Task Get_non_existing_lesson_should_return_not_found()
     {
-        // arrange
+        // Arrange
         Factory.SetupFailureFileServiceMock();
 
         var cancellationToken = new CancellationTokenSource().Token;
@@ -55,11 +55,11 @@ public class GetLessonByIdTest : LessonsTestsBase
         var lesson = await SeedLessonToDatabase(WriteDbContext, cancellationToken);
 
         var query = Fixture.CreateGetLessonByIdQuery(lesson.Id);
-        
-        // act
+
+        // Act
         var result = await _sut.Handle(query, cancellationToken);
 
-        // assert
+        // Assert
         result.IsFailure.Should().BeTrue();
         result.Error.Should().ContainSingle(e => e.Message == "record not found");
     }
@@ -68,7 +68,8 @@ public class GetLessonByIdTest : LessonsTestsBase
         IssuesWriteDbContext dbContext,
         CancellationToken cancellationToken = default)
     {
-        var lesson = new Lesson(Guid.NewGuid(),
+        var lesson = new Lesson(
+            Guid.NewGuid(),
             Guid.NewGuid(),
             Title.Create("test title").Value,
             Description.Create("test description").Value,

@@ -35,24 +35,18 @@ public class SendUserIssueForRevisionHandler : ICommandHandler<Guid, SendUserIss
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (validationResult.IsValid == false)
-        {
             return validationResult.ToList();
-        }
 
         var userIssueResult = await _userIssueRepository
             .GetUserIssueById(UserIssueId.Create(command.UserIssueId), cancellationToken);
 
         if (userIssueResult.IsFailure)
-        {
             return userIssueResult.Error.ToErrorList();
-        }
 
         var sendForRevisionResult = userIssueResult.Value.SendForRevision();
 
         if (sendForRevisionResult.IsFailure)
-        {
             return sendForRevisionResult.Error.ToErrorList();
-        }
 
         await _unitOfWork.SaveChanges(cancellationToken);
 

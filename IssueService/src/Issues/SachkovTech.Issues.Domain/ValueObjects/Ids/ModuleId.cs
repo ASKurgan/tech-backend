@@ -5,12 +5,12 @@ namespace SachkovTech.Issues.Domain.ValueObjects.Ids;
 public class ModuleId : ComparableValueObject
 {
     public static readonly ModuleId Empty = new ModuleId(Guid.Empty);
-    
+
     private ModuleId(Guid value)
     {
         Value = value;
     }
-    
+
     public Guid Value { get; }
 
     public static ModuleId NewModuleId() => new(Guid.NewGuid());

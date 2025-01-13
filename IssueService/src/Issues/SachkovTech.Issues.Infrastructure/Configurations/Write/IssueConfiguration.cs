@@ -39,7 +39,8 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
                 id => id!.Value,
                 value => LessonId.Create(value));
 
-        builder.ComplexProperty(i => i.Experience,
+        builder.ComplexProperty(
+            i => i.Experience,
             eb =>
             {
                 eb.Property(e => e.Value)
@@ -76,7 +77,7 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
         builder.Property(i => i.DeletionDate)
             .IsRequired(false)
             .HasColumnName("deletion_date");
-        
+
         builder.HasQueryFilter(f => f.IsDeleted == false);
     }
 }

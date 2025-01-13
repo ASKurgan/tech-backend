@@ -19,9 +19,8 @@ public class Position : ComparableValueObject
 
     public Result<Position, Error> Back()
         => Create(Value - 1);
-    
-    public static implicit operator int(Position position) =>
-        position.Value;
+
+    public static implicit operator int(Position position) => position.Value;
 
     public static Result<Position, Error> Create(int number)
     {

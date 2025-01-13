@@ -6,13 +6,16 @@ using SachkovTech.Issues.Application.Features.Modules.Commands.UpdateIssuePositi
 
 namespace SachkovTech.Issues.IntegrationTests.Modules.UpdateIssuePositionTests;
 
-public class UpdateIssuePositionTests: ModuleTestsBase
+public class UpdateIssuePositionTests : ModuleTestsBase
 {
     private readonly ICommandHandler<Guid, UpdateIssuePositionCommand> _sut;
-    public UpdateIssuePositionTests(ModuleTestWebFactory factory) : base(factory)
+
+    public UpdateIssuePositionTests(ModuleTestWebFactory factory)
+        : base(factory)
     {
         _sut = Scope.ServiceProvider.GetRequiredService<ICommandHandler<Guid, UpdateIssuePositionCommand>>();
     }
+
     [Fact]
     public async Task UpdateIssuePosition_should_move_forth_to_second_position()
     {
@@ -20,15 +23,16 @@ public class UpdateIssuePositionTests: ModuleTestsBase
         var cancellationToken = new CancellationTokenSource().Token;
 
         var moduleId = await SeedModule();
-        //seed 5 IssuePositions
+
+        // Seed 5 IssuePositions
         var issueId = await SeedIssuePositions(moduleId, cancellationToken); // return 4th issuePosition
-        
+
         var command = Fixture.CreateUpdateIssuePositionCommand(moduleId, issueId, 2);
 
         // Act
         var result = await _sut.Handle(command, cancellationToken);
 
-        //Assert
+        // Assert
         result.Should().NotBeNull();
         result.IsSuccess.Should().BeTrue();
 
@@ -39,6 +43,4 @@ public class UpdateIssuePositionTests: ModuleTestsBase
         module?.IssuesPosition.Where(x => x.IssueId == issueId).Select(x => x.Position)
             .Should().Equal(2);
     }
-
-    
 }

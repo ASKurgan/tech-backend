@@ -10,20 +10,27 @@ using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonById;
 
-public class GetLessonByIdHandler(
-    IReadDbContext context,
-    IFileService fileService) : IQueryHandlerWithResult<LessonResponse, GetLessonByIdQuery>
+public class GetLessonByIdHandler : IQueryHandlerWithResult<LessonResponse, GetLessonByIdQuery>
 {
+    private readonly IReadDbContext _context;
+    private readonly IFileService _fileService;
+
+    public GetLessonByIdHandler(IReadDbContext context, IFileService fileService)
+    {
+        _context = context;
+        _fileService = fileService;
+    }
+
     public async Task<Result<LessonResponse, ErrorList>> Handle(
         GetLessonByIdQuery query, CancellationToken cancellationToken = default)
     {
-        var lesson = await context.Lessons.FirstOrDefaultAsync(l => l.Id == query.LessonId, cancellationToken);
+        var lesson = await _context.Lessons.FirstOrDefaultAsync(l => l.Id == query.LessonId, cancellationToken);
         if (lesson is null)
             return Errors.General.NotFound(query.LessonId, "lesson").ToErrorList();
 
         var fileServiceRequest = new GetFilesPresignedUrlsRequest([lesson.VideoId, lesson.PreviewId]);
 
-        var urlsResult = await fileService.GetFilesPresignedUrls(fileServiceRequest, cancellationToken);
+        var urlsResult = await _fileService.GetFilesPresignedUrls(fileServiceRequest, cancellationToken);
         if (urlsResult.IsFailure)
             return Errors.General.NotFound().ToErrorList();
 
@@ -46,8 +53,9 @@ public class GetLessonByIdHandler(
             VideoUrl = urls[lesson.VideoId],
             PreviewId = lesson.PreviewId,
             PreviewUrl = urls[lesson.PreviewId],
-            //TODO: Сделать получение Tags и Issues
+
+            // TODO: Сделать получение Tags и Issues
             Tags = [],
-            Issues = []
+            Issues = [],
         };
 }

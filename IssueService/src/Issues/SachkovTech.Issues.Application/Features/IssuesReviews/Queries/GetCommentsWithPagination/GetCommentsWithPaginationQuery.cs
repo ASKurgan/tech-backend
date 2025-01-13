@@ -8,11 +8,13 @@ public record GetCommentsWithPaginationQuery(
     int Page,
     int PageSize) : IQuery
 {
-    private GetCommentsWithPaginationQuery(Guid issueReviewId,
+    private GetCommentsWithPaginationQuery(
+        Guid issueReviewId,
         string? sortDirection,
         string? sortBy,
         int page,
-        int pageSize) : this(
+        int pageSize)
+        : this(
         sortDirection,
         sortBy,
         page,
@@ -25,6 +27,6 @@ public record GetCommentsWithPaginationQuery(
 
     public GetCommentsWithPaginationQuery GetQueryWithId(Guid issueReviewId)
     {
-        return new(issueReviewId, SortDirection, SortBy, Page, PageSize);
+        return new GetCommentsWithPaginationQuery(issueReviewId, SortDirection, SortBy, Page, PageSize);
     }
 }

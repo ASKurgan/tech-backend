@@ -51,16 +51,12 @@ public class GetIssuesWithPaginationHandler
                     ModuleId = i.ModuleId,
                     LessonId = i.LessonId,
                     Title = i.Title,
-                    Description = i.Description
-                }
-            );
+                    Description = i.Description,
+                });
 
         return new PagedList<IssueResponse>
         {
-            Items = issues.ToList(),
-            TotalCount = totalCount,
-            PageSize = query.PageSize,
-            Page = query.Page
+            Items = issues.ToList(), TotalCount = totalCount, PageSize = query.PageSize, Page = query.Page,
         };
     }
 }
@@ -108,10 +104,7 @@ public class GetIssuesWithPaginationHandlerDapper
 
         return new PagedList<IssueResponse>
         {
-            Items = issues.ToList(),
-            TotalCount = totalCount,
-            PageSize = query.PageSize,
-            Page = query.Page,
+            Items = issues.ToList(), TotalCount = totalCount, PageSize = query.PageSize, Page = query.Page,
         };
     }
 }

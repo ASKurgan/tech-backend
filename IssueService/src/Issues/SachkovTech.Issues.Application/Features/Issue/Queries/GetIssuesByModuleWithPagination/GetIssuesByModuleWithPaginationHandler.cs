@@ -25,7 +25,7 @@ public class GetIssuesByModuleWithPaginationHandler
         CancellationToken cancellationToken = default)
     {
         using var connection = _sqlConnectionFactory.Create();
-        
+
         var parameters = new DynamicParameters();
 
         var sqlBuilder = new StringBuilder(
@@ -44,7 +44,7 @@ public class GetIssuesByModuleWithPaginationHandler
                           ON i.module_id = m.id
                      JOIN LATERAL jsonb_array_elements(m.issues_position) AS ip ON (ip->>'IssueId')::uuid = i.id
             WHERE NOT i.is_deleted
-            
+
             """);
 
         if (!string.IsNullOrWhiteSpace(query.Title))
@@ -53,7 +53,17 @@ public class GetIssuesByModuleWithPaginationHandler
             parameters.Add("@Title", $"%{query.Title}%");
         }
 
-        var allowedSortColumns = new List<string> { "Id", "LessonId", "ModuleId", "Position", "Files", "IsDeleted", "Description", "Title" };
+        var allowedSortColumns = new List<string>
+        {
+            "Id",
+            "LessonId",
+            "ModuleId",
+            "Position",
+            "Files",
+            "IsDeleted",
+            "Description",
+            "Title",
+        };
         var sortBy = allowedSortColumns.Contains(query.SortBy) ? query.SortBy : "Id";
         var sortDirection = query.SortDirection?.ToUpper() == "DESC" ? "DESC" : "ASC";
         sqlBuilder.ApplySorting(sortBy, sortDirection);
@@ -71,7 +81,7 @@ public class GetIssuesByModuleWithPaginationHandler
         {
             totalCountSql.Append("\nAND i.title ILIKE @Title");
         }
-        
+
         var totalCount = await connection.ExecuteScalarAsync<long>(
             totalCountSql.ToString(),
             parameters);
@@ -82,10 +92,7 @@ public class GetIssuesByModuleWithPaginationHandler
 
         return new PagedList<IssueResponse>
         {
-            Items = issues.ToList(),
-            TotalCount = totalCount,
-            PageSize = query.PageSize,
-            Page = query.Page
+            Items = issues.ToList(), TotalCount = totalCount, PageSize = query.PageSize, Page = query.Page,
         };
     }
 }

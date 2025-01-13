@@ -11,6 +11,7 @@ using SachkovTech.Issues.Application.Features.Lessons.Command.StartUploadVideo;
 using SachkovTech.Issues.Application.Features.Lessons.Command.UpdateLesson;
 using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonById;
 using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonsWithPagination;
+using SachkovTech.Issues.Application.Features.Modules.Commands.UpdateLessonPosition;
 using SachkovTech.Issues.Contracts.Lesson;
 
 namespace SachkovTech.Issues.Presentation.Lessons;
@@ -25,7 +26,8 @@ public class LessonsController : ApplicationController
         [FromServices] GetLessonsWithPaginationHandler handler,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(new GetLessonsWithPaginationQuery(page, pageSize),
+        var result = await handler.Handle(
+            new GetLessonsWithPaginationQuery(page, pageSize),
             cancellationToken);
 
         if (result.IsFailure)
@@ -60,12 +62,12 @@ public class LessonsController : ApplicationController
             request.FileName,
             request.ContentType,
             request.FileSize);
-    
+
         var result = await handler.Handle(command, cancellationToken);
-    
+
         if (result.IsFailure)
             result.Error.ToResponse();
-    
+
         return Ok(result.Value);
     }
 
@@ -115,6 +117,27 @@ public class LessonsController : ApplicationController
             request.PreviewId,
             request.Tags,
             request.Issues);
+
+        var result = await handler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok();
+    }
+
+    [HttpPatch("{lessonId:guid}/position")]
+    [Permission(Permissions.Lessons.UPDATE_LESSON)]
+    public async Task<IActionResult> UpdateLessonPosition(
+        [FromRoute] Guid lessonId,
+        [FromBody] UpdateLessonPositionRequest request,
+        [FromServices] UpdateLessonPositionHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new UpdateLessonPositionCommand(
+            lessonId,
+            request.ModuleId,
+            request.Position);
 
         var result = await handler.Handle(command, cancellationToken);
 

@@ -17,9 +17,7 @@ public class RemovingIssuePosition : INotificationHandler<IssueDeletedEvent>
     {
         var moduleIssuesResult = await _repository.GetById(notification.ModuleId, cancellationToken);
         if (moduleIssuesResult.IsFailure)
-        {
             throw new Exception(moduleIssuesResult.Error.Message);
-        }
 
         moduleIssuesResult.Value.DeleteIssuePosition(notification.IssueId);
     }

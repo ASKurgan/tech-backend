@@ -1,6 +1,4 @@
-﻿
-
-using SachkovTech.Core.Abstractions;
+﻿using SachkovTech.Core.Abstractions;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Command.RemoveIssueFromLesson;
 

@@ -39,17 +39,13 @@ public class SendForRevisionHandler : ICommandHandler<Guid, SendForRevisionComma
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (validationResult.IsValid == false)
-        {
             return validationResult.ToList();
-        }
 
         var issueReviewResult = await _issuesReviewRepository
             .GetById(IssueReviewId.Create(command.IssueReviewId), cancellationToken);
 
         if (issueReviewResult.IsFailure)
-        {
             return issueReviewResult.Error.ToErrorList();
-        }
 
         var issueReview = issueReviewResult.Value;
 

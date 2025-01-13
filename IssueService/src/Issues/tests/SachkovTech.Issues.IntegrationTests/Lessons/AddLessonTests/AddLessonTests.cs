@@ -8,14 +8,15 @@ namespace SachkovTech.Issues.IntegrationTests.Lessons.AddLessonTests;
 
 public class AddLessonTests : LessonsTestsBase
 {
-    public AddLessonTests(LessonTestWebFactory factory) : base(factory)
+    public AddLessonTests(LessonTestWebFactory factory)
+        : base(factory)
     {
     }
 
     [Fact]
     public async Task Add_lesson_to_database()
     {
-        // arrange
+        // Arrange
         Factory.SetupSuccessFileServiceMock();
 
         var cancellationToken = new CancellationTokenSource().Token;
@@ -26,10 +27,10 @@ public class AddLessonTests : LessonsTestsBase
 
         var sut = Scope.ServiceProvider.GetRequiredService<ICommandHandler<Guid, AddLessonCommand>>();
 
-        // act
+        // Act
         var result = await sut.Handle(command, cancellationToken);
 
-        //assert
+        // Assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
 
@@ -43,7 +44,7 @@ public class AddLessonTests : LessonsTestsBase
     [Fact]
     public async Task Cant_add_lesson_to_database()
     {
-        // arrange
+        // Arrange
         Factory.SetupFailureFileServiceMock();
 
         var cancellationToken = new CancellationTokenSource().Token;
@@ -54,10 +55,10 @@ public class AddLessonTests : LessonsTestsBase
 
         var sut = Scope.ServiceProvider.GetRequiredService<AddLessonHandler>();
 
-        // act
+        // Act
         var result = await sut.Handle(command, cancellationToken);
 
-        //assert
+        // Assert
         var lesson = await ReadDbContext.Lessons
             .FirstOrDefaultAsync(cancellationToken);
 

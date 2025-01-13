@@ -23,6 +23,7 @@ public class IssuesReadDbContext : DbContext, IReadDbContext
     public IQueryable<CommentDataModel> Comments => Set<CommentDataModel>();
 
     public IQueryable<UserIssueDataModel> UserIssues => Set<UserIssueDataModel>();
+
     public IQueryable<LessonDataModel> Lessons => Set<LessonDataModel>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

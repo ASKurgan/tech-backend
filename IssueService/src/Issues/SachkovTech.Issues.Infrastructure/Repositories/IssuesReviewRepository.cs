@@ -17,7 +17,8 @@ public class IssuesReviewRepository : IIssuesReviewRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Result<IssueReview, Error>> GetById(IssueReviewId id,
+    public async Task<Result<IssueReview, Error>> GetById(
+        IssueReviewId id,
         CancellationToken cancellationToken = default)
     {
         var issueReview = await _dbContext.IssueReviews
@@ -30,7 +31,8 @@ public class IssuesReviewRepository : IIssuesReviewRepository
         return issueReview;
     }
 
-    public async Task<Result<IssueReview, Error>> GetByUserIssueId(UserIssueId id,
+    public async Task<Result<IssueReview, Error>> GetByUserIssueId(
+        UserIssueId id,
         CancellationToken cancellationToken = default)
     {
         var issueReview = await _dbContext.IssueReviews

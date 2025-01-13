@@ -8,6 +8,7 @@ using SachkovTech.Issues.Application.Interfaces;
 using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Issue.Commands.DeleteIssue.SoftDeleteIssue;
+
 public class SoftDeleteIssueHandler : ICommandHandler<Guid, DeleteIssueCommand>
 {
     private readonly IIssuesRepository _issuesRepository;
@@ -33,9 +34,7 @@ public class SoftDeleteIssueHandler : ICommandHandler<Guid, DeleteIssueCommand>
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (validationResult.IsValid == false)
-        {
             return validationResult.ToList();
-        }
 
         var issueResult = await _issuesRepository.GetById(command.IssueId, false, cancellationToken);
         if (issueResult.IsFailure)

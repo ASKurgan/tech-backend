@@ -47,9 +47,7 @@ public class CreateIssueHandler : ICommandHandler<Guid, CreateIssueCommand>
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (validationResult.IsValid == false)
-        {
             return validationResult.ToList();
-        }
 
         LessonId? lessonId = null;
         if (command.LessonId is not null)
@@ -67,7 +65,6 @@ public class CreateIssueHandler : ICommandHandler<Guid, CreateIssueCommand>
 
         var module = moduleResult.Value;
         var issue = InitIssue(module.Id, lessonId, command);
-
 
         await _issuesRepository.Add(issue, cancellationToken);
 

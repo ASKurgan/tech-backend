@@ -26,6 +26,7 @@ public class IssuesWriteDbContext : DbContext
     public DbSet<UserIssue> UserIssues => Set<UserIssue>();
 
     public DbSet<IssueReview> IssueReviews => Set<IssueReview>();
+
     public DbSet<Lesson> Lessons => Set<Lesson>();
 
     public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();

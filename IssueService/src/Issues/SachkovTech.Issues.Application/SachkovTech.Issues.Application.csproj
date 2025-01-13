@@ -18,8 +18,4 @@
       <ProjectReference Include="..\SachkovTech.Issues.Domain\SachkovTech.Issues.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="EventHandlers\IssueSentOnReviewEventHandlers\" />
-    </ItemGroup>
-
 </Project>

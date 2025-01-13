@@ -7,24 +7,34 @@ using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Command.RestoreLesson;
 
-public class RestoreLessonHandler(
-    ILessonsRepository lessonsRepository,
-    IUnitOfWork unitOfWork,
-    ILogger<RestoreLessonHandler> logger) : ICommandHandler<RestoreLessonCommand>
+public class RestoreLessonHandler : ICommandHandler<RestoreLessonCommand>
 {
+    private readonly ILessonsRepository _lessonsRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly ILogger<RestoreLessonHandler> _logger;
+
+    public RestoreLessonHandler(
+        ILessonsRepository lessonsRepository,
+        IUnitOfWork unitOfWork,
+        ILogger<RestoreLessonHandler> logger)
+    {
+        _lessonsRepository = lessonsRepository;
+        _unitOfWork = unitOfWork;
+        _logger = logger;
+    }
+
     public async Task<UnitResult<ErrorList>> Handle(
         RestoreLessonCommand command, CancellationToken cancellationToken = default)
     {
-        var lesson = await lessonsRepository.GetById(command.LessonId, cancellationToken);
+        var lesson = await _lessonsRepository.GetById(command.LessonId, cancellationToken);
         if (lesson.IsFailure)
             return Errors.General.NotFound(command.LessonId, "lesson").ToErrorList();
 
         lesson.Value.Restore();
 
+        await _unitOfWork.SaveChanges(cancellationToken);
 
-        await unitOfWork.SaveChanges(cancellationToken);
-
-        logger.Log(LogLevel.Information, "Lesson with id {LessonId} restored", command.LessonId);
+        _logger.Log(LogLevel.Information, "Lesson with id {LessonId} restored", command.LessonId);
 
         return UnitResult.Success<ErrorList>();
     }

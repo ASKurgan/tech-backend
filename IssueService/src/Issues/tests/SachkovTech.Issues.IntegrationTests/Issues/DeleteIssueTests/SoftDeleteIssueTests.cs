@@ -9,7 +9,8 @@ public class SoftDeleteIssueTests : IssueTestsBase
 {
     private readonly SoftDeleteIssueHandler _sut;
 
-    public SoftDeleteIssueTests(IntegrationTestsWebFactory factory) : base(factory)
+    public SoftDeleteIssueTests(IntegrationTestsWebFactory factory)
+        : base(factory)
     {
         _sut = Scope.ServiceProvider.GetRequiredService<SoftDeleteIssueHandler>();
     }
@@ -17,17 +18,17 @@ public class SoftDeleteIssueTests : IssueTestsBase
     [Fact]
     public async Task Soft_delete_issue_successfully()
     {
-        // arrange
+        // Arrange
         var cancellationToken = new CancellationTokenSource().Token;
 
         var issueId = await SeedIssue();
 
         var command = Fixture.CreateDeleteIssueCommand(issueId);
 
-        // act
+        // Act
         var result = await _sut.Handle(command, cancellationToken);
 
-        //assert
+        // Assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
 
@@ -42,22 +43,22 @@ public class SoftDeleteIssueTests : IssueTestsBase
     [Fact]
     public async Task SoftDeleteIssue_when_issue_already_deleted_should_be_failure()
     {
-        // arrange
+        // Arrange
         var cancellationToken = new CancellationTokenSource().Token;
 
         var issueId = await SeedSoftDeletedIssue();
 
         var command = Fixture.CreateDeleteIssueCommand(issueId);
 
-        // act
+        // Act
         var result = await _sut.Handle(command, cancellationToken);
 
-        //assert
+        // Assert
         result.IsSuccess.Should().Be(false);
 
         var issue = await ReadDbContext.Issues
             .IgnoreQueryFilters()
-            .FirstOrDefaultAsync(l => l.Id == issueId, cancellationToken);;
+            .FirstOrDefaultAsync(l => l.Id == issueId, cancellationToken);
 
         issue.Should().NotBeNull();
         issue?.IsDeleted.Should().BeTrue();

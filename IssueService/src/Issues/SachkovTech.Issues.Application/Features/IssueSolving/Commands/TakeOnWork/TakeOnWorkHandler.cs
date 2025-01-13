@@ -44,17 +44,15 @@ public class TakeOnWorkHandler : ICommandHandler<Guid, TakeOnWorkCommand>
             await _readDbContext.UserIssues.FirstOrDefaultAsync(ui => ui.IssueId == command.IssueId, cancellationToken);
 
         if (userIssueExisting is not null)
-        {
             return Errors.General.ValueIsInvalid().ToErrorList();
-        }
 
         var previousUserIssue = await _readDbContext.UserIssues
             .FirstOrDefaultAsync(u => u.UserId == command.UserId, cancellationToken);
 
         var previousUserIssueStatus =
             previousUserIssue is null
-            ? IssueStatus.Completed
-            : Enum.Parse<IssueStatus>(previousUserIssue.Status);
+                ? IssueStatus.Completed
+                : Enum.Parse<IssueStatus>(previousUserIssue.Status);
 
         if (previousUserIssueStatus != IssueStatus.Completed)
             return Error.Failure("prev.issue.not.solved", "previous issue not solved").ToErrorList();
@@ -68,7 +66,8 @@ public class TakeOnWorkHandler : ICommandHandler<Guid, TakeOnWorkCommand>
 
         await _unitOfWork.SaveChanges(cancellationToken);
 
-        _logger.LogInformation("User took issue on work. A record was created with id {userIssueId}",
+        _logger.LogInformation(
+            "User took issue on work. A record was created with id {userIssueId}",
             userIssueId);
 
         return result;

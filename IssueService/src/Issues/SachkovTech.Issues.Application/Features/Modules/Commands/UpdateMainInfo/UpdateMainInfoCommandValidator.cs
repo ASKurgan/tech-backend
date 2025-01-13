@@ -10,7 +10,11 @@ public class UpdateMainInfoCommandValidator : AbstractValidator<UpdateMainInfoCo
     public UpdateMainInfoCommandValidator()
     {
         RuleFor(r => r.ModuleId).NotEmpty().WithError(Errors.General.ValueIsRequired());
-        RuleFor(r => r.Title).MustBeValueObject(Title.Create);
-        RuleFor(r => r.Description).MustBeValueObject(Description.Create);
+
+        RuleFor(r => r.Title)
+            .MustBeValueObject(Title.Create);
+
+        RuleFor(r => r.Description)
+            .MustBeValueObject(Description.Create);
     }
 }

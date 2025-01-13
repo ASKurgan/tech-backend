@@ -9,7 +9,9 @@ namespace SachkovTech.Issues.IntegrationTests.Modules.CreateModuleTests;
 public class CreateModuleTests : ModuleTestsBase
 {
     private readonly ICommandHandler<Guid, CreateModuleCommand> _sut;
-    public CreateModuleTests(ModuleTestWebFactory factory) : base(factory)
+
+    public CreateModuleTests(ModuleTestWebFactory factory)
+        : base(factory)
     {
         _sut = Scope.ServiceProvider.GetRequiredService<ICommandHandler<Guid, CreateModuleCommand>>();
     }
@@ -18,7 +20,6 @@ public class CreateModuleTests : ModuleTestsBase
     public async Task CreateModule_should_be_success()
     {
         // Arrange
-
         var cancellationToken = new CancellationTokenSource().Token;
         var command = Fixture.CreateCreateModuleCommand();
 

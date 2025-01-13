@@ -18,7 +18,7 @@ public class ForceDeleteIssueTests : IssueTestsBase
     [Fact]
     public async Task Force_delete_issue_successfully()
     {
-        // arrange
+        // Arrange
         var cancellationToken = new CancellationTokenSource().Token;
 
         var moduleId = await SeedModule();
@@ -27,10 +27,10 @@ public class ForceDeleteIssueTests : IssueTestsBase
 
         var command = Fixture.CreateDeleteIssueCommand(issueId);
 
-        // act
+        // Act
         var result = await sut.Handle(command, cancellationToken);
 
-        // assert
+        // Assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
 

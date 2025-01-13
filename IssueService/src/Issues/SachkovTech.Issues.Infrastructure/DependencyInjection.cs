@@ -116,8 +116,7 @@ public static class DependencyInjection
 
     private static IServiceCollection AddHostedServices(this IServiceCollection services)
     {
-        //services.AddHostedService<DeleteExpiredIssuesBackgroundService>();
-
+        // services.AddHostedService<DeleteExpiredIssuesBackgroundService>();
         return services;
     }
 

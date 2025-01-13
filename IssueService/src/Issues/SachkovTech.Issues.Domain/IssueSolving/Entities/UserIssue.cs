@@ -46,13 +46,6 @@ public class UserIssue : DomainEntity<UserIssueId>
 
     public PullRequestUrl PullRequestUrl { get; private set; } = PullRequestUrl.Empty;
 
-    private void TakeOnWork()
-    {
-        StartDateOfExecution = DateTime.UtcNow;
-        Status = IssueStatus.AtWork;
-        Attempts = Attempts.Create();
-    }
-
     public UnitResult<Error> SendOnReview(PullRequestUrl pullRequestUrl)
     {
         if (Status != IssueStatus.AtWork)
@@ -76,7 +69,6 @@ public class UserIssue : DomainEntity<UserIssueId>
         Attempts = Attempts.Add();
 
         return Result.Success<Error>();
-
     }
 
     public UnitResult<Error> StopWorking()
@@ -87,7 +79,6 @@ public class UserIssue : DomainEntity<UserIssueId>
         Status = IssueStatus.NotAtWork;
 
         return Result.Success<Error>();
-
     }
 
     public UnitResult<Error> CompleteIssue()
@@ -99,5 +90,12 @@ public class UserIssue : DomainEntity<UserIssueId>
         Status = IssueStatus.Completed;
 
         return new UnitResult<Error>();
+    }
+
+    private void TakeOnWork()
+    {
+        StartDateOfExecution = DateTime.UtcNow;
+        Status = IssueStatus.AtWork;
+        Attempts = Attempts.Create();
     }
 }

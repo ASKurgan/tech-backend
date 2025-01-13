@@ -11,6 +11,7 @@ public class ModuleDataModel
     public string Description { get; init; } = string.Empty;
 
     public IssuePositionDto[] IssuesPosition { get; init; } = [];
+
     public LessonPositionDto[] LessonsPosition { get; init; } = [];
 
     public bool IsDeleted { get; init; }

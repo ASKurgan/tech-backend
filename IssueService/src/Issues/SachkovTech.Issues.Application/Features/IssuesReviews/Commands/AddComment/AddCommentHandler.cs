@@ -37,9 +37,7 @@ public class AddCommentHandler : ICommandHandler<Guid, AddCommentCommand>
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (validationResult.IsValid == false)
-        {
             return validationResult.ToList();
-        }
 
         var issueReviewResult = await _issuesReviewRepository
             .GetById(IssueReviewId.Create(command.IssueReviewId), cancellationToken);

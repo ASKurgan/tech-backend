@@ -39,9 +39,7 @@ public class ForceDeleteIssueHandler : ICommandHandler<Guid, DeleteIssueCommand>
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (validationResult.IsValid == false)
-        {
             return validationResult.ToList();
-        }
 
         var issueResult = await _issuesRepository.GetById(
             command.IssueId,

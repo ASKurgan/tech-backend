@@ -34,7 +34,6 @@ public class IssueReviewConfiguration : IEntityTypeConfiguration<IssueReview>
                 id => id!.Value,
                 value => UserId.Create(value));
 
-
         builder.Property(i => i.IssueReviewStatus)
             .HasConversion<string>()
             .HasColumnName("issue_review_status")

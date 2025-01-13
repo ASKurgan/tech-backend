@@ -1,5 +1,3 @@
-
-
 using SachkovTech.Core.Abstractions;
 
 namespace SachkovTech.Issues.Application.Features.Issue.Commands.UpdateIssueMainInfo;

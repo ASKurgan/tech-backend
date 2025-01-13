@@ -8,7 +8,10 @@ public class CreateIssueCommandValidator : AbstractValidator<CreateIssueCommand>
 {
     public CreateIssueCommandValidator()
     {
-        RuleFor(c => c.Title).MustBeValueObject(Title.Create);
-        RuleFor(c => c.Description).MustBeValueObject(Description.Create);
+        RuleFor(c => c.Title)
+            .MustBeValueObject(Title.Create);
+
+        RuleFor(c => c.Description)
+            .MustBeValueObject(Description.Create);
     }
 }

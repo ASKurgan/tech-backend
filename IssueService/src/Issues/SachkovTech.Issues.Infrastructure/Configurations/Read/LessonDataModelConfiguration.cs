@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SachkovTech.Issues.Application.DataModels;
 
-
 namespace SachkovTech.Issues.Infrastructure.Configurations.Read;
 
 public class LessonDataModelConfiguration : IEntityTypeConfiguration<LessonDataModel>

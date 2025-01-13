@@ -35,9 +35,7 @@ public class UpdateIssuePositionHandler : ICommandHandler<Guid, UpdateIssuePosit
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (validationResult.IsValid == false)
-        {
             return validationResult.ToList();
-        }
 
         var moduleResult = await _modulesRepository.GetById(command.ModuleId, cancellationToken);
         if (moduleResult.IsFailure)
@@ -48,7 +46,10 @@ public class UpdateIssuePositionHandler : ICommandHandler<Guid, UpdateIssuePosit
             return Errors.General.NotFound(command.IssueId).ToErrorList();
 
         var newPosition = Position.Create(command.NewPosition).Value;
-        moduleResult.Value.MoveIssue(issueResult, newPosition);
+
+        var result = moduleResult.Value.MoveIssue(issueResult, newPosition);
+        if (result.IsFailure)
+            return moduleResult.Error.ToErrorList();
 
         await _unitOfWork.SaveChanges(cancellationToken);
 
@@ -57,6 +58,6 @@ public class UpdateIssuePositionHandler : ICommandHandler<Guid, UpdateIssuePosit
             command.IssueId,
             command.ModuleId);
 
-        return moduleResult.Value.Id.Value;
+        return issueResult.IssueId.Value;
     }
 }

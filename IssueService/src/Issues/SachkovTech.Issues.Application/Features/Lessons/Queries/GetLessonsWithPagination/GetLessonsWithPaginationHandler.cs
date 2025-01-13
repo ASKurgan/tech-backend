@@ -12,19 +12,30 @@ using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonsWithPagination;
 
-public class GetLessonsWithPaginationHandler(
-    IValidator<GetLessonsWithPaginationQuery> validator,
-    IFileService fileHttpClient,
-    IReadDbContext context)
+public class GetLessonsWithPaginationHandler
     : IQueryHandlerWithResult<PagedList<LessonResponse>, GetLessonsWithPaginationQuery>
 {
+    private readonly IValidator<GetLessonsWithPaginationQuery> _validator;
+    private readonly IFileService _fileHttpClient;
+    private readonly IReadDbContext _context;
+
+    public GetLessonsWithPaginationHandler(
+        IValidator<GetLessonsWithPaginationQuery> validator,
+        IFileService fileHttpClient,
+        IReadDbContext context)
+    {
+        _validator = validator;
+        _fileHttpClient = fileHttpClient;
+        _context = context;
+    }
+
     public async Task<Result<PagedList<LessonResponse>, ErrorList>> Handle(
         GetLessonsWithPaginationQuery query, CancellationToken cancellationToken = default)
     {
-        var validationResult = await validator.ValidateAsync(query, cancellationToken);
+        var validationResult = await _validator.ValidateAsync(query, cancellationToken);
         if (validationResult.IsValid == false)
             return validationResult.ToList();
-        var lessonsQuery = context.Lessons;
+        var lessonsQuery = _context.Lessons;
         var lessonsPagedList = await lessonsQuery.ToPagedList(query.Page, query.PageSize, cancellationToken);
 
         var videoIds = lessonsPagedList.Items
@@ -32,7 +43,7 @@ public class GetLessonsWithPaginationHandler(
             .ToList();
         var videoRequest = new GetFilesPresignedUrlsRequest(videoIds);
 
-        var videoUrlsResult = await fileHttpClient.GetFilesPresignedUrls(videoRequest, cancellationToken);
+        var videoUrlsResult = await _fileHttpClient.GetFilesPresignedUrls(videoRequest, cancellationToken);
         if (videoUrlsResult.IsFailure)
             return Errors.General.NotFound().ToErrorList();
 
@@ -44,7 +55,7 @@ public class GetLessonsWithPaginationHandler(
     {
         var urls = videoUrlsResult
             .ToDictionary(v => v.FileId, u => u.PresignedUrl);
-        
+
         var lessons = lessonsPagedList.Items
             .Select(lessonDto => new LessonResponse
             {
@@ -57,17 +68,18 @@ public class GetLessonsWithPaginationHandler(
                 VideoUrl = urls[lessonDto.VideoId],
                 PreviewId = lessonDto.PreviewId,
                 PreviewUrl = urls[lessonDto.PreviewId],
-                //TODO: Сделать получение Tags и Issues
-                Tags = [], 
-                Issues = []
+
+                // TODO: Сделать получение Tags и Issues
+                Tags = [],
+                Issues = [],
             }).ToList();
-        
+
         return new PagedList<LessonResponse>
         {
             Items = lessons.AsReadOnly(),
             TotalCount = lessonsPagedList.TotalCount,
             PageSize = lessonsPagedList.PageSize,
-            Page = lessonsPagedList.Page
+            Page = lessonsPagedList.Page,
         };
     }
 }

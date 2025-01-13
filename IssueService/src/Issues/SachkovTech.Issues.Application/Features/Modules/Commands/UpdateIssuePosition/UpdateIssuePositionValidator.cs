@@ -8,8 +8,13 @@ public class UpdateIssuePositionValidator : AbstractValidator<UpdateIssuePositio
 {
     public UpdateIssuePositionValidator()
     {
-        RuleFor(u => u.ModuleId).NotEmpty().WithError(Errors.General.ValueIsRequired());
-        RuleFor(u => u.IssueId).NotEmpty().WithError(Errors.General.ValueIsRequired());
-        RuleFor(u => u.NewPosition).GreaterThanOrEqualTo(1).LessThanOrEqualTo(1000);
+        RuleFor(u => u.ModuleId)
+            .NotEmpty().WithError(Errors.General.ValueIsRequired());
+
+        RuleFor(u => u.IssueId)
+            .NotEmpty().WithError(Errors.General.ValueIsRequired());
+
+        RuleFor(u => u.NewPosition)
+            .GreaterThanOrEqualTo(1).LessThanOrEqualTo(1000);
     }
 }

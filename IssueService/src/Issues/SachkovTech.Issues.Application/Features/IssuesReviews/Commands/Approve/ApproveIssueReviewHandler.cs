@@ -38,9 +38,7 @@ public class ApproveIssueReviewHandler : ICommandHandler<Guid, ApproveIssueRevie
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (validationResult.IsValid == false)
-        {
             return validationResult.ToList();
-        }
 
         var issueReviewResult = await _issuesReviewRepository
             .GetById(IssueReviewId.Create(command.IssueReviewId), cancellationToken);
@@ -51,11 +49,6 @@ public class ApproveIssueReviewHandler : ICommandHandler<Guid, ApproveIssueRevie
         issueReviewResult.Value.Approve(UserId.Create(command.ReviewerId));
 
         var userIssueId = issueReviewResult.Value.UserIssueId;
-
-        if (userIssueId is null)
-        {
-            return Errors.General.ValueIsInvalid("user_issue_id").ToErrorList();
-        }
 
         var sendIssueForRevisionRes = await ApproveIssue(userIssueId, cancellationToken);
 
@@ -76,6 +69,7 @@ public class ApproveIssueReviewHandler : ICommandHandler<Guid, ApproveIssueRevie
 
         return issueReviewResult.Value.Id.Value;
     }
+
     private async Task<Result<Guid, ErrorList>> ApproveIssue(
         Guid userIssueId, CancellationToken cancellationToken)
     {
@@ -83,16 +77,12 @@ public class ApproveIssueReviewHandler : ICommandHandler<Guid, ApproveIssueRevie
             .GetUserIssueById(UserIssueId.Create(userIssueId), cancellationToken);
 
         if (userIssueResult.IsFailure)
-        {
             return userIssueResult.Error.ToErrorList();
-        }
 
         var completeIssueResult = userIssueResult.Value.CompleteIssue();
 
         if (completeIssueResult.IsFailure)
-        {
             return completeIssueResult.Error.ToErrorList();
-        }
 
         return userIssueResult.Value.Id.Value;
     }

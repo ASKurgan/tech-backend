@@ -3,7 +3,7 @@ using SharedKernel;
 
 namespace SachkovTech.Issues.Domain.ValueObjects;
 
-public class Title: ComparableValueObject
+public class Title : ComparableValueObject
 {
     public const int MAX_LENGTH = 100;
 
