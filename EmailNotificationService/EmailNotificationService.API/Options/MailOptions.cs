@@ -1,5 +1,8 @@
 ﻿namespace EmailNotificationService.API.Options;
 
+/// <summary>
+/// Yandex SMTP email credentials. 
+/// </summary>
 public class MailOptions
 {
     public const string SECTION_NAME = "MailOptions";

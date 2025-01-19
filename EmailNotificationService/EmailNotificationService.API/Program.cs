@@ -8,13 +8,10 @@ using EmailNotificationService.API.Consumers;
 using Serilog.Events;
 using Serilog;
 using EmailNotificationService.API.Middlewares;
-using EmailNotificationService.API.Models;
 using EmailNotificationService.API.Options;
-using EmailNotificationService.API.Requests;
 using EmailNotificationService.API.Services;
-using EmailNotificationService.API.Features;
 using MassTransit;
-using EmailNotificationService.API.Extensions;
+using EmailNotificationService.API.Consumers.Definitions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,17 +22,17 @@ builder.Configuration
 var services = builder.Services;
 var config = builder.Configuration;
 
-// Add services to the container.
+// Add services to the container and configuring options.
 
-services.Configure<MailOptions>(
-    config.GetSection(MailOptions.SECTION_NAME));
+services.Configure<MailOptions>(config.GetSection(MailOptions.SECTION_NAME));
 services.AddScoped<EmailValidator>();
 services.AddScoped<MailSenderService>();
 services.AddScoped<HandlebarsTemplateService>();
-services.AddScoped<SendEmailConfirmation>();
+services.AddScoped<SendEmailService>();
 services.AddMemoryCache();
 
-string indexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:dd-MM-yyyy}";
+string indexFormat = 
+    $"{Assembly.GetExecutingAssembly().GetName().Name?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:dd-MM-yyyy}";
 
 Log.Logger = new LoggerConfiguration()
     .Enrich.FromLogContext()
@@ -64,14 +61,14 @@ builder.Services.AddMassTransit(configure =>
 {
     configure.SetKebabCaseEndpointNameFormatter();
 
-    configure.AddConsumer<SendEmailConsumer>();
+    configure.AddConsumer<SendEmailConsumer>(typeof(SendEmailConsumerDefinition));
 
     configure.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host(new Uri(builder.Configuration["RabbitMQ:Host"]!), h =>
+        cfg.Host(new Uri(config["RabbitMQ:Host"]!), h =>
         {
-            h.Username(builder.Configuration["RabbitMQ:UserName"]!);
-            h.Password(builder.Configuration["RabbitMQ:Password"]!);
+            h.Username(config["RabbitMQ:UserName"]!);
+            h.Password(config["RabbitMQ:Password"]!);
         });
 
         cfg.ConfigureEndpoints(context);
@@ -82,29 +79,16 @@ var app = builder.Build();
 
 app.UseStaticFiles();
 
+// Configure the HTTP request pipeline.
+
 app.UseMiddleware<ExceptionHandler>();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    config.AddUserSecrets<Program>(optional: true);
 }
-
-app.MapPost("send", async (MailData mailData, MailSenderService mailSender) =>
-{
-    var result = await mailSender.Send(mailData);
-
-    return result.ToResponse();
-});
-
-app.MapPost("confirm-email", async (MailConfirmationRequest request, SendEmailConfirmation service) =>
-{
-    var result = await service.Execute(request);
-
-    return result.ToResponse();
-});
-
 
 app.UseHttpsRedirection();
 

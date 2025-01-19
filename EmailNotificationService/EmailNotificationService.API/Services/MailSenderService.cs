@@ -7,6 +7,9 @@ using EmailNotificationService.API.Options;
 
 namespace EmailNotificationService.API.Services;
 
+/// <summary>
+/// Service for sending emails via smtp server.
+/// </summary>
 public class MailSenderService
 {
     private readonly MailOptions _options;
@@ -23,6 +26,12 @@ public class MailSenderService
         _validator = validator;
     }
 
+    /// <summary>
+    /// This method creates MimeKit's message, which represents email with all its data, 
+    /// then opens connection with SMTP-server and sends email.
+    /// </summary>
+    /// <param name="mailData">DTO with email content and recepients.</param>
+    /// <returns></string></returns>
     public async Task<UnitResult<string>> Send(MailData mailData)
     {
         var validationResult = _validator.Execute(mailData.To);

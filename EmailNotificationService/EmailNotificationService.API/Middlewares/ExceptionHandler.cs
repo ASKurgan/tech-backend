@@ -2,6 +2,9 @@
 
 namespace EmailNotificationService.API.Middlewares;
 
+/// <summary>
+/// Exceptions handling middleware.
+/// </summary>
 public class ExceptionHandler
 {
     private readonly RequestDelegate _next;

@@ -1,5 +1,8 @@
 ﻿namespace EmailNotificationService.API.Models;
 
+/// <summary>
+/// DTO-class representing email content and recipients.
+/// </summary>
 public class MailData
 {
     public MailData(IEnumerable<string> recievers, string subject, string body)

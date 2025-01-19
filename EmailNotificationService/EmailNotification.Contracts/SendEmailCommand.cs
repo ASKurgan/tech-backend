@@ -1,3 +1,0 @@
-﻿namespace EmailNotification.Contracts;
-
-public record SendEmailCommand(string Email, string Subject, string Template, object Data);

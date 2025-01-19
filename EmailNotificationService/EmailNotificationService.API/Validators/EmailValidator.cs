@@ -3,6 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace EmailNotificationService.API;
 
+/// <summary>
+/// Class for regex-based email address validation.
+/// </summary>
 public partial class EmailValidator 
 {
     private const string EMAIL_REGEX_PATTERN = @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$";
@@ -16,6 +19,11 @@ public partial class EmailValidator
         _logger = logger;
     }
 
+    /// <summary>
+    /// Validates email addresses using regex.
+    /// </summary>
+    /// <param name="addresses">List of email addresses for validation.</param>
+    /// <returns></returns>
     public Result<List<string>> Execute(List<string> addresses)
     {
         for (int i = addresses.Count - 1; i >= 0; i--)
