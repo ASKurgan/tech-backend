@@ -26,11 +26,6 @@ public static class WebApplicationExtensions
         app.UseScopeDataMiddleware();
         app.UseAuthorization();
         app.MapControllers();
-
-        if (app.Environment.IsEnvironment("Docker"))
-        {
-            app.MapGet("/", () => "Hello World!");
-        }
     }
 
     private static void ConfigureCors(this WebApplication app)
