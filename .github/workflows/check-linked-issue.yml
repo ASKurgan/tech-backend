@@ -31,7 +31,7 @@ jobs:
 
           if [ -z "$ISSUES" ]
           then
-            echo "No issues linked to this PR. Please link an issue and try again."
+            echo "No issues linked to this PR. Please link an issue and try again. Пожалуйста прикрепите задачу к пулл реку"
             exit 1
           else
             echo "Issue(s) linked: $ISSUES"
