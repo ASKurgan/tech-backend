@@ -12,3 +12,6 @@ public record SendEmailCommand(
     string Subject, 
     string Template, 
     Dictionary<string, string> Data);
+
+public record SendEmailConfirmationCommand(string Email, Dictionary<string, string> Data) 
+    : SendEmailCommand(Email, "Подтвердите адрес вашей почты", "email-confirmation", Data);

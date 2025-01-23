@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\Templates\registration.html" />
+    <None Include="wwwroot\Templates\email-confirmation.html" />
   </ItemGroup>
 
   <ItemGroup>

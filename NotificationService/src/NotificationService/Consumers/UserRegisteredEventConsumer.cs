@@ -1,6 +1,6 @@
 ﻿using AccountService.Communication;
 using AccountService.Contracts.Messaging;
-using EmailNotification.Contracts;
+using EmailNotification.Contracts.Messaging;
 using MassTransit;
 
 namespace NotificationService.Consumers;
@@ -16,24 +16,21 @@ public class UserRegisteredEventConsumer : IConsumer<UserRegisteredEvent>
 
     public async Task Consume(ConsumeContext<UserRegisteredEvent> context)
     {
-        if (context.Message.UserId == Guid.Empty) return;
+        if (context.Message.UserId == Guid.Empty)
+            return;
 
         var result = await _accountService.GetConfirmationLink(context.Message.UserId);
 
         if (result.IsFailure)
-        {
-            throw new Exception(result.Error);
-        }
+            throw new ApplicationException(result.Error);
 
-        var sendEmailCommand = new SendEmailCommand(
+        var sendEmailCommand = new SendEmailConfirmationCommand(
             result.Value.Email,
-            "Подтверждение почты!",
-            "registration-confirmation",
-            new
+             new Dictionary<string, string>()
             {
-                result.Value.ConfirmationLink
-            }
-        );
+                { "FullName", "result.Value.UserName" },
+                { "ConfirmationLink", result.Value.ConfirmationLink }
+            });
 
         await context.Publish(sendEmailCommand, context.CancellationToken);
     }
