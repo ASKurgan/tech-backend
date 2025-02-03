@@ -9,7 +9,7 @@ public class User : IdentityUser<Guid>
     private List<Role> _roles = [];
     private List<SocialNetwork> _socialNetworks = [];
 
-    // EF CORE
+    // ef core
     private User()
     {
     }
@@ -74,4 +74,28 @@ public class User : IdentityUser<Guid>
         if (!_roles.Contains(role) && role.Name == StudentAccount.STUDENT)
             _roles.Add(role);
     }
+
+    public void UpdateUserName(string userName)
+    {
+        UserName = userName;
+    }
+
+    public void UpdateFullName(FullName fullName)
+    {
+        FullName = fullName;
+    }
+
+    public void UpdateEmail(string email)
+    {
+        Email = email;
+        NormalizedEmail = email.ToUpperInvariant();
+    }
+
+    public void UpdatePhoneNumber(string? phoneNumber)
+    {
+        PhoneNumber = phoneNumber;
+    }
+
+    public void UpdateSocialNetworks(IEnumerable<SocialNetwork> socialNetworks) =>
+        _socialNetworks = socialNetworks.ToList();
 }

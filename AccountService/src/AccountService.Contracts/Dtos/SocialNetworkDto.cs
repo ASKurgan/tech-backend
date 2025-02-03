@@ -1,6 +1,6 @@
 ﻿namespace AccountService.Contracts.Dtos;
 
-public record SocialNetworkDto
+public class SocialNetworkDto
 {
     public required string Name { get; init; }
 

@@ -52,6 +52,8 @@ public class LoginHandler : ICommandHandler<LoginResponse, LoginCommand>
             .Where(r => !string.IsNullOrEmpty(r.Name))
             .Select(r => r.Name!.ToLower());
 
+        _logger.LogInformation("User {UserId} logged in", user.Id);
+
         return new LoginResponse(
             accessToken.AccessToken,
             refreshToken,

@@ -11,7 +11,7 @@ namespace ProjectTemplate.Application.Queries.GetUserById;
 
 public class GetUserByIdHandler : IQueryHandlerWithResult<UserResponse, GetUserByIdQuery>
 {
-    private readonly DistributedCacheEntryOptions _cacheOptions = new ()
+    private readonly DistributedCacheEntryOptions _cacheOptions = new()
     {
         SlidingExpiration = TimeSpan.FromMinutes(5),
     };
@@ -57,10 +57,12 @@ public class GetUserByIdHandler : IQueryHandlerWithResult<UserResponse, GetUserB
 
         return new UserResponse(
             user.Id,
+            user.UserName,
             user.FirstName,
             user.SecondName,
             user.ThirdName,
             user.Email,
+            user.PhoneNumber,
             user.RegistrationDate,
             user.SocialNetworks,
             user.StudentAccount,

@@ -11,11 +11,12 @@ public class Constants
 
     public static class Files
     {
-        //Bytes
+        // Bytes
         public const int MAX_FILE_SIZE = 10 * 1024 * 1024;
 
         public static readonly string[] FORBIDDEN_FILE_EXTENSIONS =
         [
+
             // Video
             ".mp4", ".avi", ".mkv", ".mov", ".wmv", ".flv",
 

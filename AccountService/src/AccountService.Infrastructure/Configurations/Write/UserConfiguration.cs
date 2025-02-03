@@ -28,9 +28,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(a => a.Photo)
             .IsRequired(false)
             .HasConversion(
-                photo => photo!.FileId, 
-                value => new Photo(value)
-            )
+                photo => photo!.FileId,
+                value => new Photo(value))
             .HasColumnName("photo");
 
         builder.HasOne(u => u.StudentAccount)

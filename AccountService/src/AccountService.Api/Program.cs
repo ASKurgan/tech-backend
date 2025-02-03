@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-using Microsoft.IdentityModel.Tokens;
 using ProjectTemplate;
 using ProjectTemplate.Extensions;
 

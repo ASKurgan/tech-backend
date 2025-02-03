@@ -9,7 +9,7 @@ public class ParticipantAccountConfiguration : IEntityTypeConfiguration<Particip
     public void Configure(EntityTypeBuilder<ParticipantAccount> builder)
     {
         builder.ToTable("participant_accounts");
-        
+
         builder.HasOne(p => p.User)
             .WithOne()
             .HasForeignKey<ParticipantAccount>(p => p.UserId);

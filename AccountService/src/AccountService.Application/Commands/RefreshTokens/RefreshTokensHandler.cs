@@ -25,7 +25,8 @@ public class RefreshTokensHandler : ICommandHandler<LoginResponse, RefreshTokens
     }
 
     public async Task<Result<LoginResponse, ErrorList>> Handle(
-        RefreshTokensCommand command, CancellationToken cancellationToken = default)
+        RefreshTokensCommand command,
+        CancellationToken cancellationToken = default)
     {
         var oldRefreshSession = await _refreshSessionManager
             .GetByRefreshToken(command.RefreshToken, cancellationToken);

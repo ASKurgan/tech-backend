@@ -2,6 +2,7 @@ using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using ProjectTemplate.Application.Extensions;
 using ProjectTemplate.Domain;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Validation;
@@ -42,7 +43,11 @@ public class VerifyConfirmationLinkHandler : ICommandHandler<VerifyConfirmationL
             return Errors.General.NotFound(command.UserId, nameof(command.UserId)).ToErrorList();
         }
 
-        var result = await _userManager.ConfirmEmailAsync(user, command.Code);
+        var decodedCode = EmailExtensions.NormalizeBase64UrlStringAndGetResult(command.Code);
+        if (string.IsNullOrWhiteSpace(decodedCode))
+            return Errors.General.ValueIsInvalid(nameof(command.Code)).ToErrorList();
+
+        var result = await _userManager.ConfirmEmailAsync(user, decodedCode);
 
         if (!result.Succeeded)
         {
@@ -52,7 +57,7 @@ public class VerifyConfirmationLinkHandler : ICommandHandler<VerifyConfirmationL
 
             return new ErrorList(errors);
         }
-        
+
         _logger.LogInformation("Verified user: {UserId}'s email successfully.", command.UserId);
 
         return UnitResult.Success<ErrorList>();

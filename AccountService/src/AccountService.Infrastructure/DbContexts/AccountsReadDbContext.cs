@@ -1,22 +1,31 @@
 using AccountService.Contracts.Dtos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using ProjectTemplate.Application.Database;
 using ProjectTemplate.Application.DataModels;
 
 namespace ProjectTemplate.Infrastructure.DbContexts;
 
-public class AccountsReadDbContext(IConfiguration configuration) : DbContext, IAccountsReadDbContext
+public class AccountsReadDbContext : DbContext, IAccountsReadDbContext
 {
+    private readonly string _connectionString;
+
+    public AccountsReadDbContext(string connectionString)
+    {
+        _connectionString = connectionString;
+    }
+
     public IQueryable<UserDataModel> Users => Set<UserDataModel>();
+
     public IQueryable<RoleDto> Roles => Set<RoleDto>();
+
     public IQueryable<StudentAccountDto> StudentAccounts => Set<StudentAccountDto>();
+
     public IQueryable<SupportAccountDto> SupportAccounts => Set<SupportAccountDto>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(configuration.GetConnectionString("Database"));
+        optionsBuilder.UseNpgsql(_connectionString);
         optionsBuilder.UseSnakeCaseNamingConvention();
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.UseLoggerFactory(CreateLoggerFactory());

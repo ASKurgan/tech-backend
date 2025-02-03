@@ -14,18 +14,15 @@ internal class AccountHttpClient(HttpClient httpClient) : IAccountService
 
         var response = await httpClient.SendAsync(request, cancellationToken);
 
-        var payload = await response.Content.ReadFromJsonAsync<ResponseWrapper<ConfirmationLinkResponse>>(cancellationToken)
-                      ?? throw new Exception("ConfirmationLinkResponse can't be null");
+        var payload =
+            await response.Content.ReadFromJsonAsync<ResponseWrapper<ConfirmationLinkResponse>>(cancellationToken)
+            ?? throw new Exception("ConfirmationLinkResponse can't be null");
 
         if (!response.IsSuccessStatusCode)
-        {
             return payload.Errors.ToString()!;
-        }
 
         if (payload.Result is null)
-        {
             return "Confirmation link is null";
-        }
 
         return payload.Result;
     }

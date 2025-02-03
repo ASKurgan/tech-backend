@@ -11,9 +11,9 @@ using ProjectTemplate.Infrastructure.IdentityManagers;
 using ProjectTemplate.Infrastructure.Migrator;
 using ProjectTemplate.Infrastructure.Options;
 using ProjectTemplate.Infrastructure.Providers;
+using ProjectTemplate.Infrastructure.Repository;
 using ProjectTemplate.Infrastructure.Seeding;
 using SachkovTech.Core.Database;
-using SachkovTech.Framework.Authorization;
 
 namespace ProjectTemplate.Infrastructure;
 
@@ -23,12 +23,20 @@ public static class DependencyInjection
         this IServiceCollection services, IConfiguration configuration)
     {
         services.AddIdentity()
+            .AddRepositories()
             .AddDbContexts(configuration)
             .AddSeeding()
             .ConfigureCustomOptions(configuration)
             .AddMessageBus(configuration)
             .AddProviders()
             .AddMigrators();
+
+        return services;
+    }
+
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }
@@ -88,7 +96,8 @@ public static class DependencyInjection
         services.AddScoped<AccountsWriteDbContext>(_ =>
             new AccountsWriteDbContext(configuration.GetConnectionString("Database")!));
 
-        services.AddScoped<IAccountsReadDbContext, AccountsReadDbContext>();
+        services.AddScoped<IAccountsReadDbContext, AccountsReadDbContext>(_ =>
+            new AccountsReadDbContext(configuration.GetConnectionString("Database")!));
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

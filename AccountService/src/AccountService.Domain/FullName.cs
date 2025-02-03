@@ -6,7 +6,7 @@ namespace ProjectTemplate.Domain;
 public class FullName : ComparableValueObject
 {
     public static readonly FullName Empty = new FullName(null, null, null);
-    
+
     private FullName(string? firstName, string? secondName, string? thirdName)
     {
         FirstName = firstName;
@@ -15,7 +15,9 @@ public class FullName : ComparableValueObject
     }
 
     public string? FirstName { get; }
+
     public string? SecondName { get; }
+
     public string? ThirdName { get; }
 
     public static Result<FullName, Error> Create(string? firstName, string? secondName, string? thirdName)

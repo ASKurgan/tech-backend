@@ -7,8 +7,7 @@ using ProjectTemplate.Domain;
 
 namespace ProjectTemplate.Infrastructure.DbContexts;
 
-public class AccountsWriteDbContext
-    : IdentityDbContext<User, Role, Guid>
+public class AccountsWriteDbContext : IdentityDbContext<User, Role, Guid>
 {
     private readonly string _connectionString;
 

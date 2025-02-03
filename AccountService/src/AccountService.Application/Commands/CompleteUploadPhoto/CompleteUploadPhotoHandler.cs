@@ -8,6 +8,7 @@ using SachkovTech.Core.Abstractions;
 using SharedKernel;
 
 namespace ProjectTemplate.Application.Commands.CompleteUploadPhoto;
+
 public class CompleteUploadPhotoHandler : ICommandHandler<CompleteUploadPhotoCommand>
 {
     private readonly IFileService _fileService;
@@ -20,6 +21,7 @@ public class CompleteUploadPhotoHandler : ICommandHandler<CompleteUploadPhotoCom
         _fileService = fileService;
         _userManager = userManager;
     }
+
     public async Task<UnitResult<ErrorList>> Handle(
         CompleteUploadPhotoCommand command,
         CancellationToken cancellationToken = default)
@@ -45,12 +47,12 @@ public class CompleteUploadPhotoHandler : ICommandHandler<CompleteUploadPhotoCom
         var result = await _fileService.CompleteMultipartUpload(completeRequest, cancellationToken);
 
         if (result.IsFailure)
-        {            
+        {
             return Errors.General.ValueIsInvalid(result.Error).ToErrorList();
         }
-        
+
         var photo = new Photo(result.Value.FileId);
-        
+
         user.Photo = photo;
 
         return UnitResult.Success<ErrorList>();

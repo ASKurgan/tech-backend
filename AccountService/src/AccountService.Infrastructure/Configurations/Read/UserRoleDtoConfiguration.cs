@@ -9,7 +9,7 @@ public class UserRoleDtoConfiguration : IEntityTypeConfiguration<UserRolesDataMo
     public void Configure(EntityTypeBuilder<UserRolesDataModel> builder)
     {
         builder.ToTable("user_roles");
-        
+
         builder.HasKey(u => new { u.UserId, u.RoleId });
     }
 }

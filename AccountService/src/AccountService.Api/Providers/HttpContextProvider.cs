@@ -14,8 +14,6 @@ public class HttpContextProvider
     {
         _httpContextAccessor = httpContextAccessor;
     }
-    
-    
 
     public Result<Guid, Error> GetUserId()
     {
@@ -31,13 +29,14 @@ public class HttpContextProvider
 
         return Guid.Parse(userId);
     }
+
     public Result<Guid, Error> GetRefreshSessionCookie()
     {
         if (_httpContextAccessor.HttpContext is null)
         {
             return Errors.General.Failure();
         }
-        
+
         if (!_httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(REFRESH_TOKEN, out var refreshToken))
         {
             return Errors.General.NotFound(null, REFRESH_TOKEN);
@@ -64,7 +63,7 @@ public class HttpContextProvider
         {
             return Errors.General.Failure();
         }
-        
+
         _httpContextAccessor.HttpContext.Response.Cookies.Delete(REFRESH_TOKEN);
 
         return UnitResult.Success<Error>();

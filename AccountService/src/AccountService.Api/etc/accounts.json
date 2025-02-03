@@ -19,11 +19,11 @@
       "files.read",
       "files.upload",
       "accounts.enroll",
+      "accounts.read",
       "modules.read",
       "modules.create",
       "modules.update",
-      "modules.delete",
-      "accounts.read"
+      "modules.delete"
     ],
     "Student": [
       "lessons.read",
@@ -37,6 +37,8 @@
       "files.upload"
     ],
     "Participant": [
+      "accounts.enroll",
+      "accounts.read",
       "issues.read"
     ],
     "Support": [

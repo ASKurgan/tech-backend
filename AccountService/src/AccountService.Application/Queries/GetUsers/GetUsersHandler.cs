@@ -20,7 +20,7 @@ public class GetUsersHandler : IQueryHandler<PagedList<UserDataModel>, GetUsersQ
         CancellationToken cancellationToken = default)
     {
         var userQueryBuilder = new UserQueryBuilder(_accountsReadDbContext.Users);
-        
+
         return await userQueryBuilder
             .IncludeAdminAccount()
             .IncludeStudentAccount()
@@ -35,7 +35,5 @@ public class GetUsersHandler : IQueryHandler<PagedList<UserDataModel>, GetUsersQ
             .SortByWithDirection(query.SortBy, query.SortDirection)
             .Build()
             .ToPagedList(query.Page, query.PageSize, cancellationToken);
-
-        
     }
 }

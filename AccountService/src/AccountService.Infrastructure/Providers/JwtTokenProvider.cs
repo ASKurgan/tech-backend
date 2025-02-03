@@ -70,7 +70,10 @@ public class JwtTokenProvider : ITokenProvider
     {
         var refreshSession = new RefreshSession
         {
-            User = user, ExpiresIn = DateTime.UtcNow.AddDays(30), CreatedAt = DateTime.UtcNow, RefreshToken = Guid.NewGuid(),
+            User = user,
+            ExpiresIn = DateTime.UtcNow.AddDays(30),
+            CreatedAt = DateTime.UtcNow,
+            RefreshToken = Guid.NewGuid(),
         };
 
         _accountWriteContext.Add(refreshSession);

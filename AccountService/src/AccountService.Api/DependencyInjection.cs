@@ -9,19 +9,14 @@ using FluentValidation;
 using MassTransit.Logging;
 using MassTransit.Monitoring;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using ProjectTemplate.Application;
-using ProjectTemplate.Application.Providers;
 using ProjectTemplate.Infrastructure;
-using ProjectTemplate.Infrastructure.Providers;
 using ProjectTemplate.Providers;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Caching;
@@ -101,7 +96,8 @@ public static class DependencyInjection
 
     private static IServiceCollection AddLogging(this IServiceCollection services)
     {
-        string indexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:dd-MM-yyyy}";
+        string indexFormat =
+            $"{Assembly.GetExecutingAssembly().GetName().Name?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:dd-MM-yyyy}";
 
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
@@ -135,10 +131,7 @@ public static class DependencyInjection
 
     private static IServiceCollection AddApplicationLayers(this IServiceCollection services)
     {
-        var assemblies = new[]
-        {
-            typeof(ProjectTemplate.Application.DependencyInjection).Assembly,
-        };
+        var assemblies = new[] { typeof(ProjectTemplate.Application.DependencyInjection).Assembly, };
 
         services.Scan(scan => scan.FromAssemblies(assemblies)
             .AddClasses(classes => classes
@@ -160,10 +153,7 @@ public static class DependencyInjection
     {
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo
-            {
-                Title = "My API", Version = "v1",
-            });
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1", });
             c.AddSecurityDefinition(
                 "Bearer",
                 new OpenApiSecurityScheme
@@ -178,10 +168,7 @@ public static class DependencyInjection
                 {
                     new OpenApiSecurityScheme
                     {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme, Id = "Bearer",
-                        },
+                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer", },
                     },
                     []
                 },

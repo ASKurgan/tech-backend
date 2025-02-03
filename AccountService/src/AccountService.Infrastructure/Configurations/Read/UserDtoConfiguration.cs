@@ -22,8 +22,7 @@ public class UserDtoConfiguration : IEntityTypeConfiguration<UserDataModel>
             .UsingEntity<UserRolesDataModel>(
                 e => e.HasOne<UserDataModel>()
                     .WithMany(u => u.UserRoles)
-                    .HasForeignKey("UserId")
-            );
+                    .HasForeignKey("UserId"));
 
         builder.Property(s => s.SocialNetworks)
             .ValueObjectsCollectionJsonConversion(

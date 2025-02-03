@@ -10,10 +10,10 @@ public class RegisterUserValidator : AbstractValidator<RegisterUserCommand>
     {
         RuleFor(c => c.Email)
             .NotEmpty().WithError(Errors.General.ValueIsRequired());
-        
+
         RuleFor(c => c.UserName)
             .NotEmpty().WithError(Errors.General.ValueIsRequired());
-        
+
         RuleFor(c => c.Password)
             .NotEmpty().WithError(Errors.General.ValueIsRequired());
     }

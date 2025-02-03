@@ -5,11 +5,9 @@ namespace ProjectTemplate.Domain;
 
 public class Photo : ComparableValueObject
 {
-    private static string[] PERMITED_FILES_TYPE =
-            { "image/jpg", "image/jpeg", "image/png", "image/gif" };
+    private static string[] PERMITED_FILES_TYPE = { "image/jpg", "image/jpeg", "image/png", "image/gif" };
 
-    private static string[] PERMITED_EXTENSIONS =
-            { "jpg", "jpeg", "png", "gif" };
+    private static string[] PERMITED_EXTENSIONS = { "jpg", "jpeg", "png", "gif" };
 
     private static long MAX_FILE_SIZE = 5242880;
 
@@ -21,7 +19,6 @@ public class Photo : ComparableValueObject
     public Guid FileId { get; }
 
     // public static Result<Photo, Error> Create(Guid fileId) => new Photo(fileId);
-
     public static UnitResult<Error> Validate(
         string fileName,
         string contentType,

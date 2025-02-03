@@ -22,8 +22,7 @@ public class RolePermissionManager(AccountsWriteDbContext accountsWriteContext)
 
             accountsWriteContext.RolePermissions.Add(new RolePermission
             {
-                RoleId = roleId,
-                PermissionId = permission!.Id
+                RoleId = roleId, PermissionId = permission!.Id,
             });
         }
 

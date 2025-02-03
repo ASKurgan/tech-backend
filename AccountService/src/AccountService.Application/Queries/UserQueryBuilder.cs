@@ -14,11 +14,6 @@ internal class UserQueryBuilder
         _userQuery = userQuery;
     }
 
-    /// <summary>
-    /// Get users with the specified id
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
     public UserQueryBuilder WithId(Guid? id)
     {
         _userQuery = _userQuery.WhereIf(
@@ -28,11 +23,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Get users with the specified role
-    /// </summary>
-    /// <param name="roleName"></param>
-    /// <returns></returns>
     public UserQueryBuilder WithRole(string? roleName)
     {
         _userQuery = _userQuery.WhereIf(
@@ -42,10 +32,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Get users with more than one role
-    /// </summary>
-    /// <returns></returns>
     public UserQueryBuilder WithMoreThanOneRole()
     {
         _userQuery = _userQuery.Where(ud => ud.Roles.Count > 1);
@@ -53,11 +39,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Get users excluding specific role
-    /// </summary>
-    /// <param name="roleName"></param>
-    /// <returns></returns>
     public UserQueryBuilder ExcludeRole(string? roleName)
     {
         _userQuery = _userQuery.WhereIf(
@@ -67,11 +48,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Get users with the specified first name
-    /// </summary>
-    /// <param name="firstName"></param>
-    /// <returns></returns>
     public UserQueryBuilder WithFirstName(string? firstName)
     {
         _userQuery = _userQuery.WhereIf(
@@ -81,11 +57,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Get users with the first name which starts with the specified sequence
-    /// </summary>
-    /// <param name="sequence"></param>
-    /// <returns></returns>
     public UserQueryBuilder WithFirstNameStartingWith(string? sequence)
     {
         _userQuery = _userQuery.WhereIf(
@@ -95,11 +66,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Get users with the specified second name
-    /// </summary>
-    /// <param name="secondName"></param>
-    /// <returns></returns>
     public UserQueryBuilder WithSecondName(string? secondName)
     {
         _userQuery = _userQuery.WhereIf(
@@ -109,11 +75,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Get users with the specified third name
-    /// </summary>
-    /// <param name="thirdName"></param>
-    /// <returns></returns>
     public UserQueryBuilder WithThirdName(string? thirdName)
     {
         _userQuery = _userQuery.WhereIf(
@@ -123,11 +84,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Get users with the specified email
-    /// </summary>
-    /// <param name="email"></param>
-    /// <returns></returns>
     public UserQueryBuilder WithEmail(string? email)
     {
         _userQuery = _userQuery.WhereIf(
@@ -137,11 +93,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Get users that were registered after the specified date
-    /// </summary>
-    /// <param name="registrationDate">Date to compare with</param>
-    /// <returns></returns>
     public UserQueryBuilder WithRegistrationAfter(DateTime? registrationDate)
     {
         _userQuery = _userQuery.WhereIf(
@@ -151,11 +102,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Get users that have been on the platform longer than the specified number of days
-    /// </summary>
-    /// <param name="daysNumber">Number of days</param>
-    /// <returns></returns>
     public UserQueryBuilder OnPlatformLongerThan(int daysNumber)
     {
         _userQuery = _userQuery.Where(ud => DateTime.UtcNow.Day - ud.RegistrationDate.Day > daysNumber);
@@ -163,11 +109,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Sort users by the specified field
-    /// </summary>
-    /// <param name="sortBy"></param>
-    /// <returns></returns>
     public UserQueryBuilder SortAscendingBy(string? sortBy)
     {
         _userQuery = _userQuery.OrderBy(KeySelector(sortBy));
@@ -175,11 +116,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Sort users by the specified field in descending order
-    /// </summary>
-    /// <param name="sortBy"></param>
-    /// <returns></returns>
     public UserQueryBuilder SortDescendingBy(string? sortBy)
     {
         _userQuery = _userQuery.OrderByDescending(KeySelector(sortBy));
@@ -187,12 +123,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Sort users by the specified field and direction
-    /// </summary>
-    /// <param name="sortBy">Filter field</param>
-    /// <param name="sortDirection">Filter direction</param>
-    /// <returns></returns>
     public UserQueryBuilder SortByWithDirection(string? sortBy, string? sortDirection)
     {
         _userQuery = sortDirection?.ToLower() == "desc"
@@ -202,10 +132,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Include student account
-    /// </summary>
-    /// <returns></returns>
     public UserQueryBuilder IncludeStudentAccount()
     {
         _userQuery = _userQuery.Include(u => u.StudentAccount);
@@ -213,10 +139,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Include support account
-    /// </summary>
-    /// <returns></returns>
     public UserQueryBuilder IncludeSupportAccount()
     {
         _userQuery = _userQuery.Include(u => u.SupportAccount);
@@ -224,10 +146,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Include admin account
-    /// </summary>
-    /// <returns></returns>
     public UserQueryBuilder IncludeAdminAccount()
     {
         _userQuery = _userQuery.Include(u => u.AdminAccount);
@@ -235,10 +153,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Include roles
-    /// </summary>
-    /// <returns></returns>
     public UserQueryBuilder IncludeRoles()
     {
         _userQuery = _userQuery.Include(u => u.Roles);
@@ -246,10 +160,6 @@ internal class UserQueryBuilder
         return this;
     }
 
-    /// <summary>
-    /// Builds the query
-    /// </summary>
-    /// <returns></returns>
     public IQueryable<UserDataModel> Build()
     {
         return _userQuery;
@@ -264,7 +174,6 @@ internal class UserQueryBuilder
             "second_name" => (user) => user.SecondName,
             "third_name" => (user) => user.ThirdName,
             _ => (user) => user.Id
-
         };
     }
 }
