@@ -29,13 +29,7 @@ public class GetUserByIdHandler : IQueryHandlerWithResult<UserResponse, GetUserB
         GetUserByIdQuery query,
         CancellationToken cancellationToken = default)
     {
-        var key = "users_" + query.UserId;
-
-        var userResponse = await _cache.GetOrSetAsync(
-            key,
-            _cacheOptions,
-            async () => await GetUserById(query, cancellationToken),
-            cancellationToken);
+        var userResponse = await GetUserById(query, cancellationToken);
 
         if (userResponse is null)
             return Errors.General.NotFound(query.UserId).ToErrorList();
