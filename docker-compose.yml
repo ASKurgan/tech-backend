@@ -11,80 +11,80 @@ services:
     depends_on:
       - postgres
       - minio
-      - elasticsearch
       - rabbitmq
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - ASPNETCORE_URLS=http://+:8001
 
-  issues:
-    build:
-      context: ./IssueService
-      dockerfile: ./src/SachkovTech.Web/Dockerfile
-      args:
-        NUGET_USERNAME: ${NUGET_USERNAME}
-        NUGET_PASSWORD: ${NUGET_PASSWORD}
-    ports:
-      - "8002:8002"
-    depends_on:
-      - postgres
-      - minio
-      - elasticsearch
-      - rabbitmq
-    restart: always
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+  # issues:
+  #   build:
+  #     context: ./IssueService
+  #     dockerfile: ./src/SachkovTech.Web/Dockerfile
+  #     args:
+  #       NUGET_USERNAME: ${NUGET_USERNAME}
+  #       NUGET_PASSWORD: ${NUGET_PASSWORD}
+  #   ports:
+  #     - "8002:8002"
+  #   depends_on:
+  #     - postgres
+  #     - minio
+  #     - elasticsearch
+  #     - rabbitmq
+  #   restart: always
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Docker
+  #     - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
 
-  files:
-    build:
-      context: ./FileService
-      dockerfile: ./src/FileService/Dockerfile
-      args:
-        NUGET_USERNAME: ${NUGET_USERNAME}
-        NUGET_PASSWORD: ${NUGET_PASSWORD}
-    ports:
-      - "8003:8003"
-    depends_on:
-      - minio
-      - postgres
-      - elasticsearch
-    restart: always
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
+  # files:
+  #   build:
+  #     context: ./FileService
+  #     dockerfile: ./src/FileService/Dockerfile
+  #     args:
+  #       NUGET_USERNAME: ${NUGET_USERNAME}
+  #       NUGET_PASSWORD: ${NUGET_PASSWORD}
+  #   ports:
+  #     - "8003:8003"
+  #   depends_on:
+  #     - minio
+  #     - postgres
+  #     - elasticsearch
+  #   restart: always
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Docker
   
-  emails:
-    build:
-      context: ./EmailNotificationService
-      dockerfile: ./EmailNotificationService.API/Dockerfile
-      args:
-        NUGET_USERNAME: ${NUGET_USERNAME}
-        NUGET_PASSWORD: ${NUGET_PASSWORD}
-    ports:
-      - "8004:8004"
-    depends_on:
-      - elasticsearch
-      - rabbitmq
-    restart: always
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
+  # emails:
+  #   build:
+  #     context: ./EmailNotificationService
+  #     dockerfile: ./EmailNotificationService.API/Dockerfile
+  #     args:
+  #       NUGET_USERNAME: ${NUGET_USERNAME}
+  #       NUGET_PASSWORD: ${NUGET_PASSWORD}
+  #   ports:
+  #     - "8004:8004"
+  #   depends_on:
+  #     - elasticsearch
+  #     - rabbitmq
+  #   restart: always
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Docker
 
-  notifications:
-    build:
-      context: ./NotificationService
-      dockerfile: ./src/NotificationService/Dockerfile
-      args:
-        NUGET_USERNAME: ${NUGET_USERNAME}
-        NUGET_PASSWORD: ${NUGET_PASSWORD}
-    ports:
-      - "8005:8005"
-    depends_on:
-      - elasticsearch
-      - rabbitmq
-    restart: always
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
+  # notifications:
+  #   build:
+  #     context: ./NotificationService
+  #     dockerfile: ./src/NotificationService/Dockerfile
+  #     args:
+  #       NUGET_USERNAME: ${NUGET_USERNAME}
+  #       NUGET_PASSWORD: ${NUGET_PASSWORD}
+  #   ports:
+  #     - "8005:8005"
+  #   depends_on:
+  #     - elasticsearch
+  #     - rabbitmq
+  #   restart: always
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Docker
   
   postgres:
     container_name: postgres
@@ -99,24 +99,6 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
-  pgadmin:
-    container_name: pgadmin_container_sachkov
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-      PGADMIN_SERVER_1_HOST: postgres
-      PGADMIN_SERVER_1_PORT: 5434
-      PGADMIN_SERVER_1_USERNAME: postgres
-      PGADMIN_SERVER_1_PASSWORD: postgres
-      PGADMIN_SERVER_1_DBNAME: sachkov_tech
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    ports:
-      - "${PGADMIN_PORT:-5050}:80"
-    restart: unless-stopped
-
   minio:
     container_name: minio
     image: minio/minio
@@ -128,24 +110,24 @@ services:
     command: server --console-address ":9001" /data
     restart: always
 
-  mongodb:
-    image: mongo
-    container_name: mongodb
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: mongoadmin
-      MONGO_INITDB_ROOT_PASSWORD: mongopassword
-    ports:
-      - 27017:27017
-    volumes:
-      - mongo_data:/data/db
+  # mongodb:
+  #   image: mongo
+  #   container_name: mongodb
+  #   restart: always
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: mongoadmin
+  #     MONGO_INITDB_ROOT_PASSWORD: mongopassword
+  #   ports:
+  #     - 27017:27017
+  #   volumes:
+  #     - mongo_data:/data/db
 
   rabbitmq:
     image: rabbitmq:management-alpine
     container_name: rabbitmq
     hostname: rabbitmq
-    # volumes:
-    #   - rabbitmq_data:/var/lib/rabbitmq
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -217,25 +199,25 @@ services:
       - redis_data:/data
     restart: always
 
-  nginx:
-    image: nginx:latest
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - issues
-      - accounts
-      - files
-      - emails
-      - notifications
-    restart: always
+  # nginx:
+  #   image: nginx:latest
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf
+  #   depends_on:
+  #     - issues
+  #     - accounts
+  #     - files
+  #     - emails
+  #     - notifications
+  #   restart: always
 
 volumes:
   pgadmin:
   postgres-data:
   minio_data:
-  mongo_data:
+  # mongo_data:
   elasticsearch-data:
   prometheus_data:
   grafana_data:

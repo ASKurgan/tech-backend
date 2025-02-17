@@ -2,7 +2,7 @@ using FluentValidation;
 using SachkovTech.Core.Validation;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Commands.VerifyConfirmationLink;
+namespace AccountService.Application.Commands.VerifyConfirmationLink;
 
 public class VerifyConfirmationLinkValidator : AbstractValidator<VerifyConfirmationLinkCommand>
 {

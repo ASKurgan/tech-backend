@@ -1,8 +1,8 @@
-﻿using FluentValidation;
-using ProjectTemplate.Domain;
+﻿using AccountService.Domain;
+using FluentValidation;
 using SachkovTech.Core.Validation;
 
-namespace ProjectTemplate.Application.Commands.UpdateUserSocialNetworks;
+namespace AccountService.Application.Commands.UpdateUserSocialNetworks;
 
 public class UpdateUserSocialNetworksCommandValidator : AbstractValidator<UpdateUserSocialNetworksCommand>
 {

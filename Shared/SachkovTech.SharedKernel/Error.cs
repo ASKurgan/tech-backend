@@ -2,7 +2,7 @@ namespace SharedKernel;
 
 public record Error
 {
-    public const string SEPARATOR = "||";
+    private const string SEPARATOR = "||";
 
     public string Code { get; }
     public string Message { get; }
@@ -18,13 +18,13 @@ public record Error
     }
 
     public static Error Validation(string code, string message, string? invalidField = null) =>
-        new(code, message, ErrorType.Validation, invalidField);
+        new(code, message, ErrorType.VALIDATION, invalidField);
 
-    public static Error NotFound(string code, string message) => new(code, message, ErrorType.NotFound);
+    public static Error NotFound(string code, string message) => new(code, message, ErrorType.NOT_FOUND);
 
-    public static Error Failure(string code, string message) => new(code, message, ErrorType.Failure);
+    public static Error Failure(string code, string message) => new(code, message, ErrorType.FAILURE);
 
-    public static Error Conflict(string code, string message) => new(code, message, ErrorType.Conflict);
+    public static Error Conflict(string code, string message) => new(code, message, ErrorType.CONFLICT);
 
     public string Serialize()
     {
@@ -33,7 +33,7 @@ public record Error
 
     public static Error Deserialize(string serialized)
     {
-        var parts = serialized.Split(SEPARATOR);
+        string[] parts = serialized.Split(SEPARATOR);
 
         if (parts.Length < 3)
         {
@@ -53,8 +53,8 @@ public record Error
 
 public enum ErrorType
 {
-    Validation,
-    NotFound,
-    Failure,
-    Conflict
+    VALIDATION,
+    NOT_FOUND,
+    FAILURE,
+    CONFLICT,
 }

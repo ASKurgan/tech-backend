@@ -1,18 +1,18 @@
+using AccountService.Application.Managers;
 using AccountService.Contracts.Messaging;
+using AccountService.Domain;
 using CSharpFunctionalExtensions;
 using FluentValidation;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ProjectTemplate.Application.Managers;
-using ProjectTemplate.Domain;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Database;
 using SachkovTech.Core.Validation;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Commands.Register;
+namespace AccountService.Application.Commands.Register;
 
 public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
 {

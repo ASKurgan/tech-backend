@@ -1,27 +1,26 @@
 using System.Text;
 using AccountService.Contracts.Responses;
+using AccountService.Domain;
 using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using ProjectTemplate.Domain;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Validation;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Commands.GenerateConfirmationLink;
+namespace AccountService.Application.Commands.GenerateConfirmationLink;
 
 public class GenerateConfirmationLinkHandler
     : ICommandHandler<ConfirmationLinkResponse, GenerateConfirmationLinkCommand>
 {
+    private const string BASE_URL = "http://localhost:5273/api/Accounts/email-verification/";
+
     private readonly UserManager<User> _userManager;
     private readonly ILogger<GenerateConfirmationLinkHandler> _logger;
 
     private readonly IValidator<GenerateConfirmationLinkCommand> _validator;
-
-    // TODO: тратить ценное место appsettings ради пути которое больше нигде в решении не нужно кроме этого файла - плохо
-    private const string BASE_URL = "http://localhost:5273/api/Accounts/email-verification/";
 
     public GenerateConfirmationLinkHandler(
         UserManager<User> userManager,

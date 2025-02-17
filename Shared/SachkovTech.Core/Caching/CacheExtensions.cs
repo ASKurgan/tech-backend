@@ -5,7 +5,7 @@ namespace SachkovTech.Core.Caching;
 
 public static class CacheExtensions
 {
-    private static IServiceCollection AddDistributedCache(
+    public static IServiceCollection AddDistributedCache(
         this IServiceCollection services, IConfiguration configuration)
     {
         services.AddStackExchangeRedisCache(options =>

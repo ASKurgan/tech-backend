@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AccountService.Infrastructure.DbContexts;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ProjectTemplate.Infrastructure.DbContexts;
 using SachkovTech.Core.Database;
 
-namespace ProjectTemplate.Infrastructure.Migrator;
+namespace AccountService.Infrastructure.Migrator;
 
 public class AccountsMigrator(AccountsWriteDbContext context, ILogger<AccountsMigrator> logger) : IMigrator
 {

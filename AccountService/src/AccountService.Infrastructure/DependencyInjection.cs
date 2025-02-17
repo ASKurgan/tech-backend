@@ -1,25 +1,25 @@
+using AccountService.Application.Database;
+using AccountService.Application.Managers;
+using AccountService.Application.Providers;
+using AccountService.Domain;
+using AccountService.Infrastructure.DbContexts;
+using AccountService.Infrastructure.IdentityManagers;
+using AccountService.Infrastructure.Migrator;
+using AccountService.Infrastructure.Options;
+using AccountService.Infrastructure.Providers;
+using AccountService.Infrastructure.Repository;
+using AccountService.Infrastructure.Seeding;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectTemplate.Application.Database;
-using ProjectTemplate.Application.Managers;
-using ProjectTemplate.Application.Providers;
-using ProjectTemplate.Domain;
-using ProjectTemplate.Infrastructure.DbContexts;
-using ProjectTemplate.Infrastructure.IdentityManagers;
-using ProjectTemplate.Infrastructure.Migrator;
-using ProjectTemplate.Infrastructure.Options;
-using ProjectTemplate.Infrastructure.Providers;
-using ProjectTemplate.Infrastructure.Repository;
-using ProjectTemplate.Infrastructure.Seeding;
 using SachkovTech.Core.Database;
 
-namespace ProjectTemplate.Infrastructure;
+namespace AccountService.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddAccountsInfrastructure(
+    public static IServiceCollection AddInfrastructure(
         this IServiceCollection services, IConfiguration configuration)
     {
         services.AddIdentity()

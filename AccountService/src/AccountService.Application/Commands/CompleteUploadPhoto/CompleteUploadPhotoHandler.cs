@@ -1,13 +1,13 @@
-﻿using CSharpFunctionalExtensions;
+﻿using AccountService.Domain;
+using CSharpFunctionalExtensions;
 using FileService.Communication;
 using FileService.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ProjectTemplate.Domain;
 using SachkovTech.Core.Abstractions;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Commands.CompleteUploadPhoto;
+namespace AccountService.Application.Commands.CompleteUploadPhoto;
 
 public class CompleteUploadPhotoHandler : ICommandHandler<CompleteUploadPhotoCommand>
 {

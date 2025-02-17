@@ -2,7 +2,7 @@ using AccountService.Contracts.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ProjectTemplate.Infrastructure.Configurations.Read;
+namespace AccountService.Infrastructure.Configurations.Read;
 
 public class StudentAccountDtoConfiguration : IEntityTypeConfiguration<StudentAccountDto>
 {

@@ -1,10 +1,10 @@
+using AccountService.Application.DataModels;
 using AccountService.Contracts.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ProjectTemplate.Application.DataModels;
 using SachkovTech.Core.Database;
 
-namespace ProjectTemplate.Infrastructure.Configurations.Read;
+namespace AccountService.Infrastructure.Configurations.Read;
 
 public class UserDtoConfiguration : IEntityTypeConfiguration<UserDataModel>
 {

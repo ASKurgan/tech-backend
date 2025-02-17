@@ -1,11 +1,11 @@
+using AccountService.Application.Managers;
+using AccountService.Domain;
+using AccountService.Infrastructure.DbContexts;
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
-using ProjectTemplate.Application.Managers;
-using ProjectTemplate.Domain;
-using ProjectTemplate.Infrastructure.DbContexts;
 using SharedKernel;
 
-namespace ProjectTemplate.Infrastructure.IdentityManagers;
+namespace AccountService.Infrastructure.IdentityManagers;
 
 public class RefreshSessionManager(AccountsWriteDbContext accountsWriteContext) : IRefreshSessionManager
 {

@@ -1,10 +1,10 @@
+using AccountService.Application.Managers;
 using CSharpFunctionalExtensions;
-using ProjectTemplate.Application.Managers;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Database;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Commands.Logout;
+namespace AccountService.Application.Commands.Logout;
 
 public class LogoutHandler : ICommandHandler<LogoutCommand>
 {

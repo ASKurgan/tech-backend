@@ -1,8 +1,8 @@
+using AccountService.Application.Commands.Login;
+using AccountService.Application.Commands.RefreshTokens;
 using AccountService.Contracts.Responses;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectTemplate.Application.Commands.Login;
-using ProjectTemplate.Application.Commands.RefreshTokens;
 using SachkovTech.Core.Abstractions;
 
 namespace AccountsService.IntegrationTests.Accounts.RefreshTokensTests;

@@ -33,7 +33,7 @@ public class ExceptionMiddleware
     {
         _logger.LogError(exception, exception.Message);
 
-        var (statusCode, error) = exception switch
+        (int statusCode, Error error) = exception switch
         {
             AuthenticationException => (StatusCodes.Status401Unauthorized,
                 Error.Failure("authentication.failed", exception.Message)),

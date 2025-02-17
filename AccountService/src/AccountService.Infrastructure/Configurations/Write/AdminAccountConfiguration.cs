@@ -1,8 +1,8 @@
+using AccountService.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ProjectTemplate.Domain;
 
-namespace ProjectTemplate.Infrastructure.Configurations.Write;
+namespace AccountService.Infrastructure.Configurations.Write;
 
 public class AdminAccountConfiguration : IEntityTypeConfiguration<AdminAccount>
 {

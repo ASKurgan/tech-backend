@@ -1,7 +1,7 @@
 using CSharpFunctionalExtensions;
 using SharedKernel;
 
-namespace ProjectTemplate.Domain;
+namespace AccountService.Domain;
 
 public class FullName : ComparableValueObject
 {

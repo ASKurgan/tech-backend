@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
+﻿using AccountService.Application.Commands.UpdateUserName;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectTemplate.Application.Commands.UpdateUserName;
 using SachkovTech.Core.Abstractions;
 
 namespace AccountsService.IntegrationTests.Accounts.UpdateUserName;

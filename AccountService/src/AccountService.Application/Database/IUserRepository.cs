@@ -1,8 +1,8 @@
-﻿using CSharpFunctionalExtensions;
-using ProjectTemplate.Domain;
+﻿using AccountService.Domain;
+using CSharpFunctionalExtensions;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Database;
+namespace AccountService.Application.Database;
 
 public interface IUserRepository
 {

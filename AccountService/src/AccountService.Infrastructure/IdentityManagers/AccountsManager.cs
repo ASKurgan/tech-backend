@@ -1,8 +1,8 @@
-using ProjectTemplate.Application.Managers;
-using ProjectTemplate.Domain;
-using ProjectTemplate.Infrastructure.DbContexts;
+using AccountService.Application.Managers;
+using AccountService.Domain;
+using AccountService.Infrastructure.DbContexts;
 
-namespace ProjectTemplate.Infrastructure.IdentityManagers;
+namespace AccountService.Infrastructure.IdentityManagers;
 
 public class AccountsManager(AccountsWriteDbContext accountsWriteContext) : IAccountsManager
 {

@@ -1,6 +1,6 @@
 using SachkovTech.Core.Abstractions;
 
-namespace ProjectTemplate.Application.Commands.Register;
+namespace AccountService.Application.Commands.Register;
 
 public record RegisterUserCommand(
     string Email,

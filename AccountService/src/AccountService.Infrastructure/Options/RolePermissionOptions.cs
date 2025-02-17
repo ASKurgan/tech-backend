@@ -1,4 +1,4 @@
-namespace ProjectTemplate.Infrastructure.Options;
+namespace AccountService.Infrastructure.Options;
 
 public class RolePermissionOptions
 {

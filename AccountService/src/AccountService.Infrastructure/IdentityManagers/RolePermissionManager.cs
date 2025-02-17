@@ -1,8 +1,8 @@
+using AccountService.Domain;
+using AccountService.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
-using ProjectTemplate.Domain;
-using ProjectTemplate.Infrastructure.DbContexts;
 
-namespace ProjectTemplate.Infrastructure.IdentityManagers;
+namespace AccountService.Infrastructure.IdentityManagers;
 
 public class RolePermissionManager(AccountsWriteDbContext accountsWriteContext)
 {

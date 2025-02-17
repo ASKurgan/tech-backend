@@ -1,10 +1,10 @@
+using AccountService.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ProjectTemplate.Domain;
 using SachkovTech.Core.Database;
 
-namespace ProjectTemplate.Infrastructure.Configurations.Write;
+namespace AccountService.Infrastructure.Configurations.Write;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {

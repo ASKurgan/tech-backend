@@ -1,6 +1,6 @@
 ﻿using AccountService.Contracts.Dtos;
 
-namespace ProjectTemplate.Application.DataModels;
+namespace AccountService.Application.DataModels;
 
 public class UserRolesDataModel
 {

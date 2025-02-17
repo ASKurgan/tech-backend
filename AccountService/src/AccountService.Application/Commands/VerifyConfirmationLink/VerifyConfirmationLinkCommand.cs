@@ -1,6 +1,6 @@
 using SachkovTech.Core.Abstractions;
 
-namespace ProjectTemplate.Application.Commands.VerifyConfirmationLink;
+namespace AccountService.Application.Commands.VerifyConfirmationLink;
 
 public record VerifyConfirmationLinkCommand(
     Guid UserId,

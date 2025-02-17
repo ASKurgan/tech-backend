@@ -1,4 +1,4 @@
-namespace ProjectTemplate.Domain;
+namespace AccountService.Domain;
 
 public class ParticipantAccount
 {

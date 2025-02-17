@@ -1,18 +1,18 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using AccountService.Application.Managers;
+using AccountService.Application.Models;
+using AccountService.Application.Providers;
+using AccountService.Domain;
+using AccountService.Infrastructure.DbContexts;
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using ProjectTemplate.Application.Managers;
-using ProjectTemplate.Application.Models;
-using ProjectTemplate.Application.Providers;
-using ProjectTemplate.Domain;
-using ProjectTemplate.Infrastructure.DbContexts;
 using SachkovTech.Core.RsaKeys;
 using SachkovTech.Framework.Authorization;
 using SharedKernel;
 
-namespace ProjectTemplate.Infrastructure.Providers;
+namespace AccountService.Infrastructure.Providers;
 
 public class JwtTokenProvider : ITokenProvider
 {
@@ -96,7 +96,7 @@ public class JwtTokenProvider : ITokenProvider
         var validationResult = await jwtHandler.ValidateTokenAsync(jwtToken, validationParameters);
         if (validationResult.IsValid == false)
         {
-            return Errors.Tokens.InvalidToken();
+            return Errors.Auth.InvalidToken();
         }
 
         return validationResult.ClaimsIdentity.Claims.ToList();

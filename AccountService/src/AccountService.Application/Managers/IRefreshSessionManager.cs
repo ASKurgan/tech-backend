@@ -1,8 +1,8 @@
+using AccountService.Domain;
 using CSharpFunctionalExtensions;
-using ProjectTemplate.Domain;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Managers;
+namespace AccountService.Application.Managers;
 
 public interface IRefreshSessionManager
 {

@@ -1,4 +1,4 @@
-namespace ProjectTemplate.Application;
+namespace AccountService.Application;
 
 public class Constants
 {

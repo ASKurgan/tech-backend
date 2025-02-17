@@ -1,9 +1,9 @@
+using AccountService.Application.Managers;
+using AccountService.Domain;
+using AccountService.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
-using ProjectTemplate.Application.Managers;
-using ProjectTemplate.Domain;
-using ProjectTemplate.Infrastructure.DbContexts;
 
-namespace ProjectTemplate.Infrastructure.IdentityManagers;
+namespace AccountService.Infrastructure.IdentityManagers;
 
 public class PermissionManager(AccountsWriteDbContext accountsWriteContext) : IPermissionManager
 {

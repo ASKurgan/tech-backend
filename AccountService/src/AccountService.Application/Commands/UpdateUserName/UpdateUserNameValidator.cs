@@ -2,7 +2,7 @@
 using SachkovTech.Core.Validation;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Commands.UpdateUserName;
+namespace AccountService.Application.Commands.UpdateUserName;
 
 public class UpdateUserNameValidator : AbstractValidator<UpdateUserNameCommand>
 {

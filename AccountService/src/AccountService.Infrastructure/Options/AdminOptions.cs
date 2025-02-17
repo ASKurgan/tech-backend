@@ -1,6 +1,6 @@
-using ProjectTemplate.Domain;
+using AccountService.Domain;
 
-namespace ProjectTemplate.Infrastructure.Options;
+namespace AccountService.Infrastructure.Options;
 
 public class AdminOptions
 {

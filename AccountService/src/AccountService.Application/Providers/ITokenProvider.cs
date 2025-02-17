@@ -1,10 +1,10 @@
 using System.Security.Claims;
+using AccountService.Application.Models;
+using AccountService.Domain;
 using CSharpFunctionalExtensions;
-using ProjectTemplate.Application.Models;
-using ProjectTemplate.Domain;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Providers;
+namespace AccountService.Application.Providers;
 
 public interface ITokenProvider
 {

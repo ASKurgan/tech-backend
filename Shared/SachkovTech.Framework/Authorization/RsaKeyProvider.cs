@@ -1,17 +1,17 @@
 ﻿using System.Security.Cryptography;
+using SachkovTech.Core.RsaKeys;
 
-namespace SachkovTech.Core.RsaKeys;
+namespace SachkovTech.Framework.Authorization;
 
-public class RsaKeyProvider : IRsaKeyProvider
+internal class RsaKeyProvider : IRsaKeyProvider
 {
-    private readonly bool _createNewKeys;
-    private const string PrivateKeyPath = "etc/key.private";
-    private const string PublicKeyPath = "etc/key.pub";
+    private readonly AuthOptions _authOptions;
     private readonly RSA _rsa;
 
-    public RsaKeyProvider(bool createNewKeys)
+    public RsaKeyProvider(AuthOptions authOptions)
     {
-        _createNewKeys = createNewKeys;
+        _authOptions = authOptions;
+
         _rsa = RSA.Create();
         EnsureKeysExist();
     }
@@ -22,7 +22,7 @@ public class RsaKeyProvider : IRsaKeyProvider
     /// <returns>RSA private key.</returns>
     public RSA GetPrivateRsa()
     {
-        byte[] privateKeyBytes = File.ReadAllBytes(PrivateKeyPath);
+        byte[] privateKeyBytes = File.ReadAllBytes(_authOptions.PrivateKeyPath);
         _rsa.ImportRSAPrivateKey(privateKeyBytes, out _);
         return _rsa;
     }
@@ -33,7 +33,7 @@ public class RsaKeyProvider : IRsaKeyProvider
     /// <returns>RSA public key.</returns>
     public RSA GetPublicRsa()
     {
-        byte[] publicKeyBytes = File.ReadAllBytes(PublicKeyPath);
+        byte[] publicKeyBytes = File.ReadAllBytes(_authOptions.PublicKeyPath);
         _rsa.ImportRSAPublicKey(publicKeyBytes, out _);
         return _rsa;
     }
@@ -43,7 +43,7 @@ public class RsaKeyProvider : IRsaKeyProvider
     /// </summary>
     private void EnsureKeysExist()
     {
-        if (_createNewKeys && (!File.Exists(PrivateKeyPath) || !File.Exists(PublicKeyPath)))
+        if (_authOptions.CreateNewKeys && (!File.Exists(_authOptions.PrivateKeyPath) || !File.Exists(_authOptions.PublicKeyPath)))
         {
             GenerateKeys();
         }
@@ -57,7 +57,7 @@ public class RsaKeyProvider : IRsaKeyProvider
         byte[] privateKeyBytes = _rsa.ExportRSAPrivateKey();
         byte[] publicKeyBytes = _rsa.ExportRSAPublicKey();
 
-        File.WriteAllBytes(PrivateKeyPath, privateKeyBytes);
-        File.WriteAllBytes(PublicKeyPath, publicKeyBytes);
+        File.WriteAllBytes(_authOptions.PrivateKeyPath, privateKeyBytes);
+        File.WriteAllBytes(_authOptions.PublicKeyPath, publicKeyBytes);
     }
 }

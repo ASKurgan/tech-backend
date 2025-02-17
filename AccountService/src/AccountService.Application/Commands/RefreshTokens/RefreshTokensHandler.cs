@@ -1,12 +1,12 @@
+using AccountService.Application.Managers;
+using AccountService.Application.Providers;
 using AccountService.Contracts.Responses;
 using CSharpFunctionalExtensions;
-using ProjectTemplate.Application.Managers;
-using ProjectTemplate.Application.Providers;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Database;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Commands.RefreshTokens;
+namespace AccountService.Application.Commands.RefreshTokens;
 
 public class RefreshTokensHandler : ICommandHandler<LoginResponse, RefreshTokensCommand>
 {
@@ -36,7 +36,7 @@ public class RefreshTokensHandler : ICommandHandler<LoginResponse, RefreshTokens
 
         if (oldRefreshSession.Value.ExpiresIn < DateTime.UtcNow)
         {
-            return Errors.Tokens.ExpiredToken().ToErrorList();
+            return Errors.Auth.ExpiredToken().ToErrorList();
         }
 
         _refreshSessionManager.Delete(oldRefreshSession.Value);

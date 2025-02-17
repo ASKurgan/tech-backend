@@ -1,57 +1,39 @@
 namespace SharedKernel;
 
-public static class Errors
+public static partial class Errors
 {
     public static class General
     {
         public static Error ValueIsInvalid(string? name = null)
         {
-            var label = name ?? "value";
-            return Error.Validation("value.is.invalid", $"{label} is invalid");
+            string label = name ?? "значение";
+            return Error.Validation("value.is.invalid", $"{label} недействительно");
         }
 
         public static Error NotFound(Guid? id = null, string? name = null)
         {
-            var forId = id == null ? "" : $" for Id '{id}'";
-            return Error.NotFound("record.not.found", $"{name ?? "record"} not found{forId}");
+            string forId = id == null ? string.Empty : $" по Id '{id}'";
+            return Error.NotFound("record.not.found", $"{name ?? "запись"} не найдена{forId}");
         }
 
         public static Error ValueIsRequired(string? name = null)
         {
-            var label = name == null ? "" : " " + name + " ";
-            return Error.Validation("length.is.invalid", $"invalid{label}length");
+            string label = name == null ? string.Empty : " " + name + " ";
+            return Error.Validation("length.is.invalid", $"поле{label}обязательно");
         }
 
         public static Error AlreadyExist()
         {
-            return Error.Validation("record.already.exist", "Record already exist");
+            return Error.Validation("record.already.exist", "Запись уже существует");
         }
 
         public static Error Failure()
         {
-            return Error.Failure("server.failure", "Server failure");
-        }
-
-        public static Error NotAllowed()
-        {
-            return Error.Failure("not.allowed", "Not allowed");
+            return Error.Failure("server.failure", "Серверная ошибка");
         }
     }
 
-    public static class Tokens
-    {
-        public static Error ExpiredToken()
-        {
-            return Error.Validation("token.is.expired", "Your token is expired");
-        }
-
-        public static Error InvalidToken()
-        {
-            return Error.Validation("token.is.invalid", "Your token is invalid");
-        }
-    }
-
-    public static class User
+    public static class Auth
     {
         public static Error InvalidCredentials()
         {
@@ -62,18 +44,15 @@ public static class Errors
         {
             return Error.Failure("role.is.invalid", "Неверная роль пользователя");
         }
-    }
 
-    public static class Files
-    {
-        public static Error InvalidExtension()
+        public static Error InvalidToken()
         {
-            return Error.Validation("extension.is.invalid", "File extension is invalid");
+            return Error.Validation("token.is.invalid", "Ваш токен недействителен");
         }
 
-        public static Error InvalidSize()
+        public static Error ExpiredToken()
         {
-            return Error.Validation("size.is.invalid", "File size is invalid");
+            return Error.Validation("token.is.expired", "Ваш токен истек");
         }
     }
 }

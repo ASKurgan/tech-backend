@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AccountService.Application.DataModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ProjectTemplate.Application.DataModels;
 
-namespace ProjectTemplate.Infrastructure.Configurations.Read;
+namespace AccountService.Infrastructure.Configurations.Read;
 
 public class UserRoleDtoConfiguration : IEntityTypeConfiguration<UserRolesDataModel>
 {

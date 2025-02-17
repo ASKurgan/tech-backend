@@ -1,14 +1,14 @@
-﻿using CSharpFunctionalExtensions;
+﻿using AccountService.Application.Commands.UpdateUserFullName;
+using AccountService.Application.Database;
+using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
-using ProjectTemplate.Application.Commands.UpdateUserFullName;
-using ProjectTemplate.Application.Database;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Database;
 using SachkovTech.Core.Validation;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Commands.UpdateUserPhoneNumber;
+namespace AccountService.Application.Commands.UpdateUserPhoneNumber;
 
 public class UpdateUserPhoneNumberHandler : ICommandHandler<Guid, UpdateUserPhoneNumberCommand>
 {
@@ -46,10 +46,13 @@ public class UpdateUserPhoneNumberHandler : ICommandHandler<Guid, UpdateUserPhon
         if (userResult.IsFailure)
             return userResult.Error.ToErrorList();
 
-        var userPhoneNumberResult = await _userRepository.GetByPhoneNumber(command.PhoneNumber, cancellationToken);
+        if (command.PhoneNumber != null)
+        {
+            var userPhoneNumberResult = await _userRepository.GetByPhoneNumber(command.PhoneNumber, cancellationToken);
 
-        if (userPhoneNumberResult != null && userResult.Value.Id != userPhoneNumberResult.Id)
-            return Errors.General.AlreadyExist().ToErrorList();
+            if (userPhoneNumberResult != null && userResult.Value.Id != userPhoneNumberResult.Id)
+                return Errors.General.AlreadyExist().ToErrorList();
+        }
 
         userResult.Value.UpdatePhoneNumber(command.PhoneNumber);
 

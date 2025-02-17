@@ -2,7 +2,7 @@
 using SachkovTech.Core.Validation;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Commands.UpdateUserEmail;
+namespace AccountService.Application.Commands.UpdateUserEmail;
 
 public class UpdateUserEmailCommandValidator : AbstractValidator<UpdateUserEmailCommand>
 {

@@ -1,5 +1,5 @@
-using ProjectTemplate;
-using ProjectTemplate.Extensions;
+using AccountService.Api;
+using AccountService.Api.Extensions;
 
 DotNetEnv.Env.Load();
 
@@ -13,7 +13,7 @@ await app.Configure();
 
 app.Run();
 
-namespace ProjectTemplate
+namespace AccountService.Api
 {
     public partial class Program;
 }

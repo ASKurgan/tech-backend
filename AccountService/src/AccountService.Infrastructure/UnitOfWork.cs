@@ -1,9 +1,9 @@
 using System.Data.Common;
+using AccountService.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore.Storage;
-using ProjectTemplate.Infrastructure.DbContexts;
 using SachkovTech.Core.Database;
 
-namespace ProjectTemplate.Infrastructure;
+namespace AccountService.Infrastructure;
 
 internal class UnitOfWork : IUnitOfWork
 {

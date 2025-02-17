@@ -1,11 +1,11 @@
+using AccountService.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
-using ProjectTemplate.Domain;
 
-namespace ProjectTemplate.Infrastructure.DbContexts;
+namespace AccountService.Infrastructure.DbContexts;
 
 public class AccountsWriteDbContext : IdentityDbContext<User, Role, Guid>
 {

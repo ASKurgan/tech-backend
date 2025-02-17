@@ -1,15 +1,21 @@
 ﻿using CSharpFunctionalExtensions;
 using SharedKernel;
 
-namespace ProjectTemplate.Domain;
+namespace AccountService.Domain;
 
 public class Photo : ComparableValueObject
 {
-    private static string[] PERMITED_FILES_TYPE = { "image/jpg", "image/jpeg", "image/png", "image/gif" };
+    private const long MAX_FILE_SIZE = 5242880;
 
-    private static string[] PERMITED_EXTENSIONS = { "jpg", "jpeg", "png", "gif" };
+    private static readonly string[] _permitedFilesType =
+    [
+        "image/jpg", "image/jpeg", "image/png", "image/gif"
+    ];
 
-    private static long MAX_FILE_SIZE = 5242880;
+    private static readonly string[] _permitedExtensions =
+    [
+        "jpg", "jpeg", "png", "gif"
+    ];
 
     public Photo(Guid fileId)
     {
@@ -31,19 +37,19 @@ public class Photo : ComparableValueObject
 
         var fileExtension = fileName[fileName.LastIndexOf('.')..];
 
-        if (!PERMITED_EXTENSIONS.Any(x => x == fileExtension))
+        if (_permitedExtensions.All(x => x != fileExtension))
         {
-            return Errors.Files.InvalidExtension();
+            return Error.Validation("file.invalidExtension", "Неверное расширение файла.");
         }
 
-        if (!PERMITED_FILES_TYPE.Any(x => x == contentType))
+        if (_permitedFilesType.All(x => x != contentType))
         {
             return Errors.General.ValueIsInvalid(contentType);
         }
 
         if (size > MAX_FILE_SIZE)
         {
-            return Errors.Files.InvalidSize();
+            return Error.Validation("file.invalidSize", "Неверный размер файла.");
         }
 
         return Result.Success<Error>();

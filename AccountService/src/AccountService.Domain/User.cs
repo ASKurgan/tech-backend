@@ -2,7 +2,7 @@ using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
 using SharedKernel;
 
-namespace ProjectTemplate.Domain;
+namespace AccountService.Domain;
 
 public class User : IdentityUser<Guid>
 {
@@ -37,7 +37,7 @@ public class User : IdentityUser<Guid>
         Role role)
     {
         if (role.Name != AdminAccount.ADMIN)
-            return Errors.User.InvalidRole();
+            return Errors.Auth.InvalidRole();
 
         return new User
         {
@@ -56,7 +56,7 @@ public class User : IdentityUser<Guid>
         Role role)
     {
         if (role.Name != ParticipantAccount.PARTICIPANT)
-            return Errors.User.InvalidRole();
+            return Errors.Auth.InvalidRole();
 
         return new User
         {

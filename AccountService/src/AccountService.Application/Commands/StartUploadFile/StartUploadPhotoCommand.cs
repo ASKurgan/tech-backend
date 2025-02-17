@@ -1,6 +1,6 @@
 ﻿using SachkovTech.Core.Abstractions;
 
-namespace ProjectTemplate.Application.Commands.StartUploadFile;
+namespace AccountService.Application.Commands.StartUploadFile;
 
 public record StartUploadPhotoCommand(
     Guid UserId,

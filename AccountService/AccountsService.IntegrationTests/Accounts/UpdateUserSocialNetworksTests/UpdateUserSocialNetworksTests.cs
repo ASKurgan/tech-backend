@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
+﻿using AccountService.Application.Commands.UpdateUserSocialNetworks;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectTemplate.Application.Commands.UpdateUserSocialNetworks;
 using SachkovTech.Core.Abstractions;
 
 namespace AccountsService.IntegrationTests.Accounts.UpdateUserSocialNetworksTests;

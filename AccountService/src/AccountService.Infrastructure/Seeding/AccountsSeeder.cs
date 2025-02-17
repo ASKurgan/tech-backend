@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Core.Database;
 
-namespace ProjectTemplate.Infrastructure.Seeding;
+namespace AccountService.Infrastructure.Seeding;
 
 public class AccountsSeeder: IAutoSeeder
 {

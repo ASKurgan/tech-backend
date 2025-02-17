@@ -1,8 +1,8 @@
+using AccountService.Application.Commands.Login;
+using AccountService.Application.Commands.Logout;
 using AccountService.Contracts.Responses;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectTemplate.Application.Commands.Login;
-using ProjectTemplate.Application.Commands.Logout;
 using SachkovTech.Core.Abstractions;
 
 namespace AccountsService.IntegrationTests.Accounts.LogoutTests;

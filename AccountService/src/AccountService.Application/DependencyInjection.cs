@@ -2,11 +2,11 @@ using FileService.Communication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ProjectTemplate.Application;
+namespace AccountService.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddAccountsApplication(
+    public static IServiceCollection AddApplication(
         this IServiceCollection services,
         IConfiguration configuration)
     {

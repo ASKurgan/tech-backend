@@ -1,16 +1,16 @@
-﻿using AccountService.Contracts.Dtos;
+﻿using AccountService.Application.Commands.GenerateConfirmationLink;
+using AccountService.Application.Commands.Login;
+using AccountService.Application.Commands.Logout;
+using AccountService.Application.Commands.RefreshTokens;
+using AccountService.Application.Commands.Register;
+using AccountService.Application.Commands.UpdateUserEmail;
+using AccountService.Application.Commands.UpdateUserFullName;
+using AccountService.Application.Commands.UpdateUserName;
+using AccountService.Application.Commands.UpdateUserPhoneNumber;
+using AccountService.Application.Commands.UpdateUserSocialNetworks;
+using AccountService.Application.Commands.VerifyConfirmationLink;
+using AccountService.Contracts.Dtos;
 using AutoFixture;
-using ProjectTemplate.Application.Commands.GenerateConfirmationLink;
-using ProjectTemplate.Application.Commands.Login;
-using ProjectTemplate.Application.Commands.Logout;
-using ProjectTemplate.Application.Commands.RefreshTokens;
-using ProjectTemplate.Application.Commands.Register;
-using ProjectTemplate.Application.Commands.UpdateUserEmail;
-using ProjectTemplate.Application.Commands.UpdateUserFullName;
-using ProjectTemplate.Application.Commands.UpdateUserName;
-using ProjectTemplate.Application.Commands.UpdateUserPhoneNumber;
-using ProjectTemplate.Application.Commands.UpdateUserSocialNetworks;
-using ProjectTemplate.Application.Commands.VerifyConfirmationLink;
 
 namespace AccountsService.IntegrationTests;
 

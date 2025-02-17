@@ -1,10 +1,10 @@
+using AccountService.Application.Database;
+using AccountService.Application.DataModels;
 using AccountService.Contracts.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ProjectTemplate.Application.Database;
-using ProjectTemplate.Application.DataModels;
 
-namespace ProjectTemplate.Infrastructure.DbContexts;
+namespace AccountService.Infrastructure.DbContexts;
 
 public class AccountsReadDbContext : DbContext, IAccountsReadDbContext
 {

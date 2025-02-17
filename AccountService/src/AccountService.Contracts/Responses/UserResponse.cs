@@ -8,7 +8,7 @@ public record UserResponse(
     string? FirstName,
     string? SecondName,
     string? ThirdName,
-    string Email,
+    string? Email,
     string? PhoneNumber,
     DateTime RegistrationDate,
     IEnumerable<SocialNetworkDto> SocialNetworks,

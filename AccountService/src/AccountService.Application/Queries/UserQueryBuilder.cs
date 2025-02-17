@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
+using AccountService.Application.DataModels;
 using Microsoft.EntityFrameworkCore;
-using ProjectTemplate.Application.DataModels;
 using SachkovTech.Core.Database;
 
-namespace ProjectTemplate.Application.Queries;
+namespace AccountService.Application.Queries;
 
 internal class UserQueryBuilder
 {
@@ -61,7 +61,7 @@ internal class UserQueryBuilder
     {
         _userQuery = _userQuery.WhereIf(
             string.IsNullOrWhiteSpace(sequence) == false,
-            ud => ud.FirstName.StartsWith(sequence!));
+            ud => ud.FirstName != null && ud.FirstName.StartsWith(sequence!));
 
         return this;
     }
@@ -170,9 +170,9 @@ internal class UserQueryBuilder
         return sortBy?.ToLower() switch
         {
             "email" => (user) => user.Email,
-            "first_name" => (user) => user.FirstName,
-            "second_name" => (user) => user.SecondName,
-            "third_name" => (user) => user.ThirdName,
+            "first_name" => (user) => user.FirstName ?? string.Empty,
+            "second_name" => (user) => user.SecondName ?? string.Empty,
+            "third_name" => (user) => user.ThirdName ?? string.Empty,
             _ => (user) => user.Id
         };
     }

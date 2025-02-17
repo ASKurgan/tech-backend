@@ -1,9 +1,9 @@
-﻿using ProjectTemplate.Application.Database;
-using ProjectTemplate.Application.DataModels;
+﻿using AccountService.Application.Database;
+using AccountService.Application.DataModels;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Database;
 
-namespace ProjectTemplate.Application.Queries.GetUsers;
+namespace AccountService.Application.Queries.GetUsers;
 
 public class GetUsersHandler : IQueryHandler<PagedList<UserDataModel>, GetUsersQuery>
 {

@@ -1,6 +1,6 @@
-﻿using ProjectTemplate.Domain;
+﻿using AccountService.Domain;
 
-namespace ProjectTemplate.Application.Managers;
+namespace AccountService.Application.Managers;
 
 public interface IPermissionManager
 {

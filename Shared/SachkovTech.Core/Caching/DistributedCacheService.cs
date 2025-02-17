@@ -61,7 +61,6 @@ public class DistributedCacheService : ICacheService
         _cacheKeys.TryAdd(key, true);
     }
 
-
     public async Task RemoveAsync(string key, CancellationToken cancellationToken = default)
     {
         await _cache.RemoveAsync(key, cancellationToken);

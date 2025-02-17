@@ -1,14 +1,14 @@
-﻿using CSharpFunctionalExtensions;
+﻿using AccountService.Application.Commands.UpdateUserFullName;
+using AccountService.Application.Database;
+using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
-using ProjectTemplate.Application.Commands.UpdateUserFullName;
-using ProjectTemplate.Application.Database;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Database;
 using SachkovTech.Core.Validation;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Commands.UpdateUserEmail;
+namespace AccountService.Application.Commands.UpdateUserEmail;
 
 public class UpdateUserEmailHandler : ICommandHandler<Guid, UpdateUserEmailCommand>
 {

@@ -2,7 +2,7 @@
 using SachkovTech.Framework.Middlewares;
 using Serilog;
 
-namespace ProjectTemplate.Extensions;
+namespace AccountService.Api.Extensions;
 
 public static class WebApplicationExtensions
 {

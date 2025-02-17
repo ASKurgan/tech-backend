@@ -1,7 +1,7 @@
 ﻿using FileService.Contracts;
 using SachkovTech.Core.Abstractions;
 
-namespace ProjectTemplate.Application.Commands.CompleteUploadPhoto;
+namespace AccountService.Application.Commands.CompleteUploadPhoto;
 
 public record CompleteUploadPhotoCommand(
     Guid UserId,

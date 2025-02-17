@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
+﻿using AccountService.Application.Commands.UpdateUserPhoneNumber;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectTemplate.Application.Commands.UpdateUserPhoneNumber;
 using SachkovTech.Core.Abstractions;
 
 namespace AccountsService.IntegrationTests.Accounts.UpdateUserPhoneNumberTests;

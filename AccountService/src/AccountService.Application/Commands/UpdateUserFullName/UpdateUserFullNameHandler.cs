@@ -1,14 +1,14 @@
-﻿using CSharpFunctionalExtensions;
+﻿using AccountService.Application.Database;
+using AccountService.Domain;
+using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
-using ProjectTemplate.Application.Database;
-using ProjectTemplate.Domain;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Database;
 using SachkovTech.Core.Validation;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Commands.UpdateUserFullName;
+namespace AccountService.Application.Commands.UpdateUserFullName;
 
 public class UpdateUserFullNameHandler : ICommandHandler<Guid, UpdateUserFullNameCommand>
 {

@@ -1,12 +1,12 @@
 using System.Text.Json;
+using AccountService.Application.Database;
+using AccountService.Application.Managers;
+using AccountService.Domain;
+using AccountService.Infrastructure.DbContexts;
+using AccountService.Infrastructure.Options;
 using AutoFixture;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectTemplate.Application.Database;
-using ProjectTemplate.Application.Managers;
-using ProjectTemplate.Domain;
-using ProjectTemplate.Infrastructure.DbContexts;
-using ProjectTemplate.Infrastructure.Options;
 
 namespace AccountsService.IntegrationTests.Accounts;
 

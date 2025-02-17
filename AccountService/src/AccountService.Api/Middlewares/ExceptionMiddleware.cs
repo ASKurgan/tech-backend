@@ -1,6 +1,6 @@
 using SharedKernel;
 
-namespace ProjectTemplate.Middlewares;
+namespace AccountService.Api.Middlewares;
 
 public class ExceptionMiddleware
 {

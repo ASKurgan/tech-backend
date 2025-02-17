@@ -1,13 +1,13 @@
-﻿using AccountService.Contracts.Responses;
+﻿using AccountService.Application.Database;
+using AccountService.Contracts.Responses;
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
-using ProjectTemplate.Application.Database;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Caching;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Queries.GetUserById;
+namespace AccountService.Application.Queries.GetUserById;
 
 public class GetUserByIdHandler : IQueryHandlerWithResult<UserResponse, GetUserByIdQuery>
 {

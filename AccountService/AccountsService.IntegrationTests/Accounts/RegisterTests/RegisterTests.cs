@@ -1,6 +1,6 @@
+using AccountService.Application.Commands.Register;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectTemplate.Application.Commands.Register;
 using SachkovTech.Core.Abstractions;
 
 namespace AccountsService.IntegrationTests.Accounts.RegisterTests;

@@ -11,6 +11,11 @@ public class ErrorList : IEnumerable<Error>
         _errors = [..errors];
     }
 
+    public static implicit operator ErrorList(List<Error> errors) => new(errors);
+
+    public static implicit operator ErrorList(Error error)
+        => new([error]);
+
     public IEnumerator<Error> GetEnumerator()
     {
         return _errors.GetEnumerator();
@@ -20,10 +25,4 @@ public class ErrorList : IEnumerable<Error>
     {
         return GetEnumerator();
     }
-
-    public static implicit operator ErrorList(List<Error> errors)
-        => new(errors);
-    
-    public static implicit operator ErrorList(Error error)
-        => new([error]);
 }

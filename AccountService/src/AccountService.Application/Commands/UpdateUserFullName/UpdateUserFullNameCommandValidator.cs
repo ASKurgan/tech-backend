@@ -1,8 +1,8 @@
-﻿using FluentValidation;
-using ProjectTemplate.Domain;
+﻿using AccountService.Domain;
+using FluentValidation;
 using SachkovTech.Core.Validation;
 
-namespace ProjectTemplate.Application.Commands.UpdateUserFullName;
+namespace AccountService.Application.Commands.UpdateUserFullName;
 
 public class UpdateUserFullNameCommandValidator : AbstractValidator<UpdateUserFullNameCommand>
 {

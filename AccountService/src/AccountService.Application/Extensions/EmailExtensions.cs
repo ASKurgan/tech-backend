@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace ProjectTemplate.Application.Extensions;
+namespace AccountService.Application.Extensions;
 
 public static class EmailExtensions
 {

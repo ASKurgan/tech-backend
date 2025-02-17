@@ -1,11 +1,11 @@
-﻿using CSharpFunctionalExtensions;
+﻿using AccountService.Application.Database;
+using AccountService.Domain;
+using AccountService.Infrastructure.DbContexts;
+using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
-using ProjectTemplate.Application.Database;
-using ProjectTemplate.Domain;
-using ProjectTemplate.Infrastructure.DbContexts;
 using SharedKernel;
 
-namespace ProjectTemplate.Infrastructure.Repository;
+namespace AccountService.Infrastructure.Repository;
 
 public class UserRepository : IUserRepository
 {

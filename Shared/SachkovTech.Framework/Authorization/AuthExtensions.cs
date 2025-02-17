@@ -19,7 +19,7 @@ public static class AuthExtensions
         var authOptions = configuration.GetSection(AuthOptions.AUTH).Get<AuthOptions>()
                           ?? throw new ApplicationException("Missing auth configuration");
 
-        var rsaKeyProvider = new RsaKeyProvider(authOptions.CreateNewKeys);
+        var rsaKeyProvider = new RsaKeyProvider(authOptions);
 
         services.AddSingleton<IRsaKeyProvider>(rsaKeyProvider);
         services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();

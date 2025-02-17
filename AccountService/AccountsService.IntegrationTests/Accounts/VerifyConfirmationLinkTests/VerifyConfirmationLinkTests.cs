@@ -1,8 +1,8 @@
-﻿using AccountService.Contracts.Responses;
+﻿using AccountService.Application.Commands.GenerateConfirmationLink;
+using AccountService.Application.Commands.VerifyConfirmationLink;
+using AccountService.Contracts.Responses;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectTemplate.Application.Commands.GenerateConfirmationLink;
-using ProjectTemplate.Application.Commands.VerifyConfirmationLink;
 using SachkovTech.Core.Abstractions;
 
 namespace AccountsService.IntegrationTests.Accounts.VerifyConfirmationLinkTests;

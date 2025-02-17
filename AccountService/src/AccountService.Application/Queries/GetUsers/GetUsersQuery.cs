@@ -1,6 +1,6 @@
 ﻿using SachkovTech.Core.Abstractions;
 
-namespace ProjectTemplate.Application.Queries.GetUsers;
+namespace AccountService.Application.Queries.GetUsers;
 
 public record GetUsersQuery(
     string? Role,

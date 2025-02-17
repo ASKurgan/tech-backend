@@ -1,14 +1,14 @@
+using AccountService.Application.Extensions;
+using AccountService.Domain;
 using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using ProjectTemplate.Application.Extensions;
-using ProjectTemplate.Domain;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Validation;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Commands.VerifyConfirmationLink;
+namespace AccountService.Application.Commands.VerifyConfirmationLink;
 
 public class VerifyConfirmationLinkHandler : ICommandHandler<VerifyConfirmationLinkCommand>
 {

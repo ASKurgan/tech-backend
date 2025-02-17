@@ -1,15 +1,15 @@
 using System.Text.Json;
+using AccountService.Application.Managers;
+using AccountService.Domain;
+using AccountService.Infrastructure.IdentityManagers;
+using AccountService.Infrastructure.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using ProjectTemplate.Application.Managers;
-using ProjectTemplate.Domain;
-using ProjectTemplate.Infrastructure.IdentityManagers;
-using ProjectTemplate.Infrastructure.Options;
 using SachkovTech.Core.Database;
 
-namespace ProjectTemplate.Infrastructure.Seeding;
+namespace AccountService.Infrastructure.Seeding;
 
 public class AccountsSeederService(
     UserManager<User> userManager,

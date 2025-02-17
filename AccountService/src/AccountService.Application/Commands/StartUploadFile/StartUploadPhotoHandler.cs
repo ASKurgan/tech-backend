@@ -1,14 +1,14 @@
 ﻿using AccountService.Contracts.Responses;
+using AccountService.Domain;
 using CSharpFunctionalExtensions;
 using FileService.Communication;
 using FileService.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ProjectTemplate.Domain;
 using SachkovTech.Core.Abstractions;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Commands.StartUploadFile;
+namespace AccountService.Application.Commands.StartUploadFile;
 
 public class StartUploadPhotoHandler : ICommandHandler<StartUploadFileResponse, StartUploadPhotoCommand>
 {

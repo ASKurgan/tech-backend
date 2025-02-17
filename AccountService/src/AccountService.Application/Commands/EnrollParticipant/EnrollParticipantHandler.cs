@@ -1,14 +1,14 @@
+using AccountService.Application.Managers;
+using AccountService.Domain;
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ProjectTemplate.Application.Managers;
-using ProjectTemplate.Domain;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Database;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Commands.EnrollParticipant;
+namespace AccountService.Application.Commands.EnrollParticipant;
 
 public class EnrollParticipantHandler : ICommandHandler<EnrollParticipantCommand>
 {
@@ -31,7 +31,6 @@ public class EnrollParticipantHandler : ICommandHandler<EnrollParticipantCommand
         _unitOfWork = unitOfWork;
         _logger = logger;
     }
-
 
     public async Task<UnitResult<ErrorList>> Handle(
         EnrollParticipantCommand command,
@@ -71,7 +70,7 @@ public class EnrollParticipantHandler : ICommandHandler<EnrollParticipantCommand
         catch (Exception ex)
         {
             _logger.LogError(ex, "Can not enroll participant with email {userEmail}",
-                command.Email.Replace(Environment.NewLine, "").Replace("\n", "").Replace("\r", ""));
+                command.Email.Replace(Environment.NewLine, string.Empty).Replace("\n", string.Empty).Replace("\r", string.Empty));
 
             await transaction.RollbackAsync(cancellationToken);
 

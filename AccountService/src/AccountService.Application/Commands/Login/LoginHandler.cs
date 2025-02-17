@@ -1,21 +1,20 @@
+using AccountService.Application.Providers;
 using AccountService.Contracts.Responses;
+using AccountService.Domain;
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ProjectTemplate.Application.Providers;
-using ProjectTemplate.Domain;
 using SachkovTech.Core.Abstractions;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Commands.Login;
+namespace AccountService.Application.Commands.Login;
 
 public class LoginHandler : ICommandHandler<LoginResponse, LoginCommand>
 {
     private readonly UserManager<User> _userManager;
     private readonly ITokenProvider _tokenProvider;
     private readonly ILogger<LoginHandler> _logger;
-
 
     public LoginHandler(
         UserManager<User> userManager,
@@ -36,13 +35,13 @@ public class LoginHandler : ICommandHandler<LoginResponse, LoginCommand>
 
         if (user is null)
         {
-            return Errors.User.InvalidCredentials().ToErrorList();
+            return Errors.Auth.InvalidCredentials().ToErrorList();
         }
 
         var passwordConfirmed = await _userManager.CheckPasswordAsync(user, command.Password);
         if (!passwordConfirmed)
         {
-            return Errors.User.InvalidCredentials().ToErrorList();
+            return Errors.Auth.InvalidCredentials().ToErrorList();
         }
 
         var accessToken = await _tokenProvider.GenerateAccessToken(user, cancellationToken);

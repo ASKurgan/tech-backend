@@ -1,7 +1,7 @@
+using AccountService.Application.DataModels;
 using AccountService.Contracts.Dtos;
-using ProjectTemplate.Application.DataModels;
 
-namespace ProjectTemplate.Application.Database;
+namespace AccountService.Application.Database;
 
 public interface IAccountsReadDbContext
 {

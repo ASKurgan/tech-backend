@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace ProjectTemplate.Domain;
+namespace AccountService.Domain;
 
 public class Role : IdentityRole<Guid>
 {

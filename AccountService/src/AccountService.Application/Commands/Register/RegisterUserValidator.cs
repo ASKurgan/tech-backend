@@ -2,7 +2,7 @@ using FluentValidation;
 using SachkovTech.Core.Validation;
 using SharedKernel;
 
-namespace ProjectTemplate.Application.Commands.Register;
+namespace AccountService.Application.Commands.Register;
 
 public class RegisterUserValidator : AbstractValidator<RegisterUserCommand>
 {

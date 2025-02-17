@@ -1,4 +1,7 @@
 ﻿using System.Data.Common;
+using AccountService.Api;
+using AccountService.Application.Database;
+using AccountService.Infrastructure.DbContexts;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -6,9 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
-using ProjectTemplate;
-using ProjectTemplate.Application.Database;
-using ProjectTemplate.Infrastructure.DbContexts;
 using Respawn;
 using SachkovTech.Core.Database;
 using Testcontainers.PostgreSql;

@@ -3,7 +3,7 @@ using CSharpFunctionalExtensions;
 using SachkovTech.Framework.Authorization;
 using SharedKernel;
 
-namespace ProjectTemplate.Providers;
+namespace AccountService.Api.Providers;
 
 public class HttpContextProvider
 {
@@ -25,7 +25,7 @@ public class HttpContextProvider
         var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(CustomClaims.ID);
 
         if (userId == null)
-            return Errors.User.InvalidCredentials();
+            return Errors.Auth.InvalidCredentials();
 
         return Guid.Parse(userId);
     }

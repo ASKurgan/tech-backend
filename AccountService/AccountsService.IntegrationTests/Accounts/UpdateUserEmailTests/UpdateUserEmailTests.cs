@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
+﻿using AccountService.Application.Commands.UpdateUserEmail;
+using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectTemplate.Application.Commands.UpdateUserEmail;
 using SachkovTech.Core.Abstractions;
 
 namespace AccountsService.IntegrationTests.Accounts.UpdateUserEmailTests;
