@@ -26,9 +26,9 @@ public static class DependencyInjection
         services.AddControllers();
 
         services
-            .AddFramework(configuration, assemblies)
             .AddInfrastructure(configuration)
-            .AddApplication(configuration);
+            .AddApplication(configuration)
+            .AddFramework(configuration, assemblies);
     }
 
     private static IServiceCollection AddFramework(
