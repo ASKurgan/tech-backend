@@ -62,7 +62,7 @@ public class IssuesReviewTests
 
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.Error.Should().Be(Errors.User.InvalidCredentials());
+        result.Error.Should().Be(Errors.Auth.InvalidCredentials());
     }
 
     [Fact]
@@ -98,7 +98,7 @@ public class IssuesReviewTests
 
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.Error.Should().Be(Errors.User.InvalidCredentials());
+        result.Error.Should().Be(Errors.Auth.InvalidCredentials());
     }
 
     [Fact]

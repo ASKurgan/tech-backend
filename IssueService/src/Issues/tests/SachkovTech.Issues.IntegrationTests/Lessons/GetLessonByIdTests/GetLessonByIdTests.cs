@@ -61,7 +61,7 @@ public class GetLessonByIdTest : LessonsTestsBase
 
         // Assert
         result.IsFailure.Should().BeTrue();
-        result.Error.Should().ContainSingle(e => e.Message == "record not found");
+        result.Error.Should().ContainSingle(e => e.Message == "запись не найдена");
     }
 
     private async Task<Lesson> SeedLessonToDatabase(

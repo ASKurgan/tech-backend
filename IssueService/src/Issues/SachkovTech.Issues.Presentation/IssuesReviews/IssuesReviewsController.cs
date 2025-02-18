@@ -42,7 +42,7 @@ public class IssuesReviewsController : ApplicationController
 
         if (userId == null)
         {
-            return Errors.User.InvalidCredentials().ToResponse();
+            return Errors.Auth.InvalidCredentials().ToResponse();
         }
 
         var result = await handler.Handle(
@@ -69,7 +69,7 @@ public class IssuesReviewsController : ApplicationController
         var userId = HttpContext.User.FindFirstValue(CustomClaims.ID);
 
         if (userId == null)
-            return Errors.User.InvalidCredentials().ToResponse();
+            return Errors.Auth.InvalidCredentials().ToResponse();
 
         var result = await handler.Handle(
             new StartReviewCommand(
@@ -92,7 +92,7 @@ public class IssuesReviewsController : ApplicationController
         var userId = HttpContext.User.FindFirstValue(CustomClaims.ID);
 
         if (userId == null)
-            return Errors.User.InvalidCredentials().ToResponse();
+            return Errors.Auth.InvalidCredentials().ToResponse();
 
         var result = await handler.Handle(
             new SendForRevisionCommand(issueReviewId, Guid.Parse(userId)), cancellationToken);
@@ -113,7 +113,7 @@ public class IssuesReviewsController : ApplicationController
         string? userId = HttpContext.User.FindFirstValue(CustomClaims.ID);
 
         if (userId == null)
-            return Errors.User.InvalidCredentials().ToResponse();
+            return Errors.Auth.InvalidCredentials().ToResponse();
 
         var result = await handler.Handle(
             new ApproveIssueReviewCommand(issueReviewId, Guid.Parse(userId)), cancellationToken);
@@ -132,7 +132,7 @@ public class IssuesReviewsController : ApplicationController
         string? userId = HttpContext.User.FindFirstValue(CustomClaims.ID);
 
         if (userId == null)
-            return Errors.User.InvalidCredentials().ToResponse();
+            return Errors.Auth.InvalidCredentials().ToResponse();
 
         var result = await handler.Handle(
             new DeleteCommentCommand(

@@ -18,24 +18,25 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
       - ASPNETCORE_URLS=http://+:8001
 
-  # issues:
-  #   build:
-  #     context: ./IssueService
-  #     dockerfile: ./src/SachkovTech.Web/Dockerfile
-  #     args:
-  #       NUGET_USERNAME: ${NUGET_USERNAME}
-  #       NUGET_PASSWORD: ${NUGET_PASSWORD}
-  #   ports:
-  #     - "8002:8002"
-  #   depends_on:
-  #     - postgres
-  #     - minio
-  #     - elasticsearch
-  #     - rabbitmq
-  #   restart: always
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Docker
-  #     - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+  issues:
+    build:
+      context: ./IssueService
+      dockerfile: ./src/SachkovTech.Web/Dockerfile
+      args:
+        NUGET_USERNAME: ${NUGET_USERNAME}
+        NUGET_PASSWORD: ${NUGET_PASSWORD}
+    ports:
+      - "8002:8002"
+    depends_on:
+      - postgres
+      - minio
+      - elasticsearch
+      - rabbitmq
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - ASPNETCORE_URLS=http://+:8002
 
   # files:
   #   build:

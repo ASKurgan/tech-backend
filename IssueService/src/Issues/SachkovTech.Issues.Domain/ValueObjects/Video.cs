@@ -30,14 +30,14 @@ public class Video : ComparableValueObject
         var lastDotIndex = fileName.LastIndexOf('.');
         if (lastDotIndex == -1 || lastDotIndex == fileName.Length - 1)
         {
-            return Errors.Files.InvalidExtension();
+            return Errors.General.Failure();
         }
 
         // Извлекаем расширение без точки
         var fileExtension = fileName[(lastDotIndex + 1)..];
         if (!PermitedExtensions.Contains(fileExtension, StringComparer.OrdinalIgnoreCase))
         {
-            return Errors.Files.InvalidExtension();
+            return Errors.General.Failure();
         }
 
         if (!PermitedFilesType.Contains(contentType, StringComparer.OrdinalIgnoreCase))
@@ -47,7 +47,7 @@ public class Video : ComparableValueObject
 
         if (size > MAX_FILE_SIZE)
         {
-            return Errors.Files.InvalidSize();
+            return Errors.General.Failure();
         }
 
         return Result.Success<Error>();

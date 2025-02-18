@@ -35,7 +35,7 @@ public class StopWorkingHandler : ICommandHandler<StopWorkingCommand>
             return error.ToErrorList();
 
         if (value.UserId != command.UserId)
-            return Errors.General.NotAllowed().ToErrorList();
+            return Errors.General.Failure().ToErrorList();
 
         var result = value.StopWorking();
 

@@ -31,19 +31,19 @@ public class Photo : ComparableValueObject
 
         var fileExtension = fileName[fileName.LastIndexOf('.')..];
 
-        if (!PERMITED_EXTENSIONS.Any(x => x == fileExtension))
+        if (PERMITED_EXTENSIONS.All(x => x != fileExtension))
         {
-            return Errors.Files.InvalidExtension();
+            return Errors.General.Failure();
         }
 
-        if (!PERMITED_FILES_TYPE.Any(x => x == contentType))
+        if (PERMITED_FILES_TYPE.All(x => x != contentType))
         {
             return Errors.General.ValueIsInvalid(contentType);
         }
 
         if (size > MAX_FILE_SIZE)
         {
-            return Errors.Files.InvalidSize();
+            return Errors.General.Failure();
         }
 
         return Result.Success<Error>();

@@ -72,8 +72,8 @@ public class GetLessonWithPaginationTests : LessonsTestsBase
         // Assert
         result.IsFailure.Should().BeTrue();
         result.Error.Should().NotBeNull();
-        result.Error.Should().ContainSingle(e => e.Message == "Page is invalid");
-        result.Error.Should().ContainSingle(e => e.Message == "PageSize is invalid");
+        result.Error.Should().ContainSingle(e => e.Message == "Page недействительно");
+        result.Error.Should().ContainSingle(e => e.Message == "PageSize недействительно");
     }
 
     private void SetupFailureValidationResult(

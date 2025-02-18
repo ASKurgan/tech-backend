@@ -59,7 +59,7 @@ public sealed class IssueReview : DomainEntity<IssueReviewId>
     {
         if (ReviewerId != reviewerId)
         {
-            return Errors.User.InvalidCredentials();
+            return Errors.Auth.InvalidCredentials();
         }
 
         if (IssueReviewStatus != IssueReviewStatus.OnReview)
@@ -78,7 +78,7 @@ public sealed class IssueReview : DomainEntity<IssueReviewId>
     {
         if (ReviewerId != reviewerId)
         {
-            return Errors.User.InvalidCredentials();
+            return Errors.Auth.InvalidCredentials();
         }
 
         if (IssueReviewStatus != IssueReviewStatus.OnReview)
