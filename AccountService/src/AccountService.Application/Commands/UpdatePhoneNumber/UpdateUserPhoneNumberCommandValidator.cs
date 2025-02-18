@@ -2,9 +2,9 @@
 using SachkovTech.Core.Validation;
 using SharedKernel;
 
-namespace AccountService.Application.Commands.UpdateUserPhoneNumber;
+namespace AccountService.Application.Commands.UpdatePhoneNumber;
 
-public class UpdateUserPhoneNumberCommandValidator : AbstractValidator<UpdateUserPhoneNumberCommand>
+public class UpdateUserPhoneNumberCommandValidator : AbstractValidator<UpdatePhoneNumberCommand>
 {
     private const string PhoneNumberPattern = @"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$";
 

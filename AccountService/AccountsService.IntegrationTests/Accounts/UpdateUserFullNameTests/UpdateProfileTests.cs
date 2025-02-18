@@ -1,18 +1,18 @@
-﻿using AccountService.Application.Commands.UpdateUserFullName;
+﻿using AccountService.Application.Commands.UpdateProfile;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Core.Abstractions;
 
 namespace AccountsService.IntegrationTests.Accounts.UpdateUserFullNameTests;
 
-public class UpdateUserFullNameTests : AccountTestsBase
+public class UpdateProfileTests : AccountTestsBase
 {
-    private readonly ICommandHandler<Guid, UpdateUserFullNameCommand> _sut;
+    private readonly ICommandHandler<Guid, UpdateProfileCommand> _sut;
 
-    public UpdateUserFullNameTests(IntegrationTestsWebFactory factory)
+    public UpdateProfileTests(IntegrationTestsWebFactory factory)
         : base(factory)
     {
-        _sut = Scope.ServiceProvider.GetRequiredService<ICommandHandler<Guid, UpdateUserFullNameCommand>>();
+        _sut = Scope.ServiceProvider.GetRequiredService<ICommandHandler<Guid, UpdateProfileCommand>>();
     }
 
     [Fact]
@@ -25,7 +25,7 @@ public class UpdateUserFullNameTests : AccountTestsBase
 
         var userId = await SeedUser();
 
-        var command = Fixture.CreateUpdateUserFullNameCommand(userId);
+        var command = Fixture.CreateUpdateProfileCommand(userId);
 
         // Act
         var result = await _sut.Handle(command, cancellationToken);

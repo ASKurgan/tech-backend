@@ -1,4 +1,4 @@
-﻿using AccountService.Application.Commands.UpdateUserName;
+﻿using AccountService.Application.Commands.UpdateProfile;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Core.Abstractions;
@@ -7,13 +7,13 @@ namespace AccountsService.IntegrationTests.Accounts.UpdateUserName;
 
 public class UpdateUserNameTests : AccountTestsBase
 {
-    private readonly ICommandHandler<Guid, UpdateUserNameCommand> _sut;
+    private readonly ICommandHandler<Guid, UpdateProfileCommand> _sut;
 
     public UpdateUserNameTests(
         IntegrationTestsWebFactory factory)
         : base(factory)
     {
-        _sut = Scope.ServiceProvider.GetRequiredService<ICommandHandler<Guid, UpdateUserNameCommand>>();
+        _sut = Scope.ServiceProvider.GetRequiredService<ICommandHandler<Guid, UpdateProfileCommand>>();
     }
 
     [Fact]
@@ -26,7 +26,7 @@ public class UpdateUserNameTests : AccountTestsBase
 
         var userId = await SeedUser();
 
-        var command = Fixture.CreateUpdateUserNameCommand(userId);
+        var command = Fixture.CreateUpdateProfileCommand(userId);
 
         // Act
         var result = await _sut.Handle(command, cancellationToken);

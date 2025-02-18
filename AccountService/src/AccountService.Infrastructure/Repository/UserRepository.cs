@@ -4,6 +4,7 @@ using AccountService.Infrastructure.DbContexts;
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel;
+using Errors = SharedKernel.Errors;
 
 namespace AccountService.Infrastructure.Repository;
 
@@ -32,5 +33,15 @@ public class UserRepository : IUserRepository
         var user = await _dbContext.Users.FirstOrDefaultAsync(p => p.PhoneNumber == phoneNumber, cancellationToken);
 
         return user;
+    }
+
+    public async Task<bool> IsUserExistsByUserName(string userName, CancellationToken cancellationToken)
+    {
+        var user = await _dbContext.Users.FirstOrDefaultAsync(p => p.UserName == userName, cancellationToken);
+
+        if (user is null)
+            return false;
+
+        return true;
     }
 }

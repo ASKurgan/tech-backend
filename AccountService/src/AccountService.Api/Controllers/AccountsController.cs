@@ -1,17 +1,13 @@
 using AccountService.Api.Providers;
-using AccountService.Application.Commands.CompleteUploadPhoto;
 using AccountService.Application.Commands.EnrollParticipant;
 using AccountService.Application.Commands.GenerateConfirmationLink;
 using AccountService.Application.Commands.Login;
 using AccountService.Application.Commands.Logout;
 using AccountService.Application.Commands.RefreshTokens;
 using AccountService.Application.Commands.Register;
-using AccountService.Application.Commands.StartUploadFile;
-using AccountService.Application.Commands.UpdateUserEmail;
-using AccountService.Application.Commands.UpdateUserFullName;
-using AccountService.Application.Commands.UpdateUserName;
-using AccountService.Application.Commands.UpdateUserPhoneNumber;
-using AccountService.Application.Commands.UpdateUserSocialNetworks;
+using AccountService.Application.Commands.UpdateEmail;
+using AccountService.Application.Commands.UpdatePhoneNumber;
+using AccountService.Application.Commands.UpdateProfile;
 using AccountService.Application.Commands.VerifyConfirmationLink;
 using AccountService.Application.Queries.GetUserById;
 using AccountService.Application.Queries.GetUsers;
@@ -179,56 +175,7 @@ public class AccountsController : ApplicationController
         return Ok(result.Value);
     }
 
-    // TODO: уберите это отсюда
-    [HttpPost("/start-upload-photo")]
-    [Permission(Permissions.Issues.UPDATE_ISSUE)]
-    public async Task<IActionResult> StartUploadPhoto(
-        [FromServices] StartUploadPhotoHandler handler,
-        [FromServices] UserScopedData userScopedData,
-        [FromBody] FileMetadataRequest request,
-        CancellationToken cancellationToken = default)
-    {
-        var command = new StartUploadPhotoCommand(
-            userScopedData.UserId,
-            request.FileName,
-            request.ContentType,
-            request.FileSize);
-
-        var result = await handler.Handle(command, cancellationToken);
-
-        if (result.IsFailure)
-            result.Error.ToResponse();
-
-        return Ok(result.Value);
-    }
-
-    // TODO: уберите это отсюда
-    [HttpPost("/complete-upload-photo")]
-    [Permission(Permissions.Issues.UPDATE_ISSUE)]
-    public async Task<IActionResult> CompleteUploadPhoto(
-        [FromServices] CompleteUploadPhotoHandler handler,
-        [FromServices] UserScopedData userScopedData,
-        [FromBody] CompleteMultipartUploadRequest request,
-        CancellationToken cancellationToken = default)
-    {
-        var command = new CompleteUploadPhotoCommand(
-            userScopedData.UserId,
-            request.FileMetadata.FileName,
-            request.FileMetadata.ContentType,
-            request.FileMetadata.FileSize,
-            request.UploadId,
-            request.Parts);
-
-        var result = await handler.Handle(command, cancellationToken);
-
-        if (result.IsFailure)
-            result.Error.ToResponse();
-
-        return Ok();
-    }
-
-    // TODO: для общей стилистики можно переделать в log-out , но придется искать еще на фронте
-    [HttpPost("logOut")]
+    [HttpPost("log-out")]
     public async Task<IActionResult> Logout(
         [FromServices] LogoutHandler handler,
         CancellationToken cancellationToken)
@@ -272,33 +219,18 @@ public class AccountsController : ApplicationController
         return Ok();
     }
 
-    [Permission(Permissions.Accounts.ENROLL_ACCOUNT)]
-    [HttpPut("{userId:guid}/user-name")]
-    public async Task<ActionResult> UpdateUserName(
-        [FromRoute] Guid userId,
-        [FromBody] UpdateUserNameRequest request,
-        [FromServices] UpdateUserNameHandler handler,
+    // TODO: изменить разрешение
+    [Permission(Permissions.Accounts.READ_ACCOUNT)]
+    [HttpPut("profile")]
+    public async Task<ActionResult> UpdateProfile(
+        [FromBody] UpdateProfileRequest request,
+        [FromServices] UserScopedData userScopedData,
+        [FromServices] UpdateProfileHandler handler,
         CancellationToken cancellationToken = default)
     {
-        var command = new UpdateUserNameCommand(userId, request.UserName);
-
-        var result = await handler.Handle(command, cancellationToken);
-
-        if (result.IsFailure)
-            return result.Error.ToResponse();
-
-        return Ok(result.Value);
-    }
-
-    [Permission(Permissions.Accounts.ENROLL_ACCOUNT)]
-    [HttpPut("{userId:guid}/full-name")]
-    public async Task<ActionResult> UpdateUserFullName(
-        [FromRoute] Guid userId,
-        [FromBody] UpdateUserFullNameRequest request,
-        [FromServices] UpdateUserFullNameHandler handler,
-        CancellationToken cancellationToken = default)
-    {
-        var command = new UpdateUserFullNameCommand(userId, request.FullName);
+        var command = new UpdateProfileCommand(
+            userScopedData.UserId,
+            request);
 
         var result = await handler.Handle(command, cancellationToken);
 
@@ -310,13 +242,13 @@ public class AccountsController : ApplicationController
 
     [Permission(Permissions.Accounts.ENROLL_ACCOUNT)]
     [HttpPut("{userId:guid}/email")]
-    public async Task<ActionResult> UpdateUserEmail(
+    public async Task<ActionResult> UpdateEmail(
         [FromRoute] Guid userId,
-        [FromBody] UpdateUserEmailRequest request,
-        [FromServices] UpdateUserEmailHandler handler,
+        [FromBody] UpdateEmailRequest request,
+        [FromServices] UpdateEmailHandler handler,
         CancellationToken cancellationToken = default)
     {
-        var command = new UpdateUserEmailCommand(userId, request.Email);
+        var command = new UpdateEmailCommand(userId, request.Email);
 
         var result = await handler.Handle(command, cancellationToken);
 
@@ -328,31 +260,13 @@ public class AccountsController : ApplicationController
 
     [Permission(Permissions.Accounts.ENROLL_ACCOUNT)]
     [HttpPut("{userId:guid}/phone-number")]
-    public async Task<ActionResult> UpdateUserPhoneNumber(
+    public async Task<ActionResult> UpdatePhoneNumber(
         [FromRoute] Guid userId,
-        [FromBody] UpdateUserPhoneNumberRequest request,
-        [FromServices] UpdateUserPhoneNumberHandler handler,
+        [FromBody] UpdatePhoneNumberRequest request,
+        [FromServices] UpdatePhoneNumberHandler handler,
         CancellationToken cancellationToken = default)
     {
-        var command = new UpdateUserPhoneNumberCommand(userId, request.PhoneNumber);
-
-        var result = await handler.Handle(command, cancellationToken);
-
-        if (result.IsFailure)
-            return result.Error.ToResponse();
-
-        return Ok(result.Value);
-    }
-
-    [Permission(Permissions.Accounts.ENROLL_ACCOUNT)]
-    [HttpPut("{userId:guid}/social-networks")]
-    public async Task<ActionResult> UpdateUserSocialNetworks(
-        [FromRoute] Guid userId,
-        [FromBody] UpdateUserSocialNetworksRequest request,
-        [FromServices] UpdateUserSocialNetworksHandler handler,
-        CancellationToken cancellationToken = default)
-    {
-        var command = new UpdateUserSocialNetworksCommand(userId, request.SocialNetworks);
+        var command = new UpdatePhoneNumberCommand(userId, request.PhoneNumber);
 
         var result = await handler.Handle(command, cancellationToken);
 

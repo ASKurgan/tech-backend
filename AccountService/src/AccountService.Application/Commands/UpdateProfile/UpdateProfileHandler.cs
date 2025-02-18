@@ -1,4 +1,5 @@
 ﻿using AccountService.Application.Database;
+using AccountService.Domain;
 using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
@@ -7,18 +8,18 @@ using SachkovTech.Core.Database;
 using SachkovTech.Core.Validation;
 using SharedKernel;
 
-namespace AccountService.Application.Commands.UpdateUserName;
+namespace AccountService.Application.Commands.UpdateProfile;
 
-public class UpdateUserNameHandler : ICommandHandler<Guid, UpdateUserNameCommand>
+public class UpdateProfileHandler : ICommandHandler<Guid, UpdateProfileCommand>
 {
-    private readonly ILogger<UpdateUserNameHandler> _logger;
-    private readonly IValidator<UpdateUserNameCommand> _validator;
+    private readonly ILogger<UpdateProfileHandler> _logger;
+    private readonly IValidator<UpdateProfileCommand> _validator;
     private readonly IUserRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateUserNameHandler(
-        ILogger<UpdateUserNameHandler> logger,
-        IValidator<UpdateUserNameCommand> validator,
+    public UpdateProfileHandler(
+        ILogger<UpdateProfileHandler> logger,
+        IValidator<UpdateProfileCommand> validator,
         IUserRepository userRepository,
         IUnitOfWork unitOfWork)
     {
@@ -29,18 +30,29 @@ public class UpdateUserNameHandler : ICommandHandler<Guid, UpdateUserNameCommand
     }
 
     public async Task<Result<Guid, ErrorList>> Handle(
-        UpdateUserNameCommand command,
+        UpdateProfileCommand command,
         CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (validationResult.IsValid == false)
             return validationResult.ToList();
 
+        bool isUserExist = await _userRepository.IsUserExistsByUserName(command.Dto.UserName, cancellationToken);
+        if (isUserExist)
+            return UserErrors.UserAlreadyExist();
+
         var userResult = await _userRepository.GetById(command.Id, cancellationToken);
         if (userResult.IsFailure)
             return userResult.Error.ToErrorList();
 
-        userResult.Value.UpdateUserName(command.UserName);
+        var fullname = FullName.Create(command.Dto.FirstName, command.Dto.SecondName, command.Dto.ThirdName).Value;
+
+        var socials = command.Dto.Socials
+            .Select(s => SocialNetwork.Create(s.Name, s.Link).Value);
+
+        var updateResult = userResult.Value.UpdateProfile(command.Dto.UserName, fullname, socials);
+        if (updateResult.IsFailure)
+            return updateResult.Error;
 
         await _unitOfWork.SaveChanges(cancellationToken);
 

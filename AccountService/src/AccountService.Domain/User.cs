@@ -75,14 +75,20 @@ public class User : IdentityUser<Guid>
             _roles.Add(role);
     }
 
-    public void UpdateUserName(string userName)
+    public UnitResult<ErrorList> UpdateProfile(string userName, FullName fullName, IEnumerable<SocialNetwork> socials)
     {
-        UserName = userName;
-    }
+        var socialsList = socials.ToList();
 
-    public void UpdateFullName(FullName fullName)
-    {
+        if (socialsList.Count > 5)
+        {
+            return Errors.General.ValueIsInvalid("Социальные сети").ToErrorList();
+        }
+
+        UserName = userName;
         FullName = fullName;
+        _socialNetworks = socialsList;
+
+        return UnitResult.Success<ErrorList>();
     }
 
     public void UpdateEmail(string email)

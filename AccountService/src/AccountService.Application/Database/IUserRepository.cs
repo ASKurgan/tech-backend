@@ -11,4 +11,7 @@ public interface IUserRepository
     Task<User?> GetByPhoneNumber(
         string phoneNumber,
         CancellationToken cancellationToken = default);
+
+
+    Task<bool> IsUserExistsByUserName(string userName, CancellationToken cancellationToken);
 }

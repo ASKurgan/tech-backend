@@ -3,13 +3,12 @@ using AccountService.Application.Commands.Login;
 using AccountService.Application.Commands.Logout;
 using AccountService.Application.Commands.RefreshTokens;
 using AccountService.Application.Commands.Register;
-using AccountService.Application.Commands.UpdateUserEmail;
-using AccountService.Application.Commands.UpdateUserFullName;
-using AccountService.Application.Commands.UpdateUserName;
-using AccountService.Application.Commands.UpdateUserPhoneNumber;
-using AccountService.Application.Commands.UpdateUserSocialNetworks;
+using AccountService.Application.Commands.UpdateEmail;
+using AccountService.Application.Commands.UpdatePhoneNumber;
+using AccountService.Application.Commands.UpdateProfile;
 using AccountService.Application.Commands.VerifyConfirmationLink;
 using AccountService.Contracts.Dtos;
+using AccountService.Contracts.Requests;
 using AutoFixture;
 
 namespace AccountsService.IntegrationTests;
@@ -50,52 +49,34 @@ public static class FixtureExtensions
             .Create();
     }
 
-    public static UpdateUserEmailCommand CreateUpdateUserEmailCommand(
+    public static UpdateEmailCommand CreateUpdateUserEmailCommand(
         this IFixture fixture,
         Guid UserId,
         string email = "Email@email.com")
     {
-        return fixture.Build<UpdateUserEmailCommand>()
+        return fixture.Build<UpdateEmailCommand>()
             .With(u => u.UserId, UserId)
             .With(u => u.Email, email)
             .Create();
     }
 
-    public static UpdateUserFullNameCommand CreateUpdateUserFullNameCommand(this IFixture fixture, Guid userId)
+    public static UpdateProfileCommand CreateUpdateProfileCommand(this IFixture fixture, Guid userId)
     {
-        return fixture.Build<UpdateUserFullNameCommand>()
-            .With(c => c.UserId, userId)
-            .With(
-                u => u.FullName,
-                new FullNameDto("FirstName", "SecondName", "ThirdName"))
-            .Create();
-    }
-
-    public static UpdateUserNameCommand CreateUpdateUserNameCommand(this IFixture fixture, Guid userId)
-    {
-        return fixture.Build<UpdateUserNameCommand>()
+        return fixture.Build<UpdateProfileCommand>()
             .With(c => c.Id, userId)
-            .With(u => u.UserName, "UserName")
+            .With(u => u.Dto, new UpdateProfileRequest("username", "firstname", "secondname", "thirdname",
+                new List<SocialNetworkDto>
+                {
+                    new(link: "test", name: "test"),
+                }))
             .Create();
     }
 
-    public static UpdateUserPhoneNumberCommand CreateUpdateUserPhoneNumberCommand(this IFixture fixture, Guid userId)
+    public static UpdatePhoneNumberCommand CreateUpdateUserPhoneNumberCommand(this IFixture fixture, Guid userId)
     {
-        return fixture.Build<UpdateUserPhoneNumberCommand>()
+        return fixture.Build<UpdatePhoneNumberCommand>()
             .With(u => u.UserId, userId)
             .With(u => u.PhoneNumber, "1234567890")
-            .Create();
-    }
-
-    public static UpdateUserSocialNetworksCommand CreateUpdateUserSocialNetworksCommand(
-        this IFixture fixture,
-        Guid userId)
-    {
-        return fixture.Build<UpdateUserSocialNetworksCommand>()
-            .With(u => u.UserId, userId)
-            .With(
-                u => u.SocialNetworks,
-                [new SocialNetworkDto { Name = "Facebook", Link = "https://facebook.com" }])
             .Create();
     }
 
