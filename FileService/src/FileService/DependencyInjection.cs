@@ -1,61 +1,60 @@
-﻿using FileService.Jobs;
-using FileService.MongoDataAccess;
-using FileService.MongoDataAccess.Options;
-using FileService.Providers;
-using Hangfire;
-using Hangfire.PostgreSql;
-using Minio;
-using MongoDB.Driver;
+﻿using Amazon.S3;
+using FileService.Extensions;
+using FileService.Options;
+using FileService.Services;
 
 namespace FileService;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddRepositories(
+    public static IServiceCollection AddProgramDependencies(
         this IServiceCollection services,
-        ConfigurationManager configurations)
+        IConfiguration configuration)
     {
-        services.AddSingleton(new MongoClient(configurations.GetConnectionString("MongoConnection")));
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
 
-        services.AddScoped<FilesRepository>();
+        services.AddEndpoints();
+
+        services.AddCors();
+
+        services
+            .AddFilesOptions(configuration)
+            .AddMinio(configuration)
+            .FileServices(configuration);
+
+        services.AddScoped<VideoProcessor>();
 
         return services;
     }
 
-    public static IServiceCollection AddMinio(
-        this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection FileServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<MinioOptions>(
-            configuration.GetSection(MinioOptions.MINIO));
+        services.AddSingleton<FileTypeResolver>();
 
-        services.AddMinio(options =>
+        services.AddScoped<IS3Provider, S3Provider>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddMinio(this IServiceCollection services, IConfiguration configuration) =>
+        services.AddSingleton<IAmazonS3>(_ =>
         {
             var minioOptions = configuration.GetSection(MinioOptions.MINIO).Get<MinioOptions>()
                                ?? throw new ApplicationException("Missing minio configuration");
 
-            options.WithEndpoint(minioOptions.Endpoint);
+            var config = new AmazonS3Config
+            {
+                ServiceURL = minioOptions.Endpoint, ForcePathStyle = true, UseHttp = true,
+            };
 
-            options.WithCredentials(minioOptions.AccessKey, minioOptions.SecretKey);
-            options.WithSSL(minioOptions.WithSsl);
+            return new AmazonS3Client(minioOptions.AccessKey, minioOptions.SecretKey, config);
         });
 
-        services.AddScoped<IFileProvider, MinioProvider>();
-
-        return services;
-    }
-
-    public static IServiceCollection AddHangfire(
+    private static IServiceCollection AddFilesOptions(
         this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<HangfireContext>(_ =>
-            new HangfireContext(configuration.GetConnectionString("HangfireConnection")!));
-        
-        services.AddHangfire(config => config
-            .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-            .UseSimpleAssemblyNameTypeSerializer()
-            .UseRecommendedSerializerSettings()
-            .UsePostgreSqlStorage(c =>
-                c.UseNpgsqlConnection(configuration.GetConnectionString("HangfireConnection"))));
+        services.Configure<FilesOptions>(configuration.GetSection(FilesOptions.FILES));
 
         return services;
     }

@@ -1,139 +1,154 @@
 using System.Net.Http.Json;
-using Amazon.S3.Model;
 using FileService.Contracts;
-using FileService.Contracts.Responses;
 using FluentAssertions;
-using MongoDB.Driver;
-using CompleteMultipartUploadResponse = FileService.Contracts.Responses.CompleteMultipartUploadResponse;
 
 namespace FileService.IntegrationTests;
 
-public class MultipartUploadFileTest : FileServiceTestsBase
+public class MultipartUploadTests : FileServiceTestsBase
 {
-    public MultipartUploadFileTest(
-        IntegrationTestsWebFactory factory) : base(factory)
+    public MultipartUploadTests(IntegrationTestsWebFactory factory)
+        : base(factory)
     {
     }
 
     [Fact]
-    public async Task Multipart_Upload_File()
+    public async Task MultipartUpload_FullCycle_Success()
     {
-        // arrange
-        FileInfo fileInfo = new FileInfo(
-            $"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName}/test.mp4");
-        
+        // Arrange
+        FileInfo fileInfo = new(Path.Combine(AppContext.BaseDirectory, "Resources", "test.mp4"));
         var cancellationToken = new CancellationTokenSource().Token;
-        
-        var startMultipartResult = await StartMultipartUpload(fileInfo, cancellationToken);
-        
-        int chunkSize = 1024 * 1024 * 5;
-        
-        var parts = new List<PartETagInfo>();
+
+        // 1. Start Multipart Upload
+        var startResponse = await StartMultipartUpload(fileInfo, cancellationToken);
+
+        var parts = new List<PartETagDto>();
         int partNumber = 1;
-        
+
         await using var stream = fileInfo.OpenRead();
 
-        for (int start = 0; start < fileInfo.Length; start += chunkSize)
+        // 2. Upload File Parts
+        for (int i = 0; i < startResponse.TotalChunksCount; i++)
         {
-            byte[] chunk = new byte[chunkSize];
-            await stream.ReadAsync(chunk, 0, chunkSize, cancellationToken);
+            byte[] chunk = new byte[startResponse.ChunkSize];
+            int bytesRead = await stream.ReadAsync(chunk, 0, (int)startResponse.ChunkSize, cancellationToken);
 
-            var uploadPresignedPartUrlResult = await UploadPresignedPartUrl(
-                startMultipartResult,
-                partNumber,
-                cancellationToken);
+            if (bytesRead == 0)
+                break;
+
+            var chunkUrlResponse = await GenerateChunkUploadUrl(startResponse, partNumber, cancellationToken);
 
             var eTag = await UploadFilePartToMinio(
-                uploadPresignedPartUrlResult,
+                chunkUrlResponse.UploadUrl,
                 chunk,
-                cancellationToken); 
-            
-            parts.Add(new PartETagInfo(partNumber, eTag!));
+                cancellationToken);
+
+            parts.Add(new PartETagDto(partNumber, eTag!));
             partNumber++;
         }
-        
-        // act
-        var completeMultipartResult = await CompleteMultipartUpload(
-            startMultipartResult,
+
+        // 3. Complete Multipart Upload
+        var completeResponse = await CompleteMultipartUpload(
+            startResponse,
             parts,
             cancellationToken);
 
-        // assert
-        var file = MongoDbContext.Files.Find(f => f.StoragePath == completeMultipartResult.Id).FirstOrDefault();
+        completeResponse.Should().NotBeNull();
+        completeResponse.FileId.Should().Be(startResponse.FileId);
 
-        file.Should().NotBeNull();
+        // 4. Get Download URL
+        var downloadUrl = await GetDownloadUrl(
+            startResponse,
+            cancellationToken);
+
+        downloadUrl.Should().NotBeNullOrEmpty();
+
+        // 5. Validate the file exists in MinIO
+        var httpResponse = await HttpClient.GetAsync(downloadUrl, cancellationToken);
+        httpResponse.EnsureSuccessStatusCode();
     }
 
     private async Task<StartMultipartUploadResponse> StartMultipartUpload(
-        FileInfo fileInfo, 
-        CancellationToken cancellationToken = default)
+        FileInfo fileInfo,
+        CancellationToken cancellationToken)
     {
         var request = new StartMultipartUploadRequest(
             fileInfo.Name,
-            "video/mp4",
+            "videos",
             fileInfo.Length);
-        
+
         var response = await AppHttpClient
-            .PostAsJsonAsync("files/multipart", request, cancellationToken);
+            .PostAsJsonAsync("files/multipart/start", request, cancellationToken);
 
         response.EnsureSuccessStatusCode();
-        
-        return (await response.Content
-            .ReadFromJsonAsync<StartMultipartUploadResponse>(cancellationToken))!;
+
+        return (await response.Content.ReadFromJsonAsync<StartMultipartUploadResponse>(cancellationToken))!;
     }
-    
-    private async Task<UploadPresignedPartUrlResponse> UploadPresignedPartUrl(
-        StartMultipartUploadResponse startMultipartResult,
+
+    private async Task<GenerateChunkUploadUrlResponse> GenerateChunkUploadUrl(
+        StartMultipartUploadResponse startResponse,
         int partNumber,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
-        var request = new UploadPresignedPartUrlRequest
-            (startMultipartResult!.UploadId, partNumber);
+        var request = new GenerateChunkUploadUrlRequest(
+            startResponse.FileId,
+            startResponse.UploadId,
+            partNumber,
+            startResponse.BucketName);
 
         var response = await AppHttpClient
-            .PostAsJsonAsync(
-                $"files/{startMultipartResult.Key}/presigned-part",
-                request,
-                cancellationToken);
+            .PostAsJsonAsync("files/multipart/chunk-url", request, cancellationToken);
 
         response.EnsureSuccessStatusCode();
 
-        return (await response.Content
-            .ReadFromJsonAsync<UploadPresignedPartUrlResponse>(cancellationToken))!;
+        return (await response.Content.ReadFromJsonAsync<GenerateChunkUploadUrlResponse>(cancellationToken))!;
     }
 
     private async Task<string> UploadFilePartToMinio(
-        UploadPresignedPartUrlResponse uploadPresignedPartUrlResult,
+        string uploadUrl,
         byte[] chunk,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken)
     {
         using var content = new ByteArrayContent(chunk);
-                
-        var response = await HttpClient
-            .PutAsync(uploadPresignedPartUrlResult!.Url, content, cancellationToken);
 
-        var message = HttpClient.BaseAddress;
+        var response = await HttpClient.PutAsync(uploadUrl, content, cancellationToken);
 
         response.EnsureSuccessStatusCode();
-                
-        return response.Headers.GetValues("etag").FirstOrDefault()!;
+
+        return response.Headers.ETag?.Tag?.Trim('"')!;
     }
 
     private async Task<CompleteMultipartUploadResponse> CompleteMultipartUpload(
-        StartMultipartUploadResponse startMultipartResult,
-        List<PartETagInfo> parts,
-        CancellationToken cancellationToken = default)
+        StartMultipartUploadResponse startResponse,
+        List<PartETagDto> parts,
+        CancellationToken cancellationToken)
     {
-        var completeMultipartRequest = new CompleteMultipartRequest(startMultipartResult!.UploadId, parts);
+        var request = new CompleteMultipartUploadRequest(
+            startResponse.FileId,
+            startResponse.UploadId,
+            parts,
+            startResponse.BucketName);
 
-        var response =  await AppHttpClient.PostAsJsonAsync(
-            $"files/{startMultipartResult.Key}/complete-multipart",
-            completeMultipartRequest,
-            cancellationToken);
+        var response = await AppHttpClient
+            .PostAsJsonAsync("files/multipart/complete", request, cancellationToken);
 
         response.EnsureSuccessStatusCode();
 
-        return (await response.Content
-            .ReadFromJsonAsync<CompleteMultipartUploadResponse>(cancellationToken))!;
+        return (await response.Content.ReadFromJsonAsync<CompleteMultipartUploadResponse>(cancellationToken))!;
+    }
+
+    private async Task<string> GetDownloadUrl(
+        StartMultipartUploadResponse startResponse,
+        CancellationToken cancellationToken)
+    {
+        var request = new GetDownloadUrlRequest(startResponse.FileId, startResponse.BucketName);
+
+        var response = await AppHttpClient
+            .PostAsJsonAsync("files/download-url", request, cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+
+        var downloadResponse = await response.Content.ReadFromJsonAsync<GetDownloadUrlResponse>(cancellationToken);
+
+        return downloadResponse?.DownloadUrl ?? string.Empty;
     }
 }

@@ -1,75 +1,96 @@
-﻿using CSharpFunctionalExtensions;
-using FileService.Contracts;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Json;
+using CSharpFunctionalExtensions;
+using FileService.Contracts;
 
 namespace FileService.Communication;
 
+/// <summary>
+/// Клиент для взаимодействия с файловыми эндпоинтами.
+/// </summary>
 public class FileHttpClient(HttpClient httpClient) : IFileService
 {
     /// <summary>
-    /// Function get URLs to upload files from repository.
+    /// Инициализация multipart-загрузки большого файла.
     /// </summary>
-    /// <param name="request">Contains list of Guid files identificators needs to upload</param>
-    /// <param name="cancellationToken"></param>
-    /// <returns>Function returns list of record FileResponse with FileId and URL</returns>
-    public async Task<Result<IReadOnlyList<FileResponse>, string>> GetFilesPresignedUrls(
-        GetFilesPresignedUrlsRequest request, CancellationToken cancellationToken)
-    {
-        var response = await httpClient.PostAsJsonAsync("files/presigned-urls", request, cancellationToken);
-
-        if (response.StatusCode != HttpStatusCode.OK)
-        {
-            return "Fail to get files presigned urls";
-        }
-
-        var fileResponse = await response.Content.ReadFromJsonAsync<IEnumerable<FileResponse>>(cancellationToken);
-
-        return fileResponse?.ToList() ?? [];
-    }
-
-    /// <summary>
-    /// Function start multipart upload large file 
-    /// </summary>
-    /// <param name="request">Contains file name, type (e.g. *.jpeg or *.mov), size in bytes</param>
-    /// <param name="cancellationToken"></param>
-    /// <returns>Function returns record FileResponse with file upload session identifire and URL to upload file</returns>
-    public async Task<Result<FileResponse, string>> StartMultipartUpload(
-       StartMultipartUploadRequest request, CancellationToken cancellationToken)
+    /// <param name="request">Содержит имя, тип и размер файла.</param>
+    /// <param name="cancellationToken">Токен отмены.</param>
+    /// <returns>Ответ с идентификатором загрузки и URL для загрузки файла.</returns>
+    public async Task<Result<StartMultipartUploadResponse, string>> StartMultipartUpload(
+        StartMultipartUploadRequest request, CancellationToken cancellationToken)
     {
         var response = await httpClient.PostAsJsonAsync("files/multipart", request, cancellationToken);
 
         if (response.StatusCode != HttpStatusCode.OK)
         {
-            return "Fail to start multipart upload";
+            return $"Failed to start multipart upload: {response.ReasonPhrase}";
         }
 
-        var fileResponse = await response.Content.ReadFromJsonAsync<FileResponse>(cancellationToken);
+        var result = await response.Content.ReadFromJsonAsync<StartMultipartUploadResponse>(cancellationToken);
 
-        return fileResponse!;
+        return result!;
     }
 
     /// <summary>
-    /// Function complete multipart upload large file
+    /// Завершение multipart-загрузки большого файла.
     /// </summary>
-    /// <param name="request">Contains file upload session identifire and list of pairs: file part number and it's URL</param>
-    /// <param name="cancellationToken"></param>
-    /// <returns>Function returns record FileResponse with FileId and file URL in repository</returns>
-    public async Task<Result<FileResponse, string>> CompleteMultipartUpload(
-       CompleteMultipartRequest request, CancellationToken cancellationToken)
+    /// <param name="request">Содержит данные о частях и идентификатор загрузки.</param>
+    /// <param name="cancellationToken">Токен отмены.</param>
+    /// <returns>Ответ с идентификатором файла.</returns>
+    public async Task<Result<CompleteMultipartUploadResponse, string>> CompleteMultipartUpload(
+        CompleteMultipartUploadRequest request, CancellationToken cancellationToken)
     {
-        var response = await httpClient.PostAsJsonAsync(
-            $"files/{request.UploadId}/complete-multipart",
-            request,
-            cancellationToken);
+        var response = await httpClient.PostAsJsonAsync("files/multipart/complete", request, cancellationToken);
 
         if (response.StatusCode != HttpStatusCode.OK)
         {
-            return "Fail to complete multipart upload";
+            return $"Failed to complete multipart upload: {response.ReasonPhrase}";
         }
 
-        var fileResponse = await response.Content.ReadFromJsonAsync<FileResponse>(cancellationToken);
+        var result = await response.Content.ReadFromJsonAsync<CompleteMultipartUploadResponse>(cancellationToken);
 
-        return fileResponse!;
+        return result!;
+    }
+
+    /// <summary>
+    /// Генерация предподписанной ссылки для загрузки чанка.
+    /// </summary>
+    /// <param name="request">Содержит данные о части файла.</param>
+    /// <param name="cancellationToken">Токен отмены.</param>
+    /// <returns>Ответ с URL для загрузки чанка.</returns>
+    public async Task<Result<GenerateChunkUploadUrlResponse, string>> GenerateChunkUploadUrl(
+        GenerateChunkUploadUrlRequest request, CancellationToken cancellationToken)
+    {
+        var response = await httpClient.PostAsJsonAsync("files/multipart/chunk-url", request, cancellationToken);
+
+        if (response.StatusCode != HttpStatusCode.OK)
+        {
+            return $"Failed to generate chunk upload URL: {response.ReasonPhrase}";
+        }
+
+        var result = await response.Content.ReadFromJsonAsync<GenerateChunkUploadUrlResponse>(cancellationToken);
+
+        return result!;
+    }
+
+    /// <summary>
+    /// Получение ссылки на скачивание файла.
+    /// </summary>
+    /// <param name="request">Содержит идентификатор файла и имя бакета.</param>
+    /// <param name="cancellationToken">Токен отмены.</param>
+    /// <returns>Ответ с URL для скачивания файла.</returns>
+    public async Task<Result<GetDownloadUrlResponse, string>> GetDownloadUrl(
+        GetDownloadUrlRequest request, CancellationToken cancellationToken)
+    {
+        var response = await httpClient.PostAsJsonAsync("files/download-url", request, cancellationToken);
+
+        if (response.StatusCode != HttpStatusCode.OK)
+        {
+            return $"Failed to generate download URL: {response.ReasonPhrase}";
+        }
+
+        var result = await response.Content.ReadFromJsonAsync<GetDownloadUrlResponse>(cancellationToken);
+
+        return result!;
     }
 }

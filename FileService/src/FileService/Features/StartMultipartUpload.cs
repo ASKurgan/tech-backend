@@ -1,61 +1,39 @@
-﻿using Amazon.S3;
-using Amazon.S3.Model;
-using FileService.Endpoints;
-using FileService.Providers;
+﻿using FileService.Contracts;
+using FileService.Extensions;
+using FileService.Services;
 
 namespace FileService.Features;
 
 public static class StartMultipartUpload
 {
-    private record StartMultipartUploadRequest(
-        string FileName,
-        string ContentType,
-        long Size);
-
     public sealed class Endpoint : IEndpoint
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPost("files/multipart", Handler);
+            app.MapPost("files/multipart/start", Handler);
         }
     }
 
     private static async Task<IResult> Handler(
         StartMultipartUploadRequest request,
-        IAmazonS3 s3Client,
-        IFileProvider provider,
+        IS3Provider s3Provider,
         CancellationToken cancellationToken)
     {
-        try
-        {
-            var key = Guid.NewGuid().ToString();
-            
-            await provider.IsBucketExists(["bucket"], cancellationToken);
+        string fileId = Guid.NewGuid().ToString();
 
-            var startMultipartRequest = new InitiateMultipartUploadRequest
-            {
-                BucketName = "bucket",
-                Key = key,
-                ContentType = request.ContentType,
-                Metadata =
-                {
-                    ["file-name"] = request.FileName
-                }
-            };
+        (long chunkSize, int totalChunks) = ChunkSizeCalculator.Calculate(request.FileSize);
 
-            var response = await s3Client.InitiateMultipartUploadAsync(
-                startMultipartRequest,
-                cancellationToken);
+        string uploadId = await s3Provider.StartMultipartUpload(
+            request.FileName,
+            request.BucketName,
+            fileId,
+            cancellationToken);
 
-            return Results.Ok(new
-            {
-                key,
-                uploadId = response.UploadId
-            });
-        }
-        catch (AmazonS3Exception ex)
-        {
-            return Results.BadRequest($"S3 error starting multipart upload: {ex.Message}");
-        }
+        return Results.Ok(new StartMultipartUploadResponse(
+            fileId,
+            uploadId,
+            request.BucketName,
+            chunkSize,
+            totalChunks));
     }
 }
