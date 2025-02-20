@@ -14,6 +14,8 @@ public record LessonDataModel
 
     public Guid VideoId { get; init; }
 
+    public string FileLocation { get; init; } = string.Empty;
+
     public Guid PreviewId { get; init; }
 
     public Guid[] Tags { get; init; } = [];

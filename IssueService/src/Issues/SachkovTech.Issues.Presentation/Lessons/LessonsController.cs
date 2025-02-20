@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FileService.Contracts;
+using Microsoft.AspNetCore.Mvc;
 using SachkovTech.Framework;
 using SachkovTech.Framework.Authorization;
 using SachkovTech.Issues.Application.Features.Lessons.Command.AddIssueToLesson;
@@ -13,6 +14,7 @@ using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonById;
 using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonsWithPagination;
 using SachkovTech.Issues.Application.Features.Modules.Commands.UpdateLessonPosition;
 using SachkovTech.Issues.Contracts.Lesson;
+using SharedKernel;
 
 namespace SachkovTech.Issues.Presentation.Lessons;
 
@@ -51,9 +53,9 @@ public class LessonsController : ApplicationController
         return Ok(result.Value);
     }
 
-    [HttpPost("{lessonId:guid}/start-upload-video")]
+    [HttpPost("video")]
     [Permission(Permissions.Lessons.UPDATE_LESSON)]
-    public async Task<IActionResult> StartUploadVideo(
+    public async Task<ActionResult<StartMultipartUploadResponse>> StartUploadVideo(
         [FromServices] StartUploadVideoHandler handler,
         [FromBody] FileMetadataRequest request,
         CancellationToken cancellationToken = default)
@@ -61,7 +63,7 @@ public class LessonsController : ApplicationController
         var command = new StartUploadVideoCommand(
             request.FileName,
             request.ContentType,
-            request.FileSize);
+            request.Size);
 
         var result = await handler.Handle(command, cancellationToken);
 
@@ -74,24 +76,18 @@ public class LessonsController : ApplicationController
     [HttpPost]
     [Permission(Permissions.Lessons.CREATE_LESSON)]
     public async Task<IActionResult> CreateLesson(
-        [FromBody] AddLessonRequest request,
-        [FromServices] AddLessonHandler handler,
+        [FromBody] CreateLessonRequest request,
+        [FromServices] CreateLessonHandler handler,
         CancellationToken cancellationToken)
     {
-        var command = new AddLessonCommand(
+        var command = new CreateLessonCommand(
             request.ModuleId,
             request.Title,
             request.Description,
             request.Experience,
-            request.VideoId,
-            request.PreviewId,
             request.Tags,
             request.Issues,
-            request.FileName,
-            request.ContentType,
-            request.FileSize,
-            request.UploadId,
-            request.Parts);
+            request.MultipartRequest);
 
         var result = await handler.Handle(command, cancellationToken);
 

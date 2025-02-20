@@ -23,7 +23,7 @@ public class GetModulesWithPaginationHandler : IQueryHandler<PagedList<ModuleRes
     {
         var modulesQuery = _readDbContext.Modules.AsQueryable();
 
-        var totalCount = await modulesQuery.CountAsync(cancellationToken);
+        int totalCount = await modulesQuery.CountAsync(cancellationToken);
 
         if (!string.IsNullOrWhiteSpace(query.Title))
             modulesQuery = modulesQuery.Where(m => EF.Functions.Like(m.Title.ToLower(), $"%{query.Title.ToLower()}%"));

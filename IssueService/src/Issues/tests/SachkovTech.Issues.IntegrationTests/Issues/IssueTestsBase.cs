@@ -100,8 +100,6 @@ public class IssueTestsBase : IClassFixture<IntegrationTestsWebFactory>, IAsyncL
             Title.Create("title").Value,
             Description.Create("description").Value,
             Experience.Create(5).Value,
-            new Video(Guid.NewGuid()),
-            Guid.NewGuid(),
             [],
             []);
 

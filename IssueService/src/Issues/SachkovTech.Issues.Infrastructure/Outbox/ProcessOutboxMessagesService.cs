@@ -82,8 +82,8 @@ public class ProcessOutboxMessagesService
             var messageType = AssemblyReference.Assembly.GetType(message.Type)
                               ?? throw new NullReferenceException("Message type not found");
 
-            var deserializedMessage = JsonSerializer.Deserialize(message.Payload, messageType)
-                                      ?? throw new NullReferenceException("Message payload not found");
+            object? deserializedMessage = JsonSerializer.Deserialize(message.Payload, messageType)
+                                          ?? throw new NullReferenceException("Message payload not found");
 
             await pipeline.ExecuteAsync(
                 async token =>

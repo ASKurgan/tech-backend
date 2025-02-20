@@ -5,28 +5,30 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FileService.Features;
 
-public static class GetDownloadUrl
+public static class GetDownloadUrls
 {
     public sealed class Endpoint : IEndpoint
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPost("api/files/url", Handler);
+            app.MapPost("api/files/urls", Handler);
         }
     }
 
     private static async Task<IResult> Handler(
-        GetDownloadUrlRequest request,
+        GetDownloadUrlsRequest request,
         IS3Provider s3Provider,
         CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(request.FileId))
+        if (!request.Locations.Any())
         {
-            return Results.BadRequest("FileId обязателен.");
+            return Results.BadRequest("FileIds cannot be empty.");
         }
 
-        string downloadUrl = await s3Provider.GenerateDownloadUrlAsync(new FileLocation(request.FileId, request.BucketName), 24);
+        var downloadUrls = await s3Provider.GenerateDownloadUrlsAsync(
+            request.Locations,
+            24);
 
-        return Results.Ok(new GetDownloadUrlResponse(downloadUrl));
+        return Results.Ok(new GetDownloadUrlsResponse(downloadUrls));
     }
 }

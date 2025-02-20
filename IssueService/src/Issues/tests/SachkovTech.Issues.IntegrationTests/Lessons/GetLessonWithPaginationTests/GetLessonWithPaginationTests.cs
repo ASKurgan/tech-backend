@@ -32,15 +32,14 @@ public class GetLessonWithPaginationTests : LessonsTestsBase
         // Arrange
         var cancellationToken = new CancellationTokenSource().Token;
 
-        var countLessons = 5;
+        const int countLessons = 5;
         var lessons = await SeedLessonsToDatabase(WriteDbContext, countLessons, cancellationToken);
 
-        var lessonIds = lessons.SelectMany(l => new[] { l.Video.FileId, l.PreviewId });
+        var lessonIds = lessons.Select(l => l.Video.FileId);
         Factory.SetupSuccessFileServiceMock(lessonIds);
 
-        var page = 1;
-        var pageSize = countLessons;
-        var query = Fixture.CreateGetLessonsWithPaginationQuery(page, pageSize);
+        const int page = 1;
+        var query = Fixture.CreateGetLessonsWithPaginationQuery(page, countLessons);
 
         // Act
         var result = await _sut.Handle(query, cancellationToken);
@@ -60,8 +59,8 @@ public class GetLessonWithPaginationTests : LessonsTestsBase
         // Arrange
         var cancellationToken = new CancellationTokenSource().Token;
 
-        var invalidPage = -1;
-        var invalidPageSize = -1;
+        int invalidPage = -1;
+        int invalidPageSize = -1;
         var invalidQuery = new GetLessonsWithPaginationQuery(invalidPage, invalidPageSize);
 
         SetupFailureValidationResult(invalidQuery, cancellationToken);
@@ -103,8 +102,6 @@ public class GetLessonWithPaginationTests : LessonsTestsBase
             Title.Create("test title").Value,
             Description.Create("test description").Value,
             Experience.Create(1).Value,
-            new Video(Guid.NewGuid()),
-            Guid.NewGuid(),
             [Guid.NewGuid()],
             [Guid.NewGuid()])).ToList();
 

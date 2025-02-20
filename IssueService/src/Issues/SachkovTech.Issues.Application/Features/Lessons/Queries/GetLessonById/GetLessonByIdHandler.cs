@@ -28,21 +28,19 @@ public class GetLessonByIdHandler : IQueryHandlerWithResult<LessonResponse, GetL
         if (lesson is null)
             return Errors.General.NotFound(query.LessonId, "lesson").ToErrorList();
 
-        var fileServiceRequest = new GetFilesPresignedUrlsRequest([lesson.VideoId, lesson.PreviewId]);
+        var fileServiceRequest = new GetDownloadUrlRequest(lesson.VideoId.ToString(), lesson.FileLocation);
 
-        var urlsResult = await _fileService.GetFilesPresignedUrls(fileServiceRequest, cancellationToken);
-        if (urlsResult.IsFailure)
+        var urlResult = await _fileService.GetDownloadUrl(fileServiceRequest, cancellationToken);
+        if (urlResult.IsFailure)
             return Errors.General.NotFound().ToErrorList();
 
-        var urls = urlsResult.Value.ToDictionary(v => v.FileId, u => u.PresignedUrl);
-
-        var lessonResponse = ToLessonResponse(lesson, urls);
+        var lessonResponse = ToLessonResponse(lesson, urlResult.Value.DownloadUrl);
 
         return lessonResponse;
     }
 
-    private LessonResponse ToLessonResponse(LessonDataModel lesson, Dictionary<Guid, string> urls) =>
-        new LessonResponse
+    private LessonResponse ToLessonResponse(LessonDataModel lesson, string url) =>
+        new()
         {
             Id = lesson.Id,
             ModuleId = lesson.ModuleId,
@@ -50,9 +48,11 @@ public class GetLessonByIdHandler : IQueryHandlerWithResult<LessonResponse, GetL
             Description = lesson.Description,
             Experience = lesson.Experience,
             VideoId = lesson.VideoId,
-            VideoUrl = urls[lesson.VideoId],
+            VideoUrl = url,
             PreviewId = lesson.PreviewId,
-            PreviewUrl = urls[lesson.PreviewId],
+
+            // TODO: Сделайть получение превью
+            PreviewUrl = string.Empty,
 
             // TODO: Сделать получение Tags и Issues
             Tags = [],

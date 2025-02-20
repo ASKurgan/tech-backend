@@ -51,7 +51,7 @@ public class ModuleTestsBase : IClassFixture<ModuleTestWebFactory>, IAsyncLifeti
     {
         List<Module> modulesToSeed = [];
 
-        for (var i = 0; i < count; i++)
+        for (int i = 0; i < count; i++)
         {
             modulesToSeed.Add(Fixture.CreateModule());
         }
@@ -70,7 +70,7 @@ public class ModuleTestsBase : IClassFixture<ModuleTestWebFactory>, IAsyncLifeti
         if (module is null)
             throw new Exception($"Seeded Module {moduleId} not found, something wrong with DB");
 
-        for (var i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             module.AddIssue(IssueId.NewIssueId());
         }
@@ -87,7 +87,7 @@ public class ModuleTestsBase : IClassFixture<ModuleTestWebFactory>, IAsyncLifeti
         if (module is null)
             throw new Exception($"Seeded Module {moduleId} not found, something wrong with DB");
 
-        for (var i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             module.AddLesson(LessonId.NewLessonId());
         }

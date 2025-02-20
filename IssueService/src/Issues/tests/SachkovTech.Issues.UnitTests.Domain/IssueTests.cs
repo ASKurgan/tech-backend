@@ -96,7 +96,7 @@ public class IssueTests
         var invalidIssueId = IssueId.NewIssueId(); // Несуществующий ID
 
         // Act
-        var result = issue.Id.Equals(invalidIssueId);
+        bool result = issue.Id.Equals(invalidIssueId);
 
         // Assert
         result.Should().BeFalse();

@@ -22,13 +22,13 @@ public class Lesson : Entity<LessonId>, ISoftDeletable
 
     public Experience Experience { get; private set; }
 
-    public Guid PreviewId { get; private set; }
+    public Guid? PreviewId { get; private set; }
 
     public Guid[] Tags { get; private set; }
 
     public Guid[] Issues { get; private set; }
 
-    public Video Video { get; private set; }
+    public Video Video { get; private set; } = Video.None;
 
     public bool IsDeleted { get; private set; }
 
@@ -40,8 +40,6 @@ public class Lesson : Entity<LessonId>, ISoftDeletable
         Title title,
         Description description,
         Experience experience,
-        Video video,
-        Guid previewId,
         Guid[] tags,
         Guid[] issues)
         : base(id)
@@ -50,8 +48,6 @@ public class Lesson : Entity<LessonId>, ISoftDeletable
         Title = title;
         Description = description;
         Experience = experience;
-        Video = video;
-        PreviewId = previewId;
         Tags = tags;
         Issues = issues;
     }
@@ -94,6 +90,20 @@ public class Lesson : Entity<LessonId>, ISoftDeletable
     {
         IsDeleted = false;
         DeletionDate = null;
+    }
+
+    /// <summary>
+    /// Добавить видео к уроку.
+    /// </summary>
+    /// <param name="video">Видео.</param>
+    /// <returns>Выполненную операцию либо ошибку, если видео есть.</returns>
+    public UnitResult<Error> AddVideo(Video video)
+    {
+        if (Video != Video.None)
+            return Errors.General.AlreadyExist();
+
+        Video = video;
+        return UnitResult.Success<Error>();
     }
 
     /// <summary>

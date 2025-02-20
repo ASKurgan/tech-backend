@@ -43,4 +43,13 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="etc\key.private">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="etc\key.pub">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

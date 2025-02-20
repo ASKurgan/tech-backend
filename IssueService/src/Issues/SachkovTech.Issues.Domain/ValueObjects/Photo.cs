@@ -29,7 +29,7 @@ public class Photo : ComparableValueObject
             return Errors.General.ValueIsInvalid(fileName);
         }
 
-        var fileExtension = fileName[fileName.LastIndexOf('.')..];
+        string? fileExtension = fileName[fileName.LastIndexOf('.')..];
 
         if (PERMITED_EXTENSIONS.All(x => x != fileExtension))
         {

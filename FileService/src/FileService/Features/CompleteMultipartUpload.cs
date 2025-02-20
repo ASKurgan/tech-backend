@@ -2,6 +2,7 @@
 using FileService.Extensions;
 using FileService.Services;
 using MassTransit;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FileService.Features;
 
@@ -11,14 +12,14 @@ public static class CompleteMultipartUpload
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPost("files/multipart/complete", Handler);
+            app.MapPost("api/files/multipart/end", Handler);
         }
     }
 
     private static async Task<IResult> Handler(
         CompleteMultipartUploadRequest request,
         IS3Provider s3Provider,
-        VideoProcessor videoProcessor,
+        // VideoProcessor videoProcessor,
         IPublishEndpoint publishEndpoint,
         CancellationToken cancellationToken)
     {
@@ -32,8 +33,7 @@ public static class CompleteMultipartUpload
             .ToList();
 
         string key = await s3Provider.CompleteMultipartUploadAsync(
-            request.BucketName,
-            request.FileId,
+            new FileLocation(request.FileId, request.BucketName),
             request.UploadId,
             partETags,
             cancellationToken);

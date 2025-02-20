@@ -16,16 +16,16 @@ public class GetLessonsWithPaginationHandler
     : IQueryHandlerWithResult<PagedList<LessonResponse>, GetLessonsWithPaginationQuery>
 {
     private readonly IValidator<GetLessonsWithPaginationQuery> _validator;
-    private readonly IFileService _fileHttpClient;
+    private readonly IFileService _fileService;
     private readonly IReadDbContext _context;
 
     public GetLessonsWithPaginationHandler(
         IValidator<GetLessonsWithPaginationQuery> validator,
-        IFileService fileHttpClient,
+        IFileService fileService,
         IReadDbContext context)
     {
         _validator = validator;
-        _fileHttpClient = fileHttpClient;
+        _fileService = fileService;
         _context = context;
     }
 
@@ -35,27 +35,29 @@ public class GetLessonsWithPaginationHandler
         var validationResult = await _validator.ValidateAsync(query, cancellationToken);
         if (validationResult.IsValid == false)
             return validationResult.ToList();
+
         var lessonsQuery = _context.Lessons;
         var lessonsPagedList = await lessonsQuery.ToPagedList(query.Page, query.PageSize, cancellationToken);
 
-        var videoIds = lessonsPagedList.Items
-            .SelectMany(l => new[] { l.VideoId, l.PreviewId })
-            .ToList();
-        var videoRequest = new GetFilesPresignedUrlsRequest(videoIds);
+        var fileLocations = lessonsPagedList.Items
+            .Select(l => new FileLocation(l.VideoId.ToString(), l.FileLocation));
 
-        var videoUrlsResult = await _fileHttpClient.GetFilesPresignedUrls(videoRequest, cancellationToken);
+        var urlsRequest = new GetDownloadUrlsRequest(fileLocations);
+
+        var videoUrlsResult = await _fileService.GetDownloadUrls(urlsRequest, cancellationToken);
         if (videoUrlsResult.IsFailure)
             return Errors.General.NotFound().ToErrorList();
 
-        return ConvertToLessonResponses(videoUrlsResult.Value, lessonsPagedList);
+        var urlsDict = videoUrlsResult.Value.FileUrls
+            .Where(f => f != null)
+            .ToDictionary(f => f!.FileId, f => f!.Url);
+
+        return ConvertToLessonResponses(urlsDict, lessonsPagedList);
     }
 
     private PagedList<LessonResponse> ConvertToLessonResponses(
-        IReadOnlyList<FileResponse> videoUrlsResult, PagedList<LessonDataModel> lessonsPagedList)
+        Dictionary<string, string> urls, PagedList<LessonDataModel> lessonsPagedList)
     {
-        var urls = videoUrlsResult
-            .ToDictionary(v => v.FileId, u => u.PresignedUrl);
-
         var lessons = lessonsPagedList.Items
             .Select(lessonDto => new LessonResponse
             {
@@ -65,9 +67,11 @@ public class GetLessonsWithPaginationHandler
                 Description = lessonDto.Description,
                 Experience = lessonDto.Experience,
                 VideoId = lessonDto.VideoId,
-                VideoUrl = urls[lessonDto.VideoId],
+                VideoUrl = urls[lessonDto.VideoId.ToString()],
                 PreviewId = lessonDto.PreviewId,
-                PreviewUrl = urls[lessonDto.PreviewId],
+
+                // TODO: Сделать получение превью
+                PreviewUrl = string.Empty,
 
                 // TODO: Сделать получение Tags и Issues
                 Tags = [],
@@ -76,10 +80,7 @@ public class GetLessonsWithPaginationHandler
 
         return new PagedList<LessonResponse>
         {
-            Items = lessons.AsReadOnly(),
-            TotalCount = lessonsPagedList.TotalCount,
-            PageSize = lessonsPagedList.PageSize,
-            Page = lessonsPagedList.Page,
+            Items = lessons.AsReadOnly(), TotalCount = lessonsPagedList.TotalCount, PageSize = lessonsPagedList.PageSize, Page = lessonsPagedList.Page,
         };
     }
 }

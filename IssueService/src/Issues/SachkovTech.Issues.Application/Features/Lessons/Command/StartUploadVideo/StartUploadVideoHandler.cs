@@ -2,13 +2,14 @@
 using FileService.Communication;
 using FileService.Contracts;
 using SachkovTech.Core.Abstractions;
-using SachkovTech.Issues.Contracts.Lesson;
+using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Domain.ValueObjects;
 using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Command.StartUploadVideo;
 
-public class StartUploadVideoHandler : ICommandHandler<StartUploadFileResponse, StartUploadVideoCommand>
+// TODO: добавить валидатор
+public class StartUploadVideoHandler : ICommandHandler<StartMultipartUploadResponse, StartUploadVideoCommand>
 {
     private readonly IFileService _fileService;
 
@@ -17,22 +18,22 @@ public class StartUploadVideoHandler : ICommandHandler<StartUploadFileResponse, 
         _fileService = fileService;
     }
 
-    public async Task<Result<StartUploadFileResponse, ErrorList>> Handle(
+    public async Task<Result<StartMultipartUploadResponse, ErrorList>> Handle(
         StartUploadVideoCommand command,
         CancellationToken cancellationToken = default)
     {
         var validateResult = Video.Validate(
             command.FileName,
             command.ContentType,
-            command.FileSize);
+            command.Size);
 
         if (validateResult.IsFailure)
             return validateResult.Error.ToErrorList();
 
         var startMultipartRequest = new StartMultipartUploadRequest(
             command.FileName,
-            command.ContentType,
-            command.FileSize);
+            Video.LOCATION,
+            command.Size);
 
         var result = await _fileService.StartMultipartUpload(
             startMultipartRequest,
@@ -41,6 +42,6 @@ public class StartUploadVideoHandler : ICommandHandler<StartUploadFileResponse, 
         if (result.IsFailure)
             return Errors.General.ValueIsInvalid(result.Error).ToErrorList();
 
-        return new StartUploadFileResponse(result.Value.FileId, result.Value.PresignedUrl);
+        return result.Value;
     }
 }

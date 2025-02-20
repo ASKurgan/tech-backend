@@ -5,4 +5,4 @@ namespace SachkovTech.Issues.Application.Features.Lessons.Command.StartUploadVid
 public record StartUploadVideoCommand(
     string FileName,
     string ContentType,
-    long FileSize) : ICommand;
+    long Size) : ICommand;

@@ -48,7 +48,7 @@ internal class RsaKeyProvider : IRsaKeyProvider
             GenerateKeys();
         }
     }
-    
+
     /// <summary>
     /// Генерируем пару ключей и записываем в файлы в двоичном формате.
     /// </summary>

@@ -15,6 +15,8 @@ RUN dotnet nuget add source https://nuget.pkg.github.com/SachkovTech/index.json 
     --store-password-in-clear-text
 
 COPY ["src/AccountService.Api/AccountService.Api.csproj", "src/AccountService.Api/"]
+COPY ["src/AccountService.Api/etc/key.private", "src/AccountService.Api/etc/"]
+COPY ["src/AccountService.Api/etc/key.pub", "src/AccountService.Api/etc/"]
 COPY ["src/AccountService.Application/AccountService.Application.csproj", "src/AccountService.Application/"]
 COPY ["src/AccountService.Contracts/AccountService.Contracts.csproj", "src/AccountService.Contracts/"]
 COPY ["src/AccountService.Domain/AccountService.Domain.csproj", "src/AccountService.Domain/"]

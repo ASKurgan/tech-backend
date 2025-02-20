@@ -44,4 +44,10 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="etc\key.pub">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

@@ -24,7 +24,7 @@ public static class DependencyInjection
             .AddDatabase()
             .AddHostedServices()
             .AddServices()
-            .AddQuartzService()
+            //.AddQuartzService()
             .AddMessageBus(configuration)
             .AddMigrators();
 

@@ -1,6 +1,6 @@
 namespace FileService.Contracts;
 
-public record GenerateChunkUploadUrlRequest(
+public record GetChunkUploadUrlRequest(
     string FileId,
     string UploadId,
     int PartNumber,

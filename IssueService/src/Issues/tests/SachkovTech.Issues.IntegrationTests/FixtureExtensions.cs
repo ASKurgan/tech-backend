@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using FileService.Contracts;
 using SachkovTech.Issues.Application.Features.Issue.Commands.AddIssue;
 using SachkovTech.Issues.Application.Features.Issue.Commands.DeleteIssue;
 using SachkovTech.Issues.Application.Features.Issue.Commands.RestoreIssue;
@@ -20,15 +21,13 @@ namespace SachkovTech.Issues.IntegrationTests;
 
 public static class FixtureExtensions
 {
-    public static AddLessonCommand CreateAddLessonCommand(
+    public static CreateLessonCommand CreateAddLessonCommand(
         this IFixture fixture,
         Guid moduleId)
     {
-        return fixture.Build<AddLessonCommand>()
+        return fixture.Build<CreateLessonCommand>()
             .With(c => c.ModuleId, moduleId)
-            .With(c => c.FileName, "file.mp4")
-            .With(c => c.ContentType, "video/mp4")
-            .With(c => c.FileSize, 1024)
+            .With(c => c.MultipartRequest, new CompleteMultipartUploadRequest("test", "test", [], "test"))
             .Create();
     }
 

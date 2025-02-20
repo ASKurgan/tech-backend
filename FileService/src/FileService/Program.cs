@@ -17,7 +17,7 @@ builder.Services.AddMassTransit(configure =>
 {
     configure.SetKebabCaseEndpointNameFormatter();
 
-    configure.AddConsumer<VideoProcessConsumer>();
+    // configure.AddConsumer<VideoProcessConsumer>();
 
     configure.UsingRabbitMq((context, cfg) =>
     {
@@ -39,7 +39,13 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment(dockerEnv))
     app.UseSwaggerUI();
 }
 
-app.UseCors(c => c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+app.UseCors(config =>
+{
+    config.WithOrigins("http://localhost:5173")
+        .AllowCredentials()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+});
 
 app.MapEndpoints();
 

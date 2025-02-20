@@ -19,19 +19,16 @@ public static class DependencyInjection
         services.AddCors();
 
         services
-            .AddFilesOptions(configuration)
             .AddMinio(configuration)
             .FileServices(configuration);
 
-        services.AddScoped<VideoProcessor>();
+        // services.AddScoped<VideoProcessor>();
 
         return services;
     }
 
     private static IServiceCollection FileServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSingleton<FileTypeResolver>();
-
         services.AddScoped<IS3Provider, S3Provider>();
 
         return services;
@@ -50,12 +47,4 @@ public static class DependencyInjection
 
             return new AmazonS3Client(minioOptions.AccessKey, minioOptions.SecretKey, config);
         });
-
-    private static IServiceCollection AddFilesOptions(
-        this IServiceCollection services, IConfiguration configuration)
-    {
-        services.Configure<FilesOptions>(configuration.GetSection(FilesOptions.FILES));
-
-        return services;
-    }
 }

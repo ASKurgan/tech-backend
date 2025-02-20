@@ -66,7 +66,7 @@ public class IssuesReviewsController : ApplicationController
         [FromRoute] Guid issueReviewId,
         CancellationToken cancellationToken)
     {
-        var userId = HttpContext.User.FindFirstValue(CustomClaims.ID);
+        string? userId = HttpContext.User.FindFirstValue(CustomClaims.ID);
 
         if (userId == null)
             return Errors.Auth.InvalidCredentials().ToResponse();
@@ -89,7 +89,7 @@ public class IssuesReviewsController : ApplicationController
         [FromRoute] Guid issueReviewId,
         CancellationToken cancellationToken)
     {
-        var userId = HttpContext.User.FindFirstValue(CustomClaims.ID);
+        string? userId = HttpContext.User.FindFirstValue(CustomClaims.ID);
 
         if (userId == null)
             return Errors.Auth.InvalidCredentials().ToResponse();

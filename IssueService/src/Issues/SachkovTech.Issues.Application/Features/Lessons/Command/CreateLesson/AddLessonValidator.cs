@@ -5,7 +5,7 @@ using SachkovTech.Issues.Domain.ValueObjects;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Command.AddLesson;
 
-public class AddLessonValidator : AbstractValidator<AddLessonCommand>
+public class AddLessonValidator : AbstractValidator<CreateLessonCommand>
 {
     public AddLessonValidator()
     {

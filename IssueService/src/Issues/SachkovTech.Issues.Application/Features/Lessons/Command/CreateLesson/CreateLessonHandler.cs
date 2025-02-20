@@ -16,37 +16,39 @@ using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Command.AddLesson;
 
-public class AddLessonHandler : ICommandHandler<Guid, AddLessonCommand>
+public class CreateLessonHandler : ICommandHandler<Guid, CreateLessonCommand>
 {
-    private readonly IValidator<AddLessonCommand> _validator;
+    private readonly IValidator<CreateLessonCommand> _validator;
     private readonly ILessonsRepository _lessonsRepository;
     private readonly IModulesRepository _modulesRepository;
-    private readonly IFileService _fileService;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly ILogger<AddLessonHandler> _logger;
+    private readonly ILogger<CreateLessonHandler> _logger;
+    private readonly IFileService _fileService;
 
-    public AddLessonHandler(
-        IValidator<AddLessonCommand> validator,
+    public CreateLessonHandler(
+        IValidator<CreateLessonCommand> validator,
         ILessonsRepository lessonsRepository,
         IModulesRepository modulesRepository,
-        IFileService fileService,
         IUnitOfWork unitOfWork,
-        ILogger<AddLessonHandler> logger)
+        IFileService fileService,
+        ILogger<CreateLessonHandler> logger)
     {
         _validator = validator;
         _lessonsRepository = lessonsRepository;
         _modulesRepository = modulesRepository;
-        _fileService = fileService;
         _unitOfWork = unitOfWork;
         _logger = logger;
+        _fileService = fileService;
     }
 
     public async Task<Result<Guid, ErrorList>> Handle(
-        AddLessonCommand command, CancellationToken cancellationToken = default)
+        CreateLessonCommand command, CancellationToken cancellationToken = default)
     {
         var validationResult = await _validator.ValidateAsync(command, cancellationToken);
         if (validationResult.IsValid == false)
             return validationResult.ToList();
+
+        var transaction = await _unitOfWork.BeginTransaction(cancellationToken);
 
         (_, bool isFailure, Module? module, Error? error) =
             await _modulesRepository.GetById(command.ModuleId, cancellationToken);
@@ -58,64 +60,38 @@ public class AddLessonHandler : ICommandHandler<Guid, AddLessonCommand>
         if (isLessonExists.IsSuccess)
             return Errors.General.AlreadyExist().ToErrorList();
 
-        var videoResult = await CompleteUploadVideo(
-            command.FileName,
-            command.ContentType,
-            command.FileSize,
-            command.UploadId,
-            command.Parts,
-            cancellationToken);
-
-        if (videoResult.IsFailure)
-            return videoResult.Error.ToErrorList();
-
-        var lesson = CreateLesson(command, videoResult.Value);
-
-        await _lessonsRepository.Add(lesson, cancellationToken);
-
-        module.AddLesson(lesson.Id);
-
-        await _unitOfWork.SaveChanges(cancellationToken);
-
-        _logger.Log(LogLevel.Information, "Added new lesson with {LessonId}", lesson.Id);
-
-        return lesson.Id.Value;
-    }
-
-    private Lesson CreateLesson(AddLessonCommand command, Video video) =>
-        new(LessonId.NewLessonId(),
+        var lesson = new Lesson(
+            LessonId.NewLessonId(),
             command.ModuleId,
             Title.Create(command.Title).Value,
             Description.Create(command.Description).Value,
             Experience.Create(command.Experience).Value,
-            video,
-            command.PreviewId,
             command.Tags.ToArray(),
             command.Issues.ToArray());
 
-    private async Task<Result<Video, Error>> CompleteUploadVideo(
-        string fileName,
-        string contentType,
-        long fileSize,
-        string uploadId,
-        List<PartETagInfo> parts,
-        CancellationToken cancellationToken)
-    {
-        var validateResult = Video.Validate(
-            fileName,
-            contentType,
-            fileSize);
+        await _lessonsRepository.Add(lesson, cancellationToken);
 
-        if (validateResult.IsFailure)
-            return validateResult.Error;
+        await _unitOfWork.SaveChanges(cancellationToken);
 
-        var completeRequest = new CompleteMultipartRequest(uploadId, parts);
+        // TODO: реализовать через доменное событие
+        module.AddLesson(lesson.Id);
 
-        var result = await _fileService.CompleteMultipartUpload(completeRequest, cancellationToken);
+        await _unitOfWork.SaveChanges(cancellationToken);
 
+        var result = await _fileService.CompleteMultipartUpload(command.MultipartRequest, cancellationToken);
         if (result.IsFailure)
-            return Errors.General.ValueIsInvalid(result.Error);
+            return Errors.General.ValueIsInvalid(result.Error).ToErrorList();
 
-        return new Video(result.Value.FileId);
+        var video = new Video(Guid.Parse(result.Value.FileId));
+
+        lesson.AddVideo(video);
+
+        await _unitOfWork.SaveChanges(cancellationToken);
+
+        await transaction.CommitAsync(cancellationToken);
+
+        _logger.Log(LogLevel.Information, "Added new lesson with {LessonId}", lesson.Id);
+
+        return lesson.Id.Value;
     }
 }

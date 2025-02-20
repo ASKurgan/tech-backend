@@ -251,7 +251,7 @@ public class ModuleTests
         module.IssuesPosition.FirstOrDefault(x => x.IssueId == issueToDelete.IssueId)
             .Should().Be(null);
 
-        var isSortedAndIncrementing = module.IssuesPosition
+        bool isSortedAndIncrementing = module.IssuesPosition
             .Select((item, index) => item.Position.Value - index)
             .Distinct()
             .Count() == 1;
@@ -275,7 +275,7 @@ public class ModuleTests
         module.LessonsPosition.FirstOrDefault(x => x.LessonId == lessonToDelete.LessonId)
             .Should().Be(null);
 
-        var isSortedAndIncrementing = module.LessonsPosition
+        bool isSortedAndIncrementing = module.LessonsPosition
             .Select((item, index) => item.Position.Value - index)
             .Distinct()
             .Count() == 1;

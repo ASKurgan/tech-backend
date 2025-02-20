@@ -8,6 +8,7 @@ public static class TokenValidationParametersFactory
         new()
         {
             IssuerSigningKey = key,
+            ValidateIssuerSigningKey = true,
             ValidateIssuer = false,
             ValidateAudience = false,
             ValidateLifetime = true,

@@ -84,12 +84,12 @@ public class MultipartUploadTests : FileServiceTestsBase
         return (await response.Content.ReadFromJsonAsync<StartMultipartUploadResponse>(cancellationToken))!;
     }
 
-    private async Task<GenerateChunkUploadUrlResponse> GenerateChunkUploadUrl(
+    private async Task<GetChunkUploadUrlResponse> GenerateChunkUploadUrl(
         StartMultipartUploadResponse startResponse,
         int partNumber,
         CancellationToken cancellationToken)
     {
-        var request = new GenerateChunkUploadUrlRequest(
+        var request = new GetChunkUploadUrlRequest(
             startResponse.FileId,
             startResponse.UploadId,
             partNumber,
@@ -100,7 +100,7 @@ public class MultipartUploadTests : FileServiceTestsBase
 
         response.EnsureSuccessStatusCode();
 
-        return (await response.Content.ReadFromJsonAsync<GenerateChunkUploadUrlResponse>(cancellationToken))!;
+        return (await response.Content.ReadFromJsonAsync<GetChunkUploadUrlResponse>(cancellationToken))!;
     }
 
     private async Task<string> UploadFilePartToMinio(

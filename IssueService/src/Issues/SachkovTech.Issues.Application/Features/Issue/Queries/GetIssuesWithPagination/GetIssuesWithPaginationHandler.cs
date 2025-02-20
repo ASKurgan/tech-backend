@@ -28,7 +28,7 @@ public class GetIssuesWithPaginationHandler
     {
         var issuesQuery = _readDbContext.Issues;
 
-        var totalCount = await issuesQuery.CountAsync(cancellationToken);
+        int totalCount = await issuesQuery.CountAsync(cancellationToken);
 
         Expression<Func<IssueDataModel, object>> keySelector = query.SortBy?.ToLower() switch
         {
@@ -82,7 +82,7 @@ public class GetIssuesWithPaginationHandlerDapper
 
         var parameters = new DynamicParameters();
 
-        var totalCount = await connection.ExecuteScalarAsync<long>("SELECT COUNT(*) FROM issues.issues");
+        long totalCount = await connection.ExecuteScalarAsync<long>("SELECT COUNT(*) FROM issues.issues");
 
         var sql = new StringBuilder(
             """
@@ -118,7 +118,7 @@ public static class SqlExtensions
     {
         if (string.IsNullOrWhiteSpace(sortBy) || string.IsNullOrWhiteSpace(sortDirection)) return;
 
-        var validSortDirections = new[] { "asc", "desc" };
+        string[]? validSortDirections = new[] { "asc", "desc" };
 
         if (validSortDirections.Contains(sortDirection.ToLower()))
         {

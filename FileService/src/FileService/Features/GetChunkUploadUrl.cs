@@ -1,21 +1,22 @@
 ﻿using FileService.Contracts;
 using FileService.Extensions;
 using FileService.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FileService.Features;
 
-public static class GenerateChunkUploadUrl
+public static class GetChunkUploadUrl
 {
     public sealed class Endpoint : IEndpoint
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPost("files/multipart/chunk-url", Handler);
+            app.MapPost("api/files/multipart/url", Handler);
         }
     }
 
     private static async Task<IResult> Handler(
-        GenerateChunkUploadUrlRequest request,
+        GetChunkUploadUrlRequest request,
         IS3Provider s3Provider,
         CancellationToken cancellationToken)
     {
@@ -24,14 +25,12 @@ public static class GenerateChunkUploadUrl
             return Results.BadRequest("PartNumber должен быть положительным числом.");
         }
 
-        // Генерация ссылки для загрузки чанка
         string uploadUrl = await s3Provider.GenerateChunkUploadUrl(
-            request.BucketName,
-            request.FileId,
+            new FileLocation(request.FileId, request.BucketName),
             request.UploadId,
             request.PartNumber);
 
-        return Results.Ok(new GenerateChunkUploadUrlResponse(
+        return Results.Ok(new GetChunkUploadUrlResponse(
             uploadUrl,
             request.PartNumber));
     }

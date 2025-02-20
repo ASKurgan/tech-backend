@@ -25,7 +25,7 @@ public class GetCommentsWithPaginationHandler
         var commentsQuery = _readDbContext.Comments
             .Where(c => c.IssueReviewId == query.IssueReviewId);
 
-        var totalCount = await commentsQuery.CountAsync(cancellationToken);
+        int totalCount = await commentsQuery.CountAsync(cancellationToken);
 
         Expression<Func<CommentDataModel, object>> keySelector = query.SortBy?.ToLower() switch
         {

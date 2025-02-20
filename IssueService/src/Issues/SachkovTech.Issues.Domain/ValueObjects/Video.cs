@@ -5,13 +5,17 @@ namespace SachkovTech.Issues.Domain.ValueObjects;
 
 public class Video : ComparableValueObject
 {
-    public static readonly string[] PermitedFilesType =
+    public const string LOCATION = "videos";
+
+    public static readonly Video None = new(Guid.Empty);
+
+    private const long MAX_FILE_SIZE_BYTES = 5_368_709_120;
+
+    private static readonly string[] _availableFilesType =
         ["video/mp4", "video/mkv", "video/avi", "video/mov"];
 
-    public static readonly string[] PermitedExtensions =
+    private static readonly string[] _availableExtensions =
         ["mp4", "mkv", "avi", "mov"];
-
-    public const long MAX_FILE_SIZE = 4294967296;
 
     public Video(Guid fileId)
     {
@@ -20,6 +24,8 @@ public class Video : ComparableValueObject
 
     public Guid FileId { get; }
 
+    public string FileLocation { get; } = LOCATION;
+
     public static UnitResult<Error> Validate(string fileName, string contentType, long size)
     {
         if (string.IsNullOrWhiteSpace(fileName))
@@ -27,25 +33,25 @@ public class Video : ComparableValueObject
             return Errors.General.ValueIsInvalid(fileName);
         }
 
-        var lastDotIndex = fileName.LastIndexOf('.');
+        int lastDotIndex = fileName.LastIndexOf('.');
         if (lastDotIndex == -1 || lastDotIndex == fileName.Length - 1)
         {
             return Errors.General.Failure();
         }
 
         // Извлекаем расширение без точки
-        var fileExtension = fileName[(lastDotIndex + 1)..];
-        if (!PermitedExtensions.Contains(fileExtension, StringComparer.OrdinalIgnoreCase))
+        string fileExtension = fileName[(lastDotIndex + 1)..];
+        if (!_availableExtensions.Contains(fileExtension, StringComparer.OrdinalIgnoreCase))
         {
             return Errors.General.Failure();
         }
 
-        if (!PermitedFilesType.Contains(contentType, StringComparer.OrdinalIgnoreCase))
+        if (!_availableFilesType.Contains(contentType, StringComparer.OrdinalIgnoreCase))
         {
             return Errors.General.ValueIsInvalid(contentType);
         }
 
-        if (size > MAX_FILE_SIZE)
+        if (size > MAX_FILE_SIZE_BYTES)
         {
             return Errors.General.Failure();
         }
@@ -56,5 +62,6 @@ public class Video : ComparableValueObject
     protected override IEnumerable<IComparable> GetComparableEqualityComponents()
     {
         yield return FileId;
+        yield return FileLocation;
     }
 }

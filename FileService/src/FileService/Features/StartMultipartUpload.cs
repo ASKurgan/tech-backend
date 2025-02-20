@@ -1,6 +1,7 @@
 ﻿using FileService.Contracts;
 using FileService.Extensions;
 using FileService.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FileService.Features;
 
@@ -10,13 +11,12 @@ public static class StartMultipartUpload
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPost("files/multipart/start", Handler);
+            app.MapPost("api/files/multipart/start", Handler);
         }
     }
 
     private static async Task<IResult> Handler(
-        StartMultipartUploadRequest request,
-        IS3Provider s3Provider,
+        StartMultipartUploadRequest request, IS3Provider s3Provider,
         CancellationToken cancellationToken)
     {
         string fileId = Guid.NewGuid().ToString();
@@ -25,8 +25,7 @@ public static class StartMultipartUpload
 
         string uploadId = await s3Provider.StartMultipartUpload(
             request.FileName,
-            request.BucketName,
-            fileId,
+            new FileLocation(fileId, request.BucketName),
             cancellationToken);
 
         return Results.Ok(new StartMultipartUploadResponse(

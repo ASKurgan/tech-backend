@@ -30,7 +30,7 @@ public class GetLessonByIdTest : LessonsTestsBase
 
         var query = Fixture.CreateGetLessonByIdQuery(lesson.Id);
 
-        Factory.SetupSuccessFileServiceMock([lesson.PreviewId, lesson.Video.FileId]);
+        Factory.SetupSuccessFileServiceMock([lesson.Video.FileId]);
 
         // Act
         var result = await _sut.Handle(query, cancellationToken);
@@ -74,8 +74,6 @@ public class GetLessonByIdTest : LessonsTestsBase
             Title.Create("test title").Value,
             Description.Create("test description").Value,
             Experience.Create(1).Value,
-            new Video(Guid.NewGuid()),
-            Guid.NewGuid(),
             [Guid.NewGuid()],
             [Guid.NewGuid()]);
         WriteDbContext.Lessons.Add(lesson);

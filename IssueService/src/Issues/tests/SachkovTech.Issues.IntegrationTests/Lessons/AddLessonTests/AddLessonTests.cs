@@ -25,7 +25,7 @@ public class AddLessonTests : LessonsTestsBase
 
         var command = Fixture.CreateAddLessonCommand(moduleId);
 
-        var sut = Scope.ServiceProvider.GetRequiredService<ICommandHandler<Guid, AddLessonCommand>>();
+        var sut = Scope.ServiceProvider.GetRequiredService<ICommandHandler<Guid, CreateLessonCommand>>();
 
         // Act
         var result = await sut.Handle(command, cancellationToken);
@@ -53,7 +53,7 @@ public class AddLessonTests : LessonsTestsBase
 
         var command = Fixture.CreateAddLessonCommand(moduleId);
 
-        var sut = Scope.ServiceProvider.GetRequiredService<AddLessonHandler>();
+        var sut = Scope.ServiceProvider.GetRequiredService<CreateLessonHandler>();
 
         // Act
         var result = await sut.Handle(command, cancellationToken);

@@ -1,5 +1,4 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
 WORKDIR /app
 EXPOSE 8002
 
@@ -16,6 +15,7 @@ RUN dotnet nuget add source https://nuget.pkg.github.com/SachkovTech/index.json 
     --store-password-in-clear-text
 
 COPY ["src/SachkovTech.Web/SachkovTech.Web.csproj", "src/SachkovTech.Web/"]
+COPY ["src/SachkovTech.Web/etc/key.pub", "src/SachkovTech.Web/etc/"]
 COPY ["src/Issues/SachkovTech.Issues.Infrastructure/SachkovTech.Issues.Infrastructure.csproj", "src/Issues/SachkovTech.Issues.Infrastructure/"]
 COPY ["src/Issues/SachkovTech.Issues.Application/SachkovTech.Issues.Application.csproj", "src/Issues/SachkovTech.Issues.Application/"]
 COPY ["src/Issues/SachkovTech.Issues.Contracts/SachkovTech.Issues.Contracts.csproj", "src/Issues/SachkovTech.Issues.Contracts/"]

@@ -63,8 +63,8 @@ public class GetIssuesByModuleWithPaginationHandler
             "Description",
             "Title",
         };
-        var sortBy = allowedSortColumns.Contains(query.SortBy) ? query.SortBy : "Id";
-        var sortDirection = query.SortDirection?.ToUpper() == "DESC" ? "DESC" : "ASC";
+        string? sortBy = allowedSortColumns.Contains(query.SortBy) ? query.SortBy : "Id";
+        string? sortDirection = query.SortDirection?.ToUpper() == "DESC" ? "DESC" : "ASC";
         sqlBuilder.ApplySorting(sortBy, sortDirection);
         sqlBuilder.ApplyPagination(parameters, query.Page, query.PageSize);
 
@@ -81,7 +81,7 @@ public class GetIssuesByModuleWithPaginationHandler
             totalCountSql.Append("\nAND i.title ILIKE @Title");
         }
 
-        var totalCount = await connection.ExecuteScalarAsync<long>(
+        long totalCount = await connection.ExecuteScalarAsync<long>(
             totalCountSql.ToString(),
             parameters);
 
