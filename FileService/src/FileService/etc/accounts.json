@@ -1,0 +1,92 @@
+{
+  "Roles": {
+    "Admin": [
+      "lessons.read",
+      "lessons.create",
+      "lessons.update",
+      "lessons.delete",
+      "issues.read",
+      "issues.create",
+      "issues.update",
+      "issues.delete",
+      "solving.issues.read",
+      "solving.issues.create",
+      "solving.issues.update",
+      "review.issues.read",
+      "review.issues.create",
+      "review.issues.update",
+      "review.issues.comment",
+      "files.read",
+      "files.upload",
+      "accounts.enroll",
+      "modules.read",
+      "modules.create",
+      "modules.update",
+      "modules.delete",
+      "accounts.read"
+    ],
+    "Student": [
+      "lessons.read",
+      "issues.read",
+      "solving.issues.read",
+      "solving.issues.create",
+      "solving.issues.update",
+      "review.issues.read",
+      "review.issues.comment",
+      "files.read",
+      "files.upload"
+    ],
+    "Participant": [
+      "issues.read"
+    ],
+    "Support": [
+      "lessons.read",
+      "issues.read",
+      "review.issues.read",
+      "review.issues.create",
+      "review.issues.update",
+      "review.issues.comment",
+      "files.read",
+      "files.upload"
+    ]
+  },
+  "Permissions": {
+    "Lessons": [
+      "lessons.read",
+      "lessons.create",
+      "lessons.update",
+      "lessons.delete"
+    ],
+    "Modules": [
+      "modules.read",
+      "modules.create",
+      "modules.update",
+      "modules.delete"
+    ],
+    "Issues": [
+      "issues.read",
+      "issues.create",
+      "issues.update",
+      "issues.delete"
+    ],
+    "SolvingIssues": [
+      "solving.issues.read",
+      "solving.issues.create",
+      "solving.issues.update"
+    ],
+    "IssuesReview": [
+      "review.issues.read",
+      "review.issues.create",
+      "review.issues.update",
+      "review.issues.comment"
+    ],
+    "Files": [
+      "files.read",
+      "files.upload"
+    ],
+    "Accounts": [
+      "accounts.enroll",
+      "accounts.read"
+    ]
+  }
+}

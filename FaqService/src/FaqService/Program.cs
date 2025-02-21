@@ -1,5 +1,7 @@
+using System.Reflection;
 using FaqService;
-using FaqService.Middlewares;
+using SachkovTech.Framework.Endpoints;
+using SachkovTech.Framework.Middlewares;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services
     .AddLogging(builder.Configuration)
-    .AddHandlers()
+    .AddEndpoints(Assembly.GetExecutingAssembly())
     .AddDbContext()
     .AddRepositories()
     .AddElasticSearch(builder.Configuration);
@@ -26,6 +28,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapEndpoints();
 
 app.UseHttpsRedirection();
 

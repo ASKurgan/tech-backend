@@ -1,5 +1,5 @@
-﻿using FaqService.Entities;
-using FaqService.Enums;
+﻿using FaqService.Contracts.Enums;
+using FaqService.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using static FaqService.Constants.Constants;
@@ -53,19 +53,8 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
             .HasColumnName("status")
             .IsRequired();
 
-        builder.Property(p => p.AnswerId)
-            .HasColumnName("answer_id")
-            .IsRequired(false);
-
         builder.Property(p => p.CreatedAt)
             .HasColumnName("created_at")
             .IsRequired();
-        
-        builder.HasMany(b => b.Answers)
-            .WithOne()
-            .HasForeignKey("post_id")
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
-
     }
 }

@@ -1,7 +1,8 @@
 ﻿using FileService.Contracts;
-using FileService.Extensions;
 using FileService.Services;
-using Microsoft.AspNetCore.Mvc;
+using SachkovTech.Framework.Authorization;
+using SachkovTech.Framework.Endpoints;
+using SharedKernel;
 
 namespace FileService.Features;
 
@@ -11,7 +12,8 @@ public static class GetDownloadUrls
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPost("api/files/urls", Handler);
+            app.MapPost("api/files/urls", Handler)
+                .RequireAuthorization(Permissions.Files.READ_FILES);
         }
     }
 
@@ -22,13 +24,13 @@ public static class GetDownloadUrls
     {
         if (!request.Locations.Any())
         {
-            return Results.BadRequest("FileIds cannot be empty.");
+            return ResultResponse.BadRequest(Errors.General.ValueIsInvalid("FileIds"));
         }
 
         var downloadUrls = await s3Provider.GenerateDownloadUrlsAsync(
             request.Locations,
             24);
 
-        return Results.Ok(new GetDownloadUrlsResponse(downloadUrls));
+        return ResultResponse.Ok(new GetDownloadUrlsResponse(downloadUrls));
     }
 }

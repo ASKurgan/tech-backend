@@ -1,4 +1,4 @@
-using FaqService.Enums;
+using FaqService.Contracts.Enums;
 
 namespace FaqService.Dtos;
 

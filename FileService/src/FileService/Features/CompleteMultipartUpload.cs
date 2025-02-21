@@ -1,8 +1,9 @@
 ﻿using FileService.Contracts;
-using FileService.Extensions;
 using FileService.Services;
 using MassTransit;
-using Microsoft.AspNetCore.Mvc;
+using SachkovTech.Framework.Authorization;
+using SachkovTech.Framework.Endpoints;
+using SharedKernel;
 
 namespace FileService.Features;
 
@@ -12,7 +13,8 @@ public static class CompleteMultipartUpload
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPost("api/files/multipart/end", Handler);
+            app.MapPost("api/files/multipart/end", Handler)
+                .RequireAuthorization(Permissions.Files.UPLOAD_FILES);
         }
     }
 
@@ -25,7 +27,7 @@ public static class CompleteMultipartUpload
     {
         if (request.PartETags.Count == 0)
         {
-            return Results.BadRequest("PartETags должен содержать хотя бы одну часть.");
+            return ResultResponse.BadRequest(Errors.General.ValueIsInvalid("PartETags должен содержать хотя бы одну часть."));
         }
 
         var partETags = request.PartETags
@@ -38,8 +40,7 @@ public static class CompleteMultipartUpload
             partETags,
             cancellationToken);
 
-        //await publishEndpoint.Publish(new VideoUploadedEvent("videos", key), cancellationToken);
-
-        return Results.Ok(new CompleteMultipartUploadResponse(key));
+        // await publishEndpoint.Publish(new VideoUploadedEvent("videos", key), cancellationToken);
+        return ResultResponse.Ok(new CompleteMultipartUploadResponse(key));
     }
 }

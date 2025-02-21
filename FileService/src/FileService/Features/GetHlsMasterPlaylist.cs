@@ -1,4 +1,4 @@
-﻿// using FileService.Extensions;
+// using FileService.Extensions;
 // using FileService.Services;
 // using Microsoft.AspNetCore.Mvc;
 //

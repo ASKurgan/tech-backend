@@ -9,31 +9,30 @@ public class Answer : Entity<Guid>
     private Answer(
         Guid id,
         Guid postId,
-        string text,
-        Guid userId) : base(id)
+        Guid userId,
+        string text) : base(id)
     {
         PostId = postId;
-        Text = text;
         UserId = userId;
+        Text = text;
         CreatedAt = DateTime.UtcNow;
     }
 
-    public bool IsSolution { get; private set; } = false;
-    public Guid PostId { get; private set; } = default!;
-    public string Text { get; private set; } 
-    public Guid UserId { get; private set; } = default!;
-    public int Rating { get; private set; } = default;
-    public DateTime CreatedAt { get; private set; } = default!;
+    public Guid PostId { get; private set; }
+    public Guid UserId { get; private set; }
+    public string Text { get; private set; }
+    public int Rating { get; private set; }
+    public bool IsSolution { get; private set; }
+    public DateTime CreatedAt { get; private set; }
 
     public static Result<Answer, Error> Create(
-        Guid id,
         Guid postId,
-        string text,
-        Guid userId)
+        Guid userId,
+        string text)
     {
         if (string.IsNullOrWhiteSpace(text) || text.Length >= MAX_TEXT_LENGTH)
             return Error.Validation("text.length", "Invalid text length");
-        return new Answer(id, postId, text, userId);
+        return new Answer(Guid.NewGuid(), postId, userId, text);
     }
 
     public UnitResult<Error> UpdateMainInfo(string text)
@@ -48,7 +47,7 @@ public class Answer : Entity<Guid>
     {
         IsSolution = isSolution;
     }
-    
+
     public void IncreaseRating() => Rating++;
     public void DecreaseRating() => Rating--;
 }

@@ -48,4 +48,10 @@ public static class Permissions
         public const string ENROLL_ACCOUNT = "accounts.enroll";
         public const string READ_ACCOUNT = "accounts.read";
     }
+
+    public static class Files
+    {
+        public const string READ_FILES = "files.read";
+        public const string UPLOAD_FILES = "files.upload";
+    }
 }

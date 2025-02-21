@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Text.Json;
 using FileService.Contracts;
 using FluentAssertions;
 
@@ -77,11 +78,11 @@ public class MultipartUploadTests : FileServiceTestsBase
             fileInfo.Length);
 
         var response = await AppHttpClient
-            .PostAsJsonAsync("files/multipart/start", request, cancellationToken);
+            .PostAsJsonAsync("api/files/multipart/start", request, cancellationToken);
 
         response.EnsureSuccessStatusCode();
 
-        return (await response.Content.ReadFromJsonAsync<StartMultipartUploadResponse>(cancellationToken))!;
+        return await ParseEnvelopeResponse<StartMultipartUploadResponse>(response, cancellationToken);
     }
 
     private async Task<GetChunkUploadUrlResponse> GenerateChunkUploadUrl(
@@ -96,11 +97,11 @@ public class MultipartUploadTests : FileServiceTestsBase
             startResponse.BucketName);
 
         var response = await AppHttpClient
-            .PostAsJsonAsync("files/multipart/chunk-url", request, cancellationToken);
+            .PostAsJsonAsync("api/files/multipart/url", request, cancellationToken);
 
         response.EnsureSuccessStatusCode();
 
-        return (await response.Content.ReadFromJsonAsync<GetChunkUploadUrlResponse>(cancellationToken))!;
+        return await ParseEnvelopeResponse<GetChunkUploadUrlResponse>(response, cancellationToken);
     }
 
     private async Task<string> UploadFilePartToMinio(
@@ -129,11 +130,11 @@ public class MultipartUploadTests : FileServiceTestsBase
             startResponse.BucketName);
 
         var response = await AppHttpClient
-            .PostAsJsonAsync("files/multipart/complete", request, cancellationToken);
+            .PostAsJsonAsync("api/files/multipart/end", request, cancellationToken);
 
         response.EnsureSuccessStatusCode();
 
-        return (await response.Content.ReadFromJsonAsync<CompleteMultipartUploadResponse>(cancellationToken))!;
+        return await ParseEnvelopeResponse<CompleteMultipartUploadResponse>(response, cancellationToken);
     }
 
     private async Task<string> GetDownloadUrl(
@@ -143,12 +144,29 @@ public class MultipartUploadTests : FileServiceTestsBase
         var request = new GetDownloadUrlRequest(startResponse.FileId, startResponse.BucketName);
 
         var response = await AppHttpClient
-            .PostAsJsonAsync("files/download-url", request, cancellationToken);
+            .PostAsJsonAsync("api/files/url", request, cancellationToken);
 
         response.EnsureSuccessStatusCode();
 
-        var downloadResponse = await response.Content.ReadFromJsonAsync<GetDownloadUrlResponse>(cancellationToken);
+        var downloadResponse = await ParseEnvelopeResponse<GetDownloadUrlResponse>(response, cancellationToken);
 
         return downloadResponse?.DownloadUrl ?? string.Empty;
+    }
+
+    private async Task<T> ParseEnvelopeResponse<T>(HttpResponseMessage response, CancellationToken cancellationToken)
+    {
+        using var jsonDoc = await JsonDocument.ParseAsync(
+            await response.Content.ReadAsStreamAsync(cancellationToken),
+            cancellationToken: cancellationToken);
+
+        if (jsonDoc.RootElement.TryGetProperty("result", out var resultElement))
+        {
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+            return resultElement.Deserialize<T>(options) ??
+                   throw new InvalidOperationException($"Не удалось десериализовать 'result' в тип {typeof(T).Name}.");
+        }
+
+        throw new InvalidOperationException("В ответе отсутствует свойство 'result'.");
     }
 }

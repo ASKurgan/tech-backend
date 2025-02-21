@@ -1,7 +1,7 @@
 ﻿using FileService.Contracts;
-using FileService.Extensions;
 using FileService.Services;
-using Microsoft.AspNetCore.Mvc;
+using SachkovTech.Framework.Endpoints;
+using SharedKernel;
 
 namespace FileService.Features;
 
@@ -22,7 +22,8 @@ public static class GetChunkUploadUrl
     {
         if (request.PartNumber <= 0)
         {
-            return Results.BadRequest("PartNumber должен быть положительным числом.");
+            return ResultResponse.BadRequest(
+                Errors.General.ValueIsInvalid("PartNumber должен быть положительным числом."));
         }
 
         string uploadUrl = await s3Provider.GenerateChunkUploadUrl(
@@ -30,7 +31,7 @@ public static class GetChunkUploadUrl
             request.UploadId,
             request.PartNumber);
 
-        return Results.Ok(new GetChunkUploadUrlResponse(
+        return ResultResponse.Ok(new GetChunkUploadUrlResponse(
             uploadUrl,
             request.PartNumber));
     }

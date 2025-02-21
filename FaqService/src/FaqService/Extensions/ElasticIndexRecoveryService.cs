@@ -1,19 +1,21 @@
+using FaqService.Infrastructure;
 using FaqService.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace FaqService.Extensions;
 
 public class ElasticIndexRecoveryService
 {
-    private readonly PostsRepository _repository;
+    private readonly ApplicationDbContext _dbContext;
     private readonly SearchRepository _searchRepository;
     private readonly ILogger<ElasticIndexRecoveryService> _logger;
 
     public ElasticIndexRecoveryService(
-        PostsRepository repository,
+        ApplicationDbContext dbContext,
         SearchRepository searchRepository,
         ILogger<ElasticIndexRecoveryService> logger)
     {
-        _repository = repository;
+        _dbContext = dbContext;
         _searchRepository = searchRepository;
         _logger = logger;
     }
@@ -25,9 +27,9 @@ public class ElasticIndexRecoveryService
 
         _logger.LogWarning("Restoring previous index state for post {PostId}.", postId);
 
-        var postResult = await _repository.GetById(postId, cancellationToken);
+        var post = await _dbContext.Posts.SingleOrDefaultAsync(p => p.Id == postId, cancellationToken);
 
-        if (postResult.IsFailure)
+        if (post is null)
         {
             _logger.LogError("Failed to restore index for post {PostId}. Post not found after rollback.", postId);
             return;
@@ -35,7 +37,7 @@ public class ElasticIndexRecoveryService
 
         try
         {
-            await _searchRepository.IndexPost(postResult.Value);
+            await _searchRepository.IndexPost(post);
             _logger.LogInformation("Successfully restored index for post {PostId}.", postId);
         }
         catch (Exception ex)

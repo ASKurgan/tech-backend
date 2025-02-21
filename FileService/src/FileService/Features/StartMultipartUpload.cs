@@ -1,7 +1,7 @@
 ﻿using FileService.Contracts;
-using FileService.Extensions;
 using FileService.Services;
-using Microsoft.AspNetCore.Mvc;
+using SachkovTech.Framework.Authorization;
+using SachkovTech.Framework.Endpoints;
 
 namespace FileService.Features;
 
@@ -11,7 +11,8 @@ public static class StartMultipartUpload
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPost("api/files/multipart/start", Handler);
+            app.MapPost("api/files/multipart/start", Handler)
+                .RequireAuthorization(Permissions.Files.UPLOAD_FILES);
         }
     }
 
@@ -28,7 +29,7 @@ public static class StartMultipartUpload
             new FileLocation(fileId, request.BucketName),
             cancellationToken);
 
-        return Results.Ok(new StartMultipartUploadResponse(
+        return ResultResponse.Ok(new StartMultipartUploadResponse(
             fileId,
             uploadId,
             request.BucketName,

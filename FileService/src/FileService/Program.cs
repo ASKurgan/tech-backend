@@ -1,7 +1,7 @@
 using FileService;
-using FileService.Consumers;
-using FileService.Extensions;
 using MassTransit;
+using SachkovTech.Framework.Endpoints;
+using SachkovTech.Framework.Middlewares;
 
 const string dockerEnv = "Docker";
 
@@ -32,6 +32,8 @@ builder.Services.AddMassTransit(configure =>
 });
 
 var app = builder.Build();
+
+app.UseExceptionMiddleware();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment(dockerEnv))
 {

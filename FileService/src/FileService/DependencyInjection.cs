@@ -1,7 +1,10 @@
-﻿using Amazon.S3;
-using FileService.Extensions;
+﻿using System.Reflection;
+using Amazon.S3;
 using FileService.Options;
 using FileService.Services;
+using Microsoft.OpenApi.Models;
+using SachkovTech.Framework.Authorization;
+using SachkovTech.Framework.Endpoints;
 
 namespace FileService;
 
@@ -13,8 +16,11 @@ public static class DependencyInjection
     {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        services.AddSwaggerConfiguration();
 
-        services.AddEndpoints();
+        services.AddAuthServices(configuration);
+
+        services.AddEndpoints(Assembly.GetExecutingAssembly());
 
         services.AddCors();
 
@@ -22,8 +28,10 @@ public static class DependencyInjection
             .AddMinio(configuration)
             .FileServices(configuration);
 
-        // services.AddScoped<VideoProcessor>();
+        services.AddHttpContextAccessor()
+            .AddScoped<UserScopedData>();
 
+        // services.AddScoped<VideoProcessor>();
         return services;
     }
 
@@ -47,4 +55,32 @@ public static class DependencyInjection
 
             return new AmazonS3Client(minioOptions.AccessKey, minioOptions.SecretKey, config);
         });
+
+    private static IServiceCollection AddSwaggerConfiguration(this IServiceCollection services)
+    {
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1", });
+            c.AddSecurityDefinition(
+                "Bearer",
+                new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please insert JWT with Bearer into field",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                });
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer", },
+                    },
+                    []
+                },
+            });
+        });
+        return services;
+    }
 }

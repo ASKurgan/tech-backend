@@ -1,7 +1,8 @@
 ﻿using FileService.Contracts;
-using FileService.Extensions;
 using FileService.Services;
-using Microsoft.AspNetCore.Mvc;
+using SachkovTech.Framework.Authorization;
+using SachkovTech.Framework.Endpoints;
+using SharedKernel;
 
 namespace FileService.Features;
 
@@ -11,7 +12,8 @@ public static class GetDownloadUrl
     {
         public void MapEndpoint(IEndpointRouteBuilder app)
         {
-            app.MapPost("api/files/url", Handler);
+            app.MapPost("api/files/url", Handler)
+                .RequireAuthorization(Permissions.Files.READ_FILES);
         }
     }
 
@@ -20,13 +22,15 @@ public static class GetDownloadUrl
         IS3Provider s3Provider,
         CancellationToken cancellationToken)
     {
+        // Валидация входных данных
         if (string.IsNullOrEmpty(request.FileId))
         {
-            return Results.BadRequest("FileId обязателен.");
+            return ResultResponse.BadRequest(Errors.General.ValueIsInvalid("FileId обязателен."));
         }
 
-        string downloadUrl = await s3Provider.GenerateDownloadUrlAsync(new FileLocation(request.FileId, request.BucketName), 24);
+        string downloadUrl =
+            await s3Provider.GenerateDownloadUrlAsync(new FileLocation(request.FileId, request.BucketName), 24);
 
-        return Results.Ok(new GetDownloadUrlResponse(downloadUrl));
+        return ResultResponse.Ok(new GetDownloadUrlResponse(downloadUrl));
     }
 }

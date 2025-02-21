@@ -1,8 +1,6 @@
-using Elasticsearch.Net;
-using FaqService.Api.Contracts;
+using FaqService.Contracts;
 using FaqService.Entities;
 using FaqService.Features.Elastic;
-using FaqService.Features.Queries;
 using Nest;
 
 namespace FaqService.Infrastructure.Repositories;

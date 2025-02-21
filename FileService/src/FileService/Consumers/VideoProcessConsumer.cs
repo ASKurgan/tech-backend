@@ -1,4 +1,4 @@
-﻿// using FileService.Services;
+// using FileService.Services;
 // using MassTransit;
 //
 // namespace FileService.Consumers;
@@ -21,4 +21,3 @@
 //         await _videoProcessor.ProcessVideoAsync(context.Message.BucketName, context.Message.FileId, context.CancellationToken);
 //     }
 // }
-

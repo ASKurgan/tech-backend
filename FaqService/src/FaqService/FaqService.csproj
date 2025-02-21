@@ -10,6 +10,7 @@
     <ItemGroup>
         <PackageReference Include="CSharpFunctionalExtensions" Version="3.4.3" />
         <PackageReference Include="EntityFrameworkCore.NamingConventions" Version="8.0.0" />
+        <PackageReference Include="Framework" Version="1.2.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -18,7 +19,7 @@
         <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.2" />
         <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
-        <PackageReference Include="sharedkernel" Version="1.1.0" />
+        <PackageReference Include="sharedkernel" Version="1.1.4" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0"/>
     </ItemGroup>
 
@@ -26,6 +27,10 @@
       <Content Include="..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\FaqService.Contracts\FaqService.Contracts.csproj" />
     </ItemGroup>
 
 </Project>

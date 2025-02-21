@@ -1,13 +1,14 @@
 ﻿using FaqService.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Npgsql;
 
 namespace FaqService.Infrastructure;
 
 public class ApplicationDbContext(IConfiguration configuration) : DbContext
 {
     public DbSet<Post> Posts => Set<Post>();
+    
+    public DbSet<Answer> Answers => Set<Answer>();
 
     const string DATABASE = "Database";
 
