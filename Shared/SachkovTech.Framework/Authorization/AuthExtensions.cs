@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SachkovTech.Core.RsaKeys;
-using SachkovTech.Framework.HttpHandlers;
+using SachkovTech.Framework.Http;
 
 namespace SachkovTech.Framework.Authorization;
 
@@ -27,6 +27,8 @@ public static class AuthExtensions
         services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 
         services.AddHttpContextAccessor();
+        services.AddScoped<UserScopedData>();
+
         services.AddTransient<HttpTrackerHandler>();
 
         services

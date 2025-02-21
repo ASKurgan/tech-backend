@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
-using System.Text.Json;
 using FileService.Contracts;
 using FluentAssertions;
+using SharedKernel;
 
 namespace FileService.IntegrationTests;
 
@@ -75,6 +75,7 @@ public class MultipartUploadTests : FileServiceTestsBase
         var request = new StartMultipartUploadRequest(
             fileInfo.Name,
             "videos",
+            "video/mp4",
             fileInfo.Length);
 
         var response = await AppHttpClient
@@ -82,7 +83,9 @@ public class MultipartUploadTests : FileServiceTestsBase
 
         response.EnsureSuccessStatusCode();
 
-        return await ParseEnvelopeResponse<StartMultipartUploadResponse>(response, cancellationToken);
+        var result = await response.Content.ReadFromJsonAsync<Envelope<StartMultipartUploadResponse>>(cancellationToken);
+
+        return result!.Result!;
     }
 
     private async Task<GetChunkUploadUrlResponse> GenerateChunkUploadUrl(
@@ -101,7 +104,9 @@ public class MultipartUploadTests : FileServiceTestsBase
 
         response.EnsureSuccessStatusCode();
 
-        return await ParseEnvelopeResponse<GetChunkUploadUrlResponse>(response, cancellationToken);
+        var result = await response.Content.ReadFromJsonAsync<Envelope<GetChunkUploadUrlResponse>>(cancellationToken);
+
+        return result!.Result!;
     }
 
     private async Task<string> UploadFilePartToMinio(
@@ -134,7 +139,9 @@ public class MultipartUploadTests : FileServiceTestsBase
 
         response.EnsureSuccessStatusCode();
 
-        return await ParseEnvelopeResponse<CompleteMultipartUploadResponse>(response, cancellationToken);
+        var result = await response.Content.ReadFromJsonAsync<Envelope<CompleteMultipartUploadResponse>>(cancellationToken);
+
+        return result!.Result!;
     }
 
     private async Task<string> GetDownloadUrl(
@@ -148,25 +155,8 @@ public class MultipartUploadTests : FileServiceTestsBase
 
         response.EnsureSuccessStatusCode();
 
-        var downloadResponse = await ParseEnvelopeResponse<GetDownloadUrlResponse>(response, cancellationToken);
+        var result = await response.Content.ReadFromJsonAsync<Envelope<GetDownloadUrlResponse>>(cancellationToken);
 
-        return downloadResponse?.DownloadUrl ?? string.Empty;
-    }
-
-    private async Task<T> ParseEnvelopeResponse<T>(HttpResponseMessage response, CancellationToken cancellationToken)
-    {
-        using var jsonDoc = await JsonDocument.ParseAsync(
-            await response.Content.ReadAsStreamAsync(cancellationToken),
-            cancellationToken: cancellationToken);
-
-        if (jsonDoc.RootElement.TryGetProperty("result", out var resultElement))
-        {
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-
-            return resultElement.Deserialize<T>(options) ??
-                   throw new InvalidOperationException($"Не удалось десериализовать 'result' в тип {typeof(T).Name}.");
-        }
-
-        throw new InvalidOperationException("В ответе отсутствует свойство 'result'.");
+        return result!.Result?.DownloadUrl ?? string.Empty;
     }
 }

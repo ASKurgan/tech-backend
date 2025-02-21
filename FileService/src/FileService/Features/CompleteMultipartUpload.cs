@@ -27,7 +27,7 @@ public static class CompleteMultipartUpload
     {
         if (request.PartETags.Count == 0)
         {
-            return ResultResponse.BadRequest(Errors.General.ValueIsInvalid("PartETags должен содержать хотя бы одну часть."));
+            return ResultResponse.BadRequest<CompleteMultipartUploadResponse>(Errors.General.ValueIsInvalid("PartETags должен содержать хотя бы одну часть."));
         }
 
         var partETags = request.PartETags

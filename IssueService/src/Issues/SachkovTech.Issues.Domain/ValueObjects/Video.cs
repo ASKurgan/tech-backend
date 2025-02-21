@@ -10,9 +10,7 @@ public class Video : ComparableValueObject
     public static readonly Video None = new(Guid.Empty);
 
     private const long MAX_FILE_SIZE_BYTES = 5_368_709_120;
-
-    private static readonly string[] _availableFilesType =
-        ["video/mp4", "video/mkv", "video/avi", "video/mov"];
+    private const string AVAILABLE_CONTENT_TYPE = "video";
 
     private static readonly string[] _availableExtensions =
         ["mp4", "mkv", "avi", "mov"];
@@ -46,7 +44,7 @@ public class Video : ComparableValueObject
             return Errors.General.Failure();
         }
 
-        if (!_availableFilesType.Contains(contentType, StringComparer.OrdinalIgnoreCase))
+        if (!contentType.Contains(AVAILABLE_CONTENT_TYPE))
         {
             return Errors.General.ValueIsInvalid(contentType);
         }

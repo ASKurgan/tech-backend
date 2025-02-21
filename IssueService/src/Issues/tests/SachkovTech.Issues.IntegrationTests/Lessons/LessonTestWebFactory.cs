@@ -3,6 +3,7 @@ using FileService.Communication;
 using FileService.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
+using SharedKernel;
 
 namespace SachkovTech.Issues.IntegrationTests.Lessons;
 
@@ -15,11 +16,11 @@ public class LessonTestWebFactory : IntegrationTestsWebFactory
         var response = new CompleteMultipartUploadResponse("testUrl");
         _fileServiceMock
             .CompleteMultipartUpload(Arg.Any<CompleteMultipartUploadRequest>(), Arg.Any<CancellationToken>())
-            .Returns(Result.Success<CompleteMultipartUploadResponse, string>(response));
+            .Returns(Result.Success<CompleteMultipartUploadResponse, ErrorList>(response));
 
         _fileServiceMock
             .GetDownloadUrls(Arg.Any<GetDownloadUrlsRequest>(), Arg.Any<CancellationToken>())
-            .Returns(Result.Success<GetDownloadUrlsResponse, string>(new GetDownloadUrlsResponse([new FileUrl("test", "test")])));
+            .Returns(Result.Success<GetDownloadUrlsResponse, ErrorList>(new GetDownloadUrlsResponse([new FileUrl("test", "test")])));
     }
 
     public void SetupSuccessFileServiceMock(IEnumerable<Guid> fileIds)
@@ -27,25 +28,25 @@ public class LessonTestWebFactory : IntegrationTestsWebFactory
         var response = new CompleteMultipartUploadResponse("testUrl");
         _fileServiceMock
             .CompleteMultipartUpload(Arg.Any<CompleteMultipartUploadRequest>(), Arg.Any<CancellationToken>())
-            .Returns(Result.Success<CompleteMultipartUploadResponse, string>(response));
+            .Returns(Result.Success<CompleteMultipartUploadResponse, ErrorList>(response));
 
         var urls = fileIds
             .Select(id => new FileUrl($"testUrl/{id}", $"test/{id}"))
             .ToArray();
         _fileServiceMock
             .GetDownloadUrls(Arg.Any<GetDownloadUrlsRequest>(), Arg.Any<CancellationToken>())
-            .Returns(Result.Success<GetDownloadUrlsResponse, string>(new GetDownloadUrlsResponse(urls)));
+            .Returns(Result.Success<GetDownloadUrlsResponse, ErrorList>(new GetDownloadUrlsResponse(urls)));
     }
 
     public void SetupFailureFileServiceMock()
     {
         _fileServiceMock
             .CompleteMultipartUpload(Arg.Any<CompleteMultipartUploadRequest>(), Arg.Any<CancellationToken>())
-            .Returns(Result.Failure<CompleteMultipartUploadResponse, string>("Failed to upload file"));
+            .Returns(Result.Failure<CompleteMultipartUploadResponse, ErrorList>(Errors.General.Failure()));
 
         _fileServiceMock
             .GetDownloadUrls(Arg.Any<GetDownloadUrlsRequest>(), Arg.Any<CancellationToken>())
-            .Returns(Result.Failure<GetDownloadUrlsResponse, string>("Failed to upload file"));
+            .Returns(Result.Failure<GetDownloadUrlsResponse, ErrorList>(Errors.General.Failure()));
     }
 
     protected override void ConfigureDefaultServices(IServiceCollection services)

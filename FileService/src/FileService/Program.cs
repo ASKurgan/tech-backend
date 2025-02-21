@@ -2,6 +2,7 @@ using FileService;
 using MassTransit;
 using SachkovTech.Framework.Endpoints;
 using SachkovTech.Framework.Middlewares;
+using Serilog;
 
 const string dockerEnv = "Docker";
 
@@ -33,6 +34,7 @@ builder.Services.AddMassTransit(configure =>
 
 var app = builder.Build();
 
+app.UseSerilogRequestLogging();
 app.UseExceptionMiddleware();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment(dockerEnv))
@@ -49,6 +51,9 @@ app.UseCors(config =>
         .AllowAnyMethod();
 });
 
+app.UseAuthentication();
+app.UseScopeDataMiddleware();
+app.UseAuthorization();
 app.MapEndpoints();
 
 app.Run();

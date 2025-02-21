@@ -26,6 +26,7 @@ public static class StartMultipartUpload
 
         string uploadId = await s3Provider.StartMultipartUpload(
             request.FileName,
+            request.ContentType,
             new FileLocation(fileId, request.BucketName),
             cancellationToken);
 

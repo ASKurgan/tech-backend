@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using SachkovTech.Framework.Http;
 
 namespace FileService.Communication;
 
@@ -10,13 +11,12 @@ public static class FileServiceExtensions
         this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<FileServiceOptions>(configuration.GetSection(FileServiceOptions.FILE_SERVICE));
-
         services.AddHttpClient<IFileService, FileHttpClient>((sp, config) =>
         {
             var fileOptions = sp.GetRequiredService<IOptions<FileServiceOptions>>().Value;
 
             config.BaseAddress = new Uri(fileOptions.Url);
-        });
+        }).AddHttpMessageHandler<HttpTrackerHandler>();
 
         return services;
     }

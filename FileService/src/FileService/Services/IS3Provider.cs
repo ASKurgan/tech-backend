@@ -8,11 +8,13 @@ public interface IS3Provider
     /// Инициализация multipart-загрузки
     /// </summary>
     /// <param name="fileName">Название файла.</param>
+    /// <param name="contentType">Тип файла.</param>
     /// <param name="fileLocation">Локация файла.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Ответ multipart-загрузки из S3 клиента.</returns>
     Task<string> StartMultipartUpload(
         string fileName,
+        string contentType,
         FileLocation fileLocation,
         CancellationToken cancellationToken);
 

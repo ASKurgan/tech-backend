@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using FileService.Communication;
-using FileService.Contracts;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using SachkovTech.Core.Abstractions;
@@ -80,7 +79,7 @@ public class CreateLessonHandler : ICommandHandler<Guid, CreateLessonCommand>
 
         var result = await _fileService.CompleteMultipartUpload(command.MultipartRequest, cancellationToken);
         if (result.IsFailure)
-            return Errors.General.ValueIsInvalid(result.Error).ToErrorList();
+            return result.Error;
 
         var video = new Video(Guid.Parse(result.Value.FileId));
 

@@ -28,7 +28,7 @@ public class GetLessonByIdHandler : IQueryHandlerWithResult<LessonResponse, GetL
         if (lesson is null)
             return Errors.General.NotFound(query.LessonId, "lesson").ToErrorList();
 
-        var fileServiceRequest = new GetDownloadUrlRequest(lesson.VideoId.ToString(), lesson.FileLocation);
+        var fileServiceRequest = new GetDownloadUrlRequest(lesson.FileId.ToString(), lesson.FileLocation);
 
         var urlResult = await _fileService.GetDownloadUrl(fileServiceRequest, cancellationToken);
         if (urlResult.IsFailure)
@@ -47,7 +47,7 @@ public class GetLessonByIdHandler : IQueryHandlerWithResult<LessonResponse, GetL
             Title = lesson.Title,
             Description = lesson.Description,
             Experience = lesson.Experience,
-            VideoId = lesson.VideoId,
+            VideoId = lesson.FileId,
             VideoUrl = url,
             PreviewId = lesson.PreviewId,
 

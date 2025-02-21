@@ -22,7 +22,7 @@ public static class GetChunkUploadUrl
     {
         if (request.PartNumber <= 0)
         {
-            return ResultResponse.BadRequest(
+            return ResultResponse.BadRequest<GetChunkUploadUrlResponse>(
                 Errors.General.ValueIsInvalid("PartNumber должен быть положительным числом."));
         }
 

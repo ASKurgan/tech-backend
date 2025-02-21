@@ -12,7 +12,7 @@ public record LessonDataModel
 
     public int Experience { get; init; }
 
-    public Guid VideoId { get; init; }
+    public Guid FileId { get; init; }
 
     public string FileLocation { get; init; } = string.Empty;
 

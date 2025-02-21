@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using FileService.Contracts;
+using SharedKernel;
 
 namespace FileService.Communication;
 
@@ -11,7 +12,7 @@ public interface IFileService
     /// <param name="request">Содержит имя, тип и размер файла.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Ответ с идентификатором загрузки и URL для загрузки файла.</returns>
-    Task<Result<StartMultipartUploadResponse, string>> StartMultipartUpload(
+    Task<Result<StartMultipartUploadResponse, ErrorList>> StartMultipartUpload(
         StartMultipartUploadRequest request, CancellationToken cancellationToken);
 
     /// <summary>
@@ -20,7 +21,7 @@ public interface IFileService
     /// <param name="request">Содержит данные о частях и идентификатор загрузки.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Ответ с идентификатором файла.</returns>
-    Task<Result<CompleteMultipartUploadResponse, string>> CompleteMultipartUpload(
+    Task<Result<CompleteMultipartUploadResponse, ErrorList>> CompleteMultipartUpload(
         CompleteMultipartUploadRequest request, CancellationToken cancellationToken);
 
     /// <summary>
@@ -29,7 +30,7 @@ public interface IFileService
     /// <param name="request">Содержит данные о части файла.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Ответ с URL для загрузки чанка.</returns>
-    Task<Result<GetChunkUploadUrlResponse, string>> GetChunkUploadUrl(
+    Task<Result<GetChunkUploadUrlResponse, ErrorList>> GetChunkUploadUrl(
         GetChunkUploadUrlRequest request, CancellationToken cancellationToken);
 
     /// <summary>
@@ -38,7 +39,7 @@ public interface IFileService
     /// <param name="request">Содержит идентификатор файла и имя бакета.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Ответ с URL для скачивания файла.</returns>
-    Task<Result<GetDownloadUrlResponse, string>> GetDownloadUrl(
+    Task<Result<GetDownloadUrlResponse, ErrorList>> GetDownloadUrl(
         GetDownloadUrlRequest request, CancellationToken cancellationToken);
 
     /// <summary>
@@ -47,6 +48,6 @@ public interface IFileService
     /// <param name="request">Содержит идентификаторы файлов и имя бакета.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Ответ с URL для скачивания файлов.</returns>
-    Task<Result<GetDownloadUrlsResponse, string>> GetDownloadUrls(
+    Task<Result<GetDownloadUrlsResponse, ErrorList>> GetDownloadUrls(
         GetDownloadUrlsRequest request, CancellationToken cancellationToken);
 }

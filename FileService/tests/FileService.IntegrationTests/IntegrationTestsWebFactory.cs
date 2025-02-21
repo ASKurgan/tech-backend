@@ -1,4 +1,7 @@
 using Amazon.S3;
+using FileService.IntegrationTests.Auth;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -31,6 +34,21 @@ public class IntegrationTestsWebFactory : WebApplicationFactory<Program>, IAsync
     {
         builder.ConfigureTestServices(services =>
         {
+            services.RemoveAll(sd => sd.ServiceType == typeof(AuthenticationHandler<>));
+            services.RemoveAll<IAuthorizationPolicyProvider>();
+            services.RemoveAll<IAuthorizationHandler>();
+
+            services.AddSingleton<IAuthorizationPolicyProvider, TestPolicyProvider>();
+            services.AddSingleton<IAuthorizationHandler, TestRequirementHandler>();
+
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = "Test";
+                    options.DefaultChallengeScheme = "Test";
+                    options.DefaultSignInScheme = "Test";
+                })
+                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", null);
+
             services.RemoveAll<IAmazonS3>();
 
             ushort port = _minioContainer.GetMappedPublicPort(9000);

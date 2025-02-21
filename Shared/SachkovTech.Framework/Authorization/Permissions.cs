@@ -47,6 +47,7 @@ public static class Permissions
     {
         public const string ENROLL_ACCOUNT = "accounts.enroll";
         public const string READ_ACCOUNT = "accounts.read";
+        public const string UPDATE_ACCOUNT = "accounts.update";
     }
 
     public static class Files

@@ -7,6 +7,7 @@ using Polly;
 using Polly.Retry;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Infrastructure.DbContexts;
+using PredicateBuilder = Polly.PredicateBuilder;
 
 namespace SachkovTech.Issues.Infrastructure.Outbox;
 

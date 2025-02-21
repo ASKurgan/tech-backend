@@ -5,6 +5,7 @@ using FileService.Services;
 using Microsoft.OpenApi.Models;
 using SachkovTech.Framework.Authorization;
 using SachkovTech.Framework.Endpoints;
+using SachkovTech.Framework.Logging;
 
 namespace FileService;
 
@@ -17,6 +18,7 @@ public static class DependencyInjection
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddSwaggerConfiguration();
+        services.AddApplicationLogging(configuration);
 
         services.AddAuthServices(configuration);
 
@@ -28,10 +30,8 @@ public static class DependencyInjection
             .AddMinio(configuration)
             .FileServices(configuration);
 
-        services.AddHttpContextAccessor()
-            .AddScoped<UserScopedData>();
-
         // services.AddScoped<VideoProcessor>();
+
         return services;
     }
 

@@ -18,6 +18,7 @@ public class S3Provider : IS3Provider
 
     public async Task<string> StartMultipartUpload(
         string fileName,
+        string contentType,
         FileLocation location,
         CancellationToken cancellationToken)
     {
@@ -26,7 +27,7 @@ public class S3Provider : IS3Provider
         // TODO: отменить multipart загрузку если она уже идёт
         var initiateRequest = new InitiateMultipartUploadRequest
         {
-            BucketName = location.BucketName, Key = location.FileId,
+            BucketName = location.BucketName, Key = location.FileId, ContentType = contentType,
         };
 
         initiateRequest.Metadata.Add("file-name", fileName);

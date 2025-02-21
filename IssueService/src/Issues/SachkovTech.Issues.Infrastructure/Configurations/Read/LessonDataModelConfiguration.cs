@@ -28,12 +28,16 @@ public class LessonDataModelConfiguration : IEntityTypeConfiguration<LessonDataM
         builder.Property(b => b.Experience)
             .HasColumnName("experience");
 
-        builder.Property(l => l.VideoId)
+        builder.Property(l => l.FileId)
             .IsRequired()
-            .HasColumnName("video_id");
+            .HasColumnName("file_id");
+
+        builder.Property(l => l.FileLocation)
+            .IsRequired()
+            .HasColumnName("file_location");
 
         builder.Property(l => l.PreviewId)
-            .IsRequired()
+            .IsRequired(false)
             .HasColumnName("preview_id");
 
         builder.Property(l => l.Tags)

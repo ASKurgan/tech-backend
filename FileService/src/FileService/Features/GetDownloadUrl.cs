@@ -22,14 +22,12 @@ public static class GetDownloadUrl
         IS3Provider s3Provider,
         CancellationToken cancellationToken)
     {
-        // Валидация входных данных
         if (string.IsNullOrEmpty(request.FileId))
         {
-            return ResultResponse.BadRequest(Errors.General.ValueIsInvalid("FileId обязателен."));
+            return ResultResponse.BadRequest<GetChunkUploadUrlResponse>(Errors.General.ValueIsInvalid("FileId обязателен."));
         }
 
-        string downloadUrl =
-            await s3Provider.GenerateDownloadUrlAsync(new FileLocation(request.FileId, request.BucketName), 24);
+        string downloadUrl = await s3Provider.GenerateDownloadUrlAsync(new FileLocation(request.FileId, request.BucketName), 24);
 
         return ResultResponse.Ok(new GetDownloadUrlResponse(downloadUrl));
     }

@@ -1,7 +1,8 @@
-﻿using System.Net;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using CSharpFunctionalExtensions;
 using FileService.Contracts;
+using SachkovTech.Framework.Http;
+using SharedKernel;
 
 namespace FileService.Communication;
 
@@ -10,65 +11,38 @@ namespace FileService.Communication;
 /// </summary>
 public class FileHttpClient(HttpClient httpClient) : IFileService
 {
-    public async Task<Result<StartMultipartUploadResponse, string>> StartMultipartUpload(
+    public async Task<Result<StartMultipartUploadResponse, ErrorList>> StartMultipartUpload(
         StartMultipartUploadRequest request, CancellationToken cancellationToken)
     {
         var response = await httpClient.PostAsJsonAsync("api/files/multipart/start", request, cancellationToken);
-        response.EnsureSuccessStatusCode();
-
-        var result = await response.Content.ReadFromJsonAsync<StartMultipartUploadResponse>(cancellationToken);
-        return result!;
+        return await response.HandleResponseAsync<StartMultipartUploadResponse>(cancellationToken);
     }
 
-    public async Task<Result<CompleteMultipartUploadResponse, string>> CompleteMultipartUpload(
+    public async Task<Result<CompleteMultipartUploadResponse, ErrorList>> CompleteMultipartUpload(
         CompleteMultipartUploadRequest request, CancellationToken cancellationToken)
     {
         var response = await httpClient.PostAsJsonAsync("api/files/multipart/end", request, cancellationToken);
-        if (response.StatusCode != HttpStatusCode.OK)
-        {
-            return $"Failed to complete multipart upload: {response.ReasonPhrase}";
-        }
-
-        var result = await response.Content.ReadFromJsonAsync<CompleteMultipartUploadResponse>(cancellationToken);
-        return result!;
+        return await response.HandleResponseAsync<CompleteMultipartUploadResponse>(cancellationToken);
     }
 
-    public async Task<Result<GetChunkUploadUrlResponse, string>> GetChunkUploadUrl(
+    public async Task<Result<GetChunkUploadUrlResponse, ErrorList>> GetChunkUploadUrl(
         GetChunkUploadUrlRequest request, CancellationToken cancellationToken)
     {
         var response = await httpClient.PostAsJsonAsync("api/files/multipart/url", request, cancellationToken);
-        if (response.StatusCode != HttpStatusCode.OK)
-        {
-            return $"Failed to generate chunk upload URL: {response.ReasonPhrase}";
-        }
-
-        var result = await response.Content.ReadFromJsonAsync<GetChunkUploadUrlResponse>(cancellationToken);
-        return result!;
+        return await response.HandleResponseAsync<GetChunkUploadUrlResponse>(cancellationToken);
     }
 
-    public async Task<Result<GetDownloadUrlResponse, string>> GetDownloadUrl(
+    public async Task<Result<GetDownloadUrlResponse, ErrorList>> GetDownloadUrl(
         GetDownloadUrlRequest request, CancellationToken cancellationToken)
     {
         var response = await httpClient.PostAsJsonAsync("api/files/url", request, cancellationToken);
-        if (response.StatusCode != HttpStatusCode.OK)
-        {
-            return $"Failed to generate download URL: {response.ReasonPhrase}";
-        }
-
-        var result = await response.Content.ReadFromJsonAsync<GetDownloadUrlResponse>(cancellationToken);
-        return result!;
+        return await response.HandleResponseAsync<GetDownloadUrlResponse>(cancellationToken);
     }
 
-    public async Task<Result<GetDownloadUrlsResponse, string>> GetDownloadUrls(
+    public async Task<Result<GetDownloadUrlsResponse, ErrorList>> GetDownloadUrls(
         GetDownloadUrlsRequest request, CancellationToken cancellationToken)
     {
         var response = await httpClient.PostAsJsonAsync("api/files/urls", request, cancellationToken);
-        if (response.StatusCode != HttpStatusCode.OK)
-        {
-            return $"Failed to generate download URLs: {response.ReasonPhrase}";
-        }
-
-        var result = await response.Content.ReadFromJsonAsync<GetDownloadUrlsResponse>(cancellationToken);
-        return result!;
+        return await response.HandleResponseAsync<GetDownloadUrlsResponse>(cancellationToken);
     }
 }

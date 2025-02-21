@@ -40,19 +40,20 @@ public class GetIssuesWithPaginationHandler
             ? issuesQuery.OrderByDescending(keySelector)
             : issuesQuery.OrderBy(keySelector);
 
-        issuesQuery = issuesQuery.WhereIf(
+        issuesQuery = QueriesExtensions.WhereIf(
+            issuesQuery,
             !string.IsNullOrWhiteSpace(query.Title),
             i => i.Title.Contains(query.Title!));
 
         var issues = issuesQuery.ToList()
             .Select(i => new IssueResponse
-                {
-                    Id = i.Id,
-                    ModuleId = i.ModuleId,
-                    LessonId = i.LessonId,
-                    Title = i.Title,
-                    Description = i.Description,
-                });
+            {
+                Id = i.Id,
+                ModuleId = i.ModuleId,
+                LessonId = i.LessonId,
+                Title = i.Title,
+                Description = i.Description,
+            });
 
         return new PagedList<IssueResponse>
         {
@@ -67,7 +68,8 @@ public class GetIssuesWithPaginationHandlerDapper
     private readonly ISqlConnectionFactory _sqlConnectionFactory;
     private readonly ILogger<GetIssuesWithPaginationHandlerDapper> _logger;
 
-    public GetIssuesWithPaginationHandlerDapper(ISqlConnectionFactory sqlConnectionFactory,
+    public GetIssuesWithPaginationHandlerDapper(
+        ISqlConnectionFactory sqlConnectionFactory,
         ILogger<GetIssuesWithPaginationHandlerDapper> logger)
     {
         _sqlConnectionFactory = sqlConnectionFactory;
@@ -118,7 +120,10 @@ public static class SqlExtensions
     {
         if (string.IsNullOrWhiteSpace(sortBy) || string.IsNullOrWhiteSpace(sortDirection)) return;
 
-        string[]? validSortDirections = new[] { "asc", "desc" };
+        string[]? validSortDirections = new[]
+        {
+            "asc", "desc"
+        };
 
         if (validSortDirections.Contains(sortDirection.ToLower()))
         {

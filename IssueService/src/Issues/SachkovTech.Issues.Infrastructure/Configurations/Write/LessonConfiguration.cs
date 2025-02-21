@@ -47,7 +47,7 @@ public class LessonConfiguration : IEntityTypeConfiguration<Lesson>
         });
 
         builder.Property(l => l.PreviewId)
-            .IsRequired()
+            .IsRequired(false)
             .HasColumnName("preview_id");
 
         builder.Property(x => x.Tags)
@@ -58,9 +58,16 @@ public class LessonConfiguration : IEntityTypeConfiguration<Lesson>
             .HasColumnName("issues")
             .HasColumnType("uuid[]");
 
-        builder.Property(l => l.Video)
-            .HasConversion(v => v.FileId, value => new Video(value))
-            .IsRequired()
-            .HasColumnName("video_id");
+        builder
+            .ComplexProperty(l => l.Video, vb =>
+            {
+                vb.Property(t => t.FileId)
+                    .IsRequired()
+                    .HasColumnName("file_id");
+
+                vb.Property(t => t.FileLocation)
+                    .IsRequired()
+                    .HasColumnName("file_location");
+            });
     }
 }

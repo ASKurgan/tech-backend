@@ -40,7 +40,7 @@ public class GetLessonsWithPaginationHandler
         var lessonsPagedList = await lessonsQuery.ToPagedList(query.Page, query.PageSize, cancellationToken);
 
         var fileLocations = lessonsPagedList.Items
-            .Select(l => new FileLocation(l.VideoId.ToString(), l.FileLocation));
+            .Select(l => new FileLocation(l.FileId.ToString(), l.FileLocation));
 
         var urlsRequest = new GetDownloadUrlsRequest(fileLocations);
 
@@ -66,8 +66,8 @@ public class GetLessonsWithPaginationHandler
                 Title = lessonDto.Title,
                 Description = lessonDto.Description,
                 Experience = lessonDto.Experience,
-                VideoId = lessonDto.VideoId,
-                VideoUrl = urls[lessonDto.VideoId.ToString()],
+                VideoId = lessonDto.FileId,
+                VideoUrl = urls[lessonDto.FileId.ToString()],
                 PreviewId = lessonDto.PreviewId,
 
                 // TODO: Сделать получение превью

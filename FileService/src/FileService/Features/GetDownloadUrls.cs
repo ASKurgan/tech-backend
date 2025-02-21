@@ -1,5 +1,6 @@
 ﻿using FileService.Contracts;
 using FileService.Services;
+using Microsoft.AspNetCore.Http.HttpResults;
 using SachkovTech.Framework.Authorization;
 using SachkovTech.Framework.Endpoints;
 using SharedKernel;
@@ -24,7 +25,7 @@ public static class GetDownloadUrls
     {
         if (!request.Locations.Any())
         {
-            return ResultResponse.BadRequest(Errors.General.ValueIsInvalid("FileIds"));
+            return ResultResponse.BadRequest<GetChunkUploadUrlResponse>(Errors.General.ValueIsInvalid("FileIds"));
         }
 
         var downloadUrls = await s3Provider.GenerateDownloadUrlsAsync(

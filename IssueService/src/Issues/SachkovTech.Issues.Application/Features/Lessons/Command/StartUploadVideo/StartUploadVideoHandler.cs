@@ -2,7 +2,6 @@
 using FileService.Communication;
 using FileService.Contracts;
 using SachkovTech.Core.Abstractions;
-using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Domain.ValueObjects;
 using SharedKernel;
 
@@ -33,6 +32,7 @@ public class StartUploadVideoHandler : ICommandHandler<StartMultipartUploadRespo
         var startMultipartRequest = new StartMultipartUploadRequest(
             command.FileName,
             Video.LOCATION,
+            command.ContentType,
             command.Size);
 
         var result = await _fileService.StartMultipartUpload(
@@ -40,7 +40,7 @@ public class StartUploadVideoHandler : ICommandHandler<StartMultipartUploadRespo
             cancellationToken);
 
         if (result.IsFailure)
-            return Errors.General.ValueIsInvalid(result.Error).ToErrorList();
+            return result.Error;
 
         return result.Value;
     }

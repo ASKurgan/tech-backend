@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using SachkovTech.Framework.Authorization;
 
-namespace SachkovTech.Framework.HttpHandlers;
+namespace SachkovTech.Framework.Http;
 
 public class HttpTrackerHandler : DelegatingHandler
 {
