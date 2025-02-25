@@ -3,15 +3,15 @@ using Microsoft.AspNetCore.Mvc;
 using SachkovTech.Framework;
 using SachkovTech.Framework.Authorization;
 using SachkovTech.Issues.Application.Features.Lessons.Command.AddIssueToLesson;
-using SachkovTech.Issues.Application.Features.Lessons.Command.AddLesson;
 using SachkovTech.Issues.Application.Features.Lessons.Command.AddTagToLesson;
+using SachkovTech.Issues.Application.Features.Lessons.Command.CreateLesson;
 using SachkovTech.Issues.Application.Features.Lessons.Command.RemoveIssueFromLesson;
 using SachkovTech.Issues.Application.Features.Lessons.Command.RestoreLesson;
 using SachkovTech.Issues.Application.Features.Lessons.Command.SoftDeleteLesson;
 using SachkovTech.Issues.Application.Features.Lessons.Command.StartUploadVideo;
 using SachkovTech.Issues.Application.Features.Lessons.Command.UpdateLesson;
 using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonById;
-using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonsWithPagination;
+using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessons;
 using SachkovTech.Issues.Application.Features.Modules.Commands.UpdateLessonPosition;
 using SachkovTech.Issues.Contracts.Lesson;
 
@@ -24,7 +24,7 @@ public class LessonsController : ApplicationController
     public async Task<IActionResult> GetLessonsWithPagination(
         [FromQuery] int page,
         [FromQuery] int pageSize,
-        [FromServices] GetLessonsWithPaginationHandler handler,
+        [FromServices] GetLessonsHandler handler,
         CancellationToken cancellationToken)
     {
         var result = await handler.Handle(

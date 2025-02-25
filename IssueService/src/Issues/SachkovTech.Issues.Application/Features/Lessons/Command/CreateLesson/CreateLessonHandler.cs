@@ -13,7 +13,7 @@ using SachkovTech.Issues.Domain.ValueObjects;
 using SachkovTech.Issues.Domain.ValueObjects.Ids;
 using SharedKernel;
 
-namespace SachkovTech.Issues.Application.Features.Lessons.Command.AddLesson;
+namespace SachkovTech.Issues.Application.Features.Lessons.Command.CreateLesson;
 
 public class CreateLessonHandler : ICommandHandler<Guid, CreateLessonCommand>
 {

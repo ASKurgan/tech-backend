@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Database;
-using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonsWithPagination;
+using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessons;
 using SachkovTech.Issues.Contracts.Lesson;
 using SachkovTech.Issues.Domain.Issue.ValueObjects;
 using SachkovTech.Issues.Domain.Lesson;

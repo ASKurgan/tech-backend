@@ -2,7 +2,7 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Core.Abstractions;
-using SachkovTech.Issues.Application.Features.Lessons.Command.AddLesson;
+using SachkovTech.Issues.Application.Features.Lessons.Command.CreateLesson;
 
 namespace SachkovTech.Issues.IntegrationTests.Lessons.AddLessonTests;
 

@@ -5,22 +5,20 @@ using FluentValidation;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Database;
 using SachkovTech.Core.Validation;
-using SachkovTech.Issues.Application.DataModels;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Contracts.Lesson;
 using SachkovTech.Issues.Domain.Lesson;
 using SharedKernel;
 
-namespace SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonsWithPagination;
+namespace SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessons;
 
-public class GetLessonsWithPaginationHandler
-    : IQueryHandlerWithResult<PagedList<LessonResponse>, GetLessonsWithPaginationQuery>
+public class GetLessonsHandler : IQueryHandlerWithResult<PagedList<LessonResponse>, GetLessonsWithPaginationQuery>
 {
     private readonly IValidator<GetLessonsWithPaginationQuery> _validator;
     private readonly IFileService _fileService;
     private readonly IIssuesReadDbContext _readDbContext;
 
-    public GetLessonsWithPaginationHandler(
+    public GetLessonsHandler(
         IValidator<GetLessonsWithPaginationQuery> validator,
         IFileService fileService,
         IIssuesReadDbContext readDbContext)
