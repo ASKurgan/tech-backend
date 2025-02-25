@@ -15,7 +15,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Framework" Version="1.2.7" />
+      <PackageReference Include="Framework" Version="1.2.9" />
     </ItemGroup>
     
 </Project>

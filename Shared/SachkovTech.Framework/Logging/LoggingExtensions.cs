@@ -12,7 +12,9 @@ namespace SachkovTech.Framework.Logging;
 
 public static class LoggingExtensions
 {
-    public static IServiceCollection AddApplicationLogging(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddApplicationLoggingElastic(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
         var elasticOptions = configuration.GetSection(ElasticOptions.ELASTIC)
             .Get<ElasticOptions>() ?? throw new ArgumentNullException(nameof(ElasticOptions));
@@ -32,6 +34,24 @@ public static class LoggingExtensions
                     options.TextFormatting = new EcsTextFormatterConfiguration();
                     options.BootstrapMethod = BootstrapMethod.Silent;
                 })
+            .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
+            .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
+            .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)
+            .CreateLogger();
+
+        services.AddSerilog();
+
+        return services;
+    }
+
+    public static IServiceCollection AddApplicationLoggingSeq(
+        this IServiceCollection services, IConfiguration configuration)
+    {
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .WriteTo.Debug()
+            .WriteTo.Seq(configuration.GetConnectionString("Seq")
+                         ?? throw new ArgumentNullException("Seq"))
             .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
             .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
             .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)

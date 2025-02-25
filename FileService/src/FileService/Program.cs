@@ -14,24 +14,6 @@ builder.Configuration
 
 builder.Services.AddProgramDependencies(builder.Configuration);
 
-builder.Services.AddMassTransit(configure =>
-{
-    configure.SetKebabCaseEndpointNameFormatter();
-
-    // configure.AddConsumer<VideoProcessConsumer>();
-
-    configure.UsingRabbitMq((context, cfg) =>
-    {
-        cfg.Host(new Uri(builder.Configuration["RabbitMQ:Host"]!), h =>
-        {
-            h.Username(builder.Configuration["RabbitMQ:UserName"]!);
-            h.Password(builder.Configuration["RabbitMQ:Password"]!);
-        });
-
-        cfg.ConfigureEndpoints(context);
-    });
-});
-
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();

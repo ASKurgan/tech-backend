@@ -1,5 +1,6 @@
 services:
   accounts:
+    container_name: accounts
     build:
       context: ./AccountService
       dockerfile: ./src/AccountService.Api/Dockerfile
@@ -12,6 +13,7 @@ services:
       - postgres
       - minio
       - rabbitmq
+      - seq
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
@@ -19,6 +21,7 @@ services:
       - ASPNETCORE_URLS=http://+:8001
 
   issues:
+    container_name: issues
     build:
       context: ./IssueService
       dockerfile: ./src/SachkovTech.Web/Dockerfile
@@ -31,6 +34,7 @@ services:
       - postgres
       - minio
       - rabbitmq
+      - seq
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
@@ -38,6 +42,7 @@ services:
       - ASPNETCORE_URLS=http://+:8002
 
   files:
+    container_name: files
     build:
       context: ./FileService
       dockerfile: ./src/FileService/Dockerfile
@@ -49,9 +54,11 @@ services:
     depends_on:
       - minio
       - postgres
+      - seq
     restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
       - ASPNETCORE_URLS=http://+:8003
   
   # emails:
@@ -69,6 +76,7 @@ services:
   #   restart: always
   #   environment:
   #     - ASPNETCORE_ENVIRONMENT=Docker
+  #     - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
 
   # notifications:
   #   build:
@@ -85,6 +93,7 @@ services:
   #   restart: always
   #   environment:
   #     - ASPNETCORE_ENVIRONMENT=Docker
+  #     - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
   
   postgres:
     container_name: postgres
@@ -166,14 +175,14 @@ services:
   #     - prometheus_data:/prometheus
   #   restart: always
 
-  # jaeger:
-  #   image: jaegertracing/all-in-one:latest
-  #   container_name: jaeger
-  #   ports:
-  #     - 4317:4317
-  #     - 4318:4318
-  #     - 16686:16686
-  #   restart: always
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    ports:
+      - 4317:4317
+      - 4318:4318
+      - 16686:16686
+    restart: always
 
   # grafana:
   #   image: grafana/grafana
@@ -209,6 +218,16 @@ services:
     depends_on:
       - accounts
     restart: always
+  
+  seq:
+    image: datalust/seq:latest
+    restart: always
+    container_name: seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5341:5341"
+      - "8081:80"
 
 volumes:
   pgadmin:

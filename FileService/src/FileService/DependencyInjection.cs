@@ -2,10 +2,15 @@
 using Amazon.S3;
 using FileService.Options;
 using FileService.Services;
+using MassTransit;
+using MassTransit.Logging;
+using MassTransit.Monitoring;
 using Microsoft.OpenApi.Models;
 using SachkovTech.Framework.Authorization;
 using SachkovTech.Framework.Endpoints;
 using SachkovTech.Framework.Logging;
+using SachkovTech.Framework.Observability;
+using SachkovTech.Framework.Swagger;
 
 namespace FileService;
 
@@ -15,10 +20,13 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddInfrastructure(configuration);
+
+        services.AddCustomSwagger(configuration);
+
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
-        services.AddSwaggerConfiguration();
-        services.AddApplicationLogging(configuration);
+
+        services.AddApplicationLoggingSeq(configuration);
 
         services.AddAuthServices(configuration);
 
@@ -26,11 +34,22 @@ public static class DependencyInjection
 
         services.AddCors();
 
-        services
-            .AddMinio(configuration)
-            .FileServices(configuration);
+        services.AddObservability(configuration, [InstrumentationOptions.MeterName],
+            [DiagnosticHeaders.DefaultListenerName]);
 
         // services.AddScoped<VideoProcessor>();
+
+        return services;
+    }
+}
+
+public static class DependencyInjectionInfrastructure
+{
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddMessageBus(configuration)
+            .AddMinio(configuration)
+            .FileServices(configuration);
 
         return services;
     }
@@ -56,31 +75,26 @@ public static class DependencyInjection
             return new AmazonS3Client(minioOptions.AccessKey, minioOptions.SecretKey, config);
         });
 
-    private static IServiceCollection AddSwaggerConfiguration(this IServiceCollection services)
+    private static IServiceCollection AddMessageBus(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSwaggerGen(c =>
+        services.AddMassTransit(configure =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1", });
-            c.AddSecurityDefinition(
-                "Bearer",
-                new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please insert JWT with Bearer into field",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
-                });
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            configure.SetKebabCaseEndpointNameFormatter();
+
+            // configure.AddConsumer<VideoProcessConsumer>();
+
+            configure.UsingRabbitMq((context, cfg) =>
             {
+                cfg.Host(new Uri(configuration["RabbitMQ:Host"]!), h =>
                 {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer", },
-                    },
-                    []
-                },
+                    h.Username(configuration["RabbitMQ:UserName"]!);
+                    h.Password(configuration["RabbitMQ:Password"]!);
+                });
+
+                cfg.ConfigureEndpoints(context);
             });
         });
+
         return services;
     }
 }

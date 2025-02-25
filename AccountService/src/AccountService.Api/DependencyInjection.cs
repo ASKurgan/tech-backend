@@ -5,12 +5,12 @@ using AccountService.Infrastructure;
 using FluentValidation;
 using MassTransit.Logging;
 using MassTransit.Monitoring;
-using Microsoft.OpenApi.Models;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Caching;
 using SachkovTech.Framework.Authorization;
 using SachkovTech.Framework.Logging;
 using SachkovTech.Framework.Observability;
+using SachkovTech.Framework.Swagger;
 
 namespace AccountService.Api;
 
@@ -18,10 +18,7 @@ public static class DependencyInjection
 {
     public static void AddProgramDependencies(this IServiceCollection services, IConfiguration configuration)
     {
-        var assemblies = new[]
-        {
-            typeof(AccountService.Application.DependencyInjection).Assembly,
-        };
+        var assemblies = new[] { typeof(AccountService.Application.DependencyInjection).Assembly, };
 
         services.AddControllers();
 
@@ -36,54 +33,22 @@ public static class DependencyInjection
         IConfiguration configuration,
         params Assembly[] assemblies)
     {
+        services.AddApplicationLoggingSeq(configuration);
+
         services.AddEndpointsApiExplorer()
-            .AddApplicationLogging(configuration)
             .AddValidatorsFromAssemblies(assemblies)
             .AddHandlers(assemblies)
-            .AddSwaggerConfiguration()
+            .AddCustomSwagger(configuration)
             .AddAuthServices(configuration)
             .AddDistributedCache(configuration)
-            .AddObservability(configuration, [InstrumentationOptions.MeterName], [DiagnosticHeaders.DefaultListenerName]);
+            .AddObservability(configuration, [InstrumentationOptions.MeterName],
+                [DiagnosticHeaders.DefaultListenerName]);
 
         services.AddHttpContextAccessor()
             .AddScoped<UserScopedData>();
 
         services.AddScoped<HttpContextProvider>();
 
-        return services;
-    }
-
-    private static IServiceCollection AddSwaggerConfiguration(this IServiceCollection services)
-    {
-        services.AddSwaggerGen(c =>
-        {
-            c.SwaggerDoc("v1", new OpenApiInfo
-            {
-                Title = "My API", Version = "v1",
-            });
-            c.AddSecurityDefinition(
-                "Bearer",
-                new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please insert JWT with Bearer into field",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
-                });
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme, Id = "Bearer",
-                        },
-                    },
-                    []
-                },
-            });
-        });
         return services;
     }
 }
