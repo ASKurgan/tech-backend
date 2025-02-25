@@ -2,7 +2,7 @@ using AccountService.Contracts.Dtos;
 
 namespace AccountService.Contracts.Responses;
 
-public record UserResponse(
+public record UserDto(
     Guid Id,
     string? UserName,
     string? FirstName,

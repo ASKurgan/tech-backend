@@ -8,6 +8,7 @@ using SachkovTech.Core.Validation;
 using SachkovTech.Issues.Application.DataModels;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Contracts.Lesson;
+using SachkovTech.Issues.Domain.Lesson;
 using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonsWithPagination;
@@ -17,16 +18,16 @@ public class GetLessonsWithPaginationHandler
 {
     private readonly IValidator<GetLessonsWithPaginationQuery> _validator;
     private readonly IFileService _fileService;
-    private readonly IReadDbContext _context;
+    private readonly IIssuesReadDbContext _readDbContext;
 
     public GetLessonsWithPaginationHandler(
         IValidator<GetLessonsWithPaginationQuery> validator,
         IFileService fileService,
-        IReadDbContext context)
+        IIssuesReadDbContext readDbContext)
     {
         _validator = validator;
         _fileService = fileService;
-        _context = context;
+        _readDbContext = readDbContext;
     }
 
     public async Task<Result<PagedList<LessonResponse>, ErrorList>> Handle(
@@ -36,11 +37,11 @@ public class GetLessonsWithPaginationHandler
         if (validationResult.IsValid == false)
             return validationResult.ToList();
 
-        var lessonsQuery = _context.Lessons;
+        var lessonsQuery = _readDbContext.ReadLessons;
         var lessonsPagedList = await lessonsQuery.ToPagedList(query.Page, query.PageSize, cancellationToken);
 
         var fileLocations = lessonsPagedList.Items
-            .Select(l => new FileLocation(l.FileId.ToString(), l.FileLocation));
+            .Select(l => new FileLocation(l.Video.FileId.ToString(), l.Video.FileLocation));
 
         var urlsRequest = new GetDownloadUrlsRequest(fileLocations);
 
@@ -56,21 +57,21 @@ public class GetLessonsWithPaginationHandler
     }
 
     private PagedList<LessonResponse> ConvertToLessonResponses(
-        Dictionary<string, string> urls, PagedList<LessonDataModel> lessonsPagedList)
+        Dictionary<string, string> urls, PagedList<Lesson> lessonsPagedList)
     {
         var lessons = lessonsPagedList.Items
-            .Select(lessonDto => new LessonResponse
+            .Select(lesson => new LessonResponse
             {
-                Id = lessonDto.Id,
-                ModuleId = lessonDto.ModuleId,
-                Title = lessonDto.Title,
-                Description = lessonDto.Description,
-                Experience = lessonDto.Experience,
-                VideoId = lessonDto.FileId,
-                VideoUrl = urls[lessonDto.FileId.ToString()],
-                PreviewId = lessonDto.PreviewId,
+                Id = lesson.Id,
+                ModuleId = lesson.ModuleId,
+                Title = lesson.Title.Value,
+                Description = lesson.Description.Value,
+                Experience = lesson.Experience.Value,
+                VideoId = lesson.Video.FileId,
+                VideoUrl = urls[lesson.Video.FileId.ToString()],
 
                 // TODO: Сделать получение превью
+                PreviewId = Guid.Empty,
                 PreviewUrl = string.Empty,
 
                 // TODO: Сделать получение Tags и Issues

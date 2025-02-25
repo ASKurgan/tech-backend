@@ -3,14 +3,13 @@ using CSharpFunctionalExtensions;
 using Dapper;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Database;
-using SachkovTech.Issues.Application.Features.Issue.Queries.GetIssuesWithPagination;
 using SachkovTech.Issues.Contracts.Issue;
 using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Issue.Queries.GetIssuesByModuleWithPagination;
 
 public class GetIssuesByModuleWithPaginationHandler
-    : IQueryHandlerWithResult<PagedList<IssueResponse>, GetFilteredIssuesByModuleWithPaginationQuery>
+    : IQueryHandlerWithResult<PagedList<IssueDto>, GetFilteredIssuesByModuleWithPaginationQuery>
 {
     private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
@@ -19,7 +18,7 @@ public class GetIssuesByModuleWithPaginationHandler
         _sqlConnectionFactory = sqlConnectionFactory;
     }
 
-    public async Task<Result<PagedList<IssueResponse>, ErrorList>> Handle(
+    public async Task<Result<PagedList<IssueDto>, ErrorList>> Handle(
         GetFilteredIssuesByModuleWithPaginationQuery query,
         CancellationToken cancellationToken = default)
     {
@@ -29,21 +28,28 @@ public class GetIssuesByModuleWithPaginationHandler
 
         var sqlBuilder = new StringBuilder(
             """
+            WITH issues_positions AS (
+                SELECT
+                    m.id AS module_id,
+                    (ip->>'IssueId')::uuid AS issue_id,
+                    (ip->>'Position')::int AS position
+                FROM issues.modules AS m
+                JOIN LATERAL jsonb_array_elements(m.issues_position) AS ip ON true
+            )
             SELECT
                 i.id AS Id,
                 i.lesson_id AS LessonId,
                 i.module_id AS ModuleId,
-                (ip->>'Position')::int AS Position,
+                ip.position AS Position,
                 i.files AS Files,
                 i.is_deleted AS IsDeleted,
                 i.description AS Description,
                 i.title AS Title
             FROM issues.issues AS i
-                     JOIN issues.modules AS m
-                          ON i.module_id = m.id
-                     JOIN LATERAL jsonb_array_elements(m.issues_position) AS ip ON (ip->>'IssueId')::uuid = i.id
+            JOIN issues_positions AS ip
+                ON i.id = ip.issue_id
             WHERE NOT i.is_deleted
-
+            ORDER BY ip.position ASC;
             """);
 
         if (!string.IsNullOrWhiteSpace(query.Title))
@@ -85,11 +91,11 @@ public class GetIssuesByModuleWithPaginationHandler
             totalCountSql.ToString(),
             parameters);
 
-        var issues = await connection.QueryAsync<IssueResponse>(
+        var issues = await connection.QueryAsync<IssueDto>(
             sqlBuilder.ToString(),
             param: parameters);
 
-        return new PagedList<IssueResponse>
+        return new PagedList<IssueDto>
         {
             Items = issues.ToList(), TotalCount = totalCount, PageSize = query.PageSize, Page = query.Page,
         };

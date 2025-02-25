@@ -16,6 +16,9 @@ public static class WebApplicationExtensions
             app.UseOpenTelemetryPrometheusScrapingEndpoint();
         }
 
+        app.UseSwagger();
+        app.UseSwaggerUI();
+
         app.UseExceptionMiddleware();
         app.UseSerilogRequestLogging();
         app.ConfigureCors();

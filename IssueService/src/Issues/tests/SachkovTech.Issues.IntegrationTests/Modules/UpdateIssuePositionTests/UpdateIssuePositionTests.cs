@@ -36,11 +36,11 @@ public class UpdateIssuePositionTests : ModuleTestsBase
         result.Should().NotBeNull();
         result.IsSuccess.Should().BeTrue();
 
-        var module = await ReadDbContext.Modules
+        var module = await ReadDbContext.ReadModules
             .FirstOrDefaultAsync(x => x.Id == moduleId, cancellationToken);
 
         module?.IssuesPosition.Should().NotBeNull();
-        module?.IssuesPosition.Where(x => x.IssueId == issueId).Select(x => x.Position)
+        module?.IssuesPosition.Where(x => x.IssueId == issueId).Select(x => x.Position.Value)
             .Should().Equal(2);
     }
 }

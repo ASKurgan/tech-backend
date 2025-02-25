@@ -14,7 +14,7 @@ public abstract class AccountTestsBase : IClassFixture<IntegrationTestsWebFactor
 {
     protected readonly IntegrationTestsWebFactory Factory;
     protected readonly IServiceScope Scope;
-    protected readonly AccountsWriteDbContext WriteDbContext;
+    protected readonly AccountsDbContext DbContext;
     protected readonly IAccountsReadDbContext ReadDbContext;
     protected readonly UserManager<User> UserManager;
     protected readonly RoleManager<Role> RoleManager;
@@ -33,7 +33,7 @@ public abstract class AccountTestsBase : IClassFixture<IntegrationTestsWebFactor
 
         RefreshSessionManager = Scope.ServiceProvider.GetRequiredService<IRefreshSessionManager>();
 
-        WriteDbContext = Scope.ServiceProvider.GetRequiredService<AccountsWriteDbContext>();
+        DbContext = Scope.ServiceProvider.GetRequiredService<AccountsDbContext>();
         ReadDbContext = Scope.ServiceProvider.GetRequiredService<IAccountsReadDbContext>();
 
         Fixture = new Fixture();
@@ -62,7 +62,7 @@ public abstract class AccountTestsBase : IClassFixture<IntegrationTestsWebFactor
 
         await UserManager.CreateAsync(user, "Password1!");
 
-        await WriteDbContext.SaveChangesAsync();
+        await DbContext.SaveChangesAsync();
 
         return user.Id;
     }
@@ -84,6 +84,6 @@ public abstract class AccountTestsBase : IClassFixture<IntegrationTestsWebFactor
             }
         }
 
-        await WriteDbContext.SaveChangesAsync();
+        await DbContext.SaveChangesAsync();
     }
 }

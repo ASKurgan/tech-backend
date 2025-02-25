@@ -48,9 +48,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired(false);
 
         builder.Property(s => s.SocialNetworks)
-            .ValueObjectsCollectionJsonConversion(
-                input => input,
-                output => output)
+            .ValueObjectsCollectionJsonConversion()
             .HasColumnName("social_networks");
     }
 }

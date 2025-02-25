@@ -77,7 +77,7 @@ public static class DependencyInjection
                 options.User.RequireUniqueEmail = true;
                 options.Password.RequireNonAlphanumeric = false;
             })
-            .AddEntityFrameworkStores<AccountsWriteDbContext>()
+            .AddEntityFrameworkStores<AccountsDbContext>()
             .AddDefaultTokenProviders();
 
         services.AddScoped<RolePermissionManager>();
@@ -93,11 +93,11 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddScoped<AccountsWriteDbContext>(_ =>
-            new AccountsWriteDbContext(configuration.GetConnectionString("Database")!));
+        services.AddScoped<AccountsDbContext>(_ =>
+            new AccountsDbContext(configuration.GetConnectionString("Database")!));
 
-        services.AddScoped<IAccountsReadDbContext, AccountsReadDbContext>(_ =>
-            new AccountsReadDbContext(configuration.GetConnectionString("Database")!));
+        services.AddScoped<IAccountsReadDbContext, AccountsDbContext>(_ =>
+            new AccountsDbContext(configuration.GetConnectionString("Database")!));
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

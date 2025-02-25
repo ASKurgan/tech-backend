@@ -14,8 +14,8 @@ namespace SachkovTech.Issues.IntegrationTests.Issues;
 public class IssueTestsBase : IClassFixture<IntegrationTestsWebFactory>, IAsyncLifetime
 {
     protected readonly IntegrationTestsWebFactory Factory;
-    protected readonly IssuesWriteDbContext WriteDbContext;
-    protected readonly IReadDbContext ReadDbContext;
+    protected readonly IssuesDbContext DbContext;
+    protected readonly IIssuesReadDbContext ReadDbContext;
     protected readonly IServiceScope Scope;
     protected readonly Fixture Fixture;
 
@@ -26,8 +26,8 @@ public class IssueTestsBase : IClassFixture<IntegrationTestsWebFactory>, IAsyncL
         _resetDatabase = factory.ResetDatabaseAsync;
 
         Scope = factory.Services.CreateScope();
-        WriteDbContext = Scope.ServiceProvider.GetRequiredService<IssuesWriteDbContext>();
-        ReadDbContext = Scope.ServiceProvider.GetRequiredService<IReadDbContext>();
+        DbContext = Scope.ServiceProvider.GetRequiredService<IssuesDbContext>();
+        ReadDbContext = Scope.ServiceProvider.GetRequiredService<IIssuesReadDbContext>();
         Fixture = new Fixture();
         Factory = factory;
     }
@@ -47,9 +47,9 @@ public class IssueTestsBase : IClassFixture<IntegrationTestsWebFactory>, IAsyncL
             Title.Create("title").Value,
             Description.Create("description").Value);
 
-        await WriteDbContext.Modules.AddAsync(module);
+        await DbContext.Modules.AddAsync(module);
 
-        await WriteDbContext.SaveChangesAsync();
+        await DbContext.SaveChangesAsync();
 
         return module.Id;
     }
@@ -65,9 +65,9 @@ public class IssueTestsBase : IClassFixture<IntegrationTestsWebFactory>, IAsyncL
             Experience.Create(5).Value,
             null);
 
-        await WriteDbContext.Issues.AddAsync(issue);
+        await DbContext.Issues.AddAsync(issue);
 
-        await WriteDbContext.SaveChangesAsync();
+        await DbContext.SaveChangesAsync();
 
         return issue.Id;
     }
@@ -85,9 +85,9 @@ public class IssueTestsBase : IClassFixture<IntegrationTestsWebFactory>, IAsyncL
 
         issue.SoftDelete();
 
-        await WriteDbContext.Issues.AddAsync(issue);
+        await DbContext.Issues.AddAsync(issue);
 
-        await WriteDbContext.SaveChangesAsync();
+        await DbContext.SaveChangesAsync();
 
         return issue.Id;
     }
@@ -103,9 +103,9 @@ public class IssueTestsBase : IClassFixture<IntegrationTestsWebFactory>, IAsyncL
             [],
             []);
 
-        await WriteDbContext.Lessons.AddAsync(lesson);
+        await DbContext.Lessons.AddAsync(lesson);
 
-        await WriteDbContext.SaveChangesAsync();
+        await DbContext.SaveChangesAsync();
 
         return lesson.Id;
     }

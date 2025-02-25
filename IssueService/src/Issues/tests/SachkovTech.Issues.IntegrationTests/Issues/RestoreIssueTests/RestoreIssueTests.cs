@@ -32,7 +32,7 @@ public class RestoreIssueTests : IssueTestsBase
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
 
-        var issue = await ReadDbContext.Issues
+        var issue = await ReadDbContext.ReadIssues
             .IgnoreQueryFilters()
             .FirstOrDefaultAsync(l => l.Id == result.Value, cancellationToken);
 
@@ -59,7 +59,7 @@ public class RestoreIssueTests : IssueTestsBase
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
 
-        var issue = await ReadDbContext.Issues
+        var issue = await ReadDbContext.ReadIssues
             .IgnoreQueryFilters()
             .FirstOrDefaultAsync(l => l.Id == result.Value, cancellationToken);
 

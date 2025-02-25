@@ -7,12 +7,12 @@ using SharedKernel;
 
 namespace AccountService.Infrastructure.IdentityManagers;
 
-public class RefreshSessionManager(AccountsWriteDbContext accountsWriteContext) : IRefreshSessionManager
+public class RefreshSessionManager(AccountsDbContext accountsContext) : IRefreshSessionManager
 {
     public async Task<Result<RefreshSession, Error>> GetByRefreshToken(
         Guid refreshToken, CancellationToken cancellationToken)
     {
-        var refreshSession = await accountsWriteContext.RefreshSessions
+        var refreshSession = await accountsContext.RefreshSessions
             .Include(r => r.User)
             .ThenInclude(u => u.Roles)
             .FirstOrDefaultAsync(r => r.RefreshToken == refreshToken, cancellationToken);
@@ -25,6 +25,6 @@ public class RefreshSessionManager(AccountsWriteDbContext accountsWriteContext) 
 
     public void Delete(RefreshSession refreshSession)
     {
-        accountsWriteContext.RefreshSessions.Remove(refreshSession);
+        accountsContext.RefreshSessions.Remove(refreshSession);
     }
 }

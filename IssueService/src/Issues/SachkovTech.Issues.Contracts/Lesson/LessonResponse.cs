@@ -25,5 +25,5 @@ public class LessonResponse
 
     public TagResponse[] Tags { get; init; } = [];
 
-    public IssueResponse[] Issues { get; init; } = [];
+    public IssueDto[] Issues { get; init; } = [];
 }

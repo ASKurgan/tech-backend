@@ -41,11 +41,11 @@ public class UpdateIssueTests : IssueTestsBase
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
 
-        var issue = await ReadDbContext.Issues
+        var issue = await ReadDbContext.ReadIssues
             .FirstOrDefaultAsync(l => l.Id == result.Value, cancellationToken);
 
         issue.Should().NotBeNull();
-        issue?.ModuleId.Should().Be(newModuleId);
-        issue?.LessonId.Should().Be(newLessonId);
+        issue.ModuleId.Value.Should().Be(newModuleId);
+        issue.LessonId?.Value.Should().Be(newLessonId);
     }
 }

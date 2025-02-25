@@ -6,9 +6,9 @@ namespace SachkovTech.Issues.Infrastructure.Outbox;
 
 public class OutboxRepository : IOutboxRepository
 {
-    private readonly IssuesWriteDbContext _dbContext;
+    private readonly IssuesDbContext _dbContext;
 
-    public OutboxRepository(IssuesWriteDbContext dbContext)
+    public OutboxRepository(IssuesDbContext dbContext)
     {
         _dbContext = dbContext;
     }

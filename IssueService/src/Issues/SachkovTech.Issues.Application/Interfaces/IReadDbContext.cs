@@ -1,18 +1,20 @@
-using SachkovTech.Issues.Application.DataModels;
+using SachkovTech.Issues.Domain.Issue;
+using SachkovTech.Issues.Domain.IssueSolving.Entities;
+using SachkovTech.Issues.Domain.IssuesReviews;
+using SachkovTech.Issues.Domain.Lesson;
+using SachkovTech.Issues.Domain.Module;
 
 namespace SachkovTech.Issues.Application.Interfaces;
 
-public interface IReadDbContext
+public interface IIssuesReadDbContext
 {
-    IQueryable<IssueDataModel> Issues { get; }
+    IQueryable<Module> ReadModules { get; }
 
-    IQueryable<ModuleDataModel> Modules { get; }
+    IQueryable<Issue> ReadIssues { get; }
 
-    IQueryable<IssueReviewDataModel> IssueReviewDtos { get; }
+    IQueryable<UserIssue> ReadUserIssues { get; }
 
-    IQueryable<CommentDataModel> Comments { get; }
+    IQueryable<IssueReview> ReadIssueReviews { get; }
 
-    IQueryable<UserIssueDataModel> UserIssues { get; }
-
-    IQueryable<LessonDataModel> Lessons { get; }
+    IQueryable<Lesson> ReadLessons { get; }
 }

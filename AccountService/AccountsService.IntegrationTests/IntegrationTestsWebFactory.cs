@@ -46,7 +46,7 @@ public class IntegrationTestsWebFactory : WebApplicationFactory<Program>, IAsync
         await _rabbitMqContainer.StartAsync();
 
         using var scope = Services.CreateScope();
-        var issuesDbContext = scope.ServiceProvider.GetRequiredService<AccountsWriteDbContext>();
+        var issuesDbContext = scope.ServiceProvider.GetRequiredService<AccountsDbContext>();
 
         await issuesDbContext.Database.EnsureDeletedAsync();
         await issuesDbContext.Database.EnsureCreatedAsync();
@@ -91,15 +91,15 @@ public class IntegrationTestsWebFactory : WebApplicationFactory<Program>, IAsync
 
     protected virtual void ConfigureDefaultServices(IServiceCollection services)
     {
-        services.RemoveAll(typeof(AccountsWriteDbContext));
+        services.RemoveAll(typeof(AccountsDbContext));
         services.RemoveAll(typeof(IAccountsReadDbContext));
         services.RemoveAll(typeof(IAutoSeeder));
 
-        services.AddScoped<AccountsWriteDbContext>(_ =>
-            new AccountsWriteDbContext(_dbContainer.GetConnectionString()));
+        services.AddScoped<AccountsDbContext>(_ =>
+            new AccountsDbContext(_dbContainer.GetConnectionString()));
 
-        services.AddScoped<IAccountsReadDbContext, AccountsReadDbContext>(_ =>
-            new AccountsReadDbContext(_dbContainer.GetConnectionString()));
+        services.AddScoped<IAccountsReadDbContext, AccountsDbContext>(_ =>
+            new AccountsDbContext(_dbContainer.GetConnectionString()));
 
         services.AddSingleton<IAutoSeeder, FakeAccountsSeeder>();
     }

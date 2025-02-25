@@ -11,9 +11,9 @@ namespace SachkovTech.Issues.Infrastructure.Repositories;
 
 public class ModulesRepository : IModulesRepository
 {
-    private readonly IssuesWriteDbContext _dbContext;
+    private readonly IssuesDbContext _dbContext;
 
-    public ModulesRepository(IssuesWriteDbContext dbContext)
+    public ModulesRepository(IssuesDbContext dbContext)
     {
         _dbContext = dbContext;
     }

@@ -5,7 +5,7 @@ using IMigrator = SachkovTech.Core.Database.IMigrator;
 
 namespace SachkovTech.Issues.Infrastructure.Migrator;
 
-public class IssuesMigrator(IssuesWriteDbContext context, ILogger<IssuesMigrator> logger) : IMigrator
+public class IssuesMigrator(IssuesDbContext context, ILogger<IssuesMigrator> logger) : IMigrator
 {
     public async Task Migrate(CancellationToken cancellationToken = default)
     {

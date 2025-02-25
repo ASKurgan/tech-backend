@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using CSharpFunctionalExtensions;
 using SharedKernel;
 
@@ -7,6 +8,7 @@ public class Position : ComparableValueObject
 {
     public static readonly Position First = new(1);
 
+    [JsonConstructor]
     private Position(int value)
     {
         Value = value;

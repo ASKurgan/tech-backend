@@ -7,6 +7,16 @@ namespace SachkovTech.Core.Database;
 
 public static class EfCoreFluentApiExtensions
 {
+    public static PropertyBuilder<IReadOnlyList<TValueObject>> ValueObjectsCollectionJsonConversion<TValueObject>(
+        this PropertyBuilder<IReadOnlyList<TValueObject>> builder)
+    {
+        return builder.HasConversion(
+                valueObjects => JsonSerializer.Serialize(valueObjects, JsonSerializerOptions.Default),
+                json => JsonSerializer.Deserialize<IReadOnlyList<TValueObject>>(json, JsonSerializerOptions.Default)!,
+                CreateCollectionValueComparer<TValueObject>())
+            .HasColumnType("jsonb");
+    }
+
     public static PropertyBuilder<IReadOnlyList<TValueObject>> ValueObjectsCollectionJsonConversion<TValueObject, TDto>(
         this PropertyBuilder<IReadOnlyList<TValueObject>> builder,
         Func<TValueObject, TDto> toDtoSelector,

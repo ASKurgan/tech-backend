@@ -15,13 +15,13 @@ namespace SachkovTech.Issues.Application.Features.IssueSolving.Commands.TakeOnWo
 public class TakeOnWorkHandler : ICommandHandler<Guid, TakeOnWorkCommand>
 {
     private readonly IUserIssueRepository _userIssueRepository;
-    private readonly IReadDbContext _readDbContext;
+    private readonly IIssuesReadDbContext _readDbContext;
     private readonly ILogger<TakeOnWorkHandler> _logger;
     private readonly IUnitOfWork _unitOfWork;
 
     public TakeOnWorkHandler(
         IUserIssueRepository userIssueRepository,
-        IReadDbContext readDbContext,
+        IIssuesReadDbContext readDbContext,
         ILogger<TakeOnWorkHandler> logger,
         IUnitOfWork unitOfWork)
     {
@@ -41,18 +41,16 @@ public class TakeOnWorkHandler : ICommandHandler<Guid, TakeOnWorkCommand>
             return issueResult.Error;
 
         var userIssueExisting =
-            await _readDbContext.UserIssues.FirstOrDefaultAsync(ui => ui.IssueId == command.IssueId, cancellationToken);
+            await _readDbContext.ReadUserIssues.FirstOrDefaultAsync(ui => ui.IssueId == command.IssueId, cancellationToken);
 
         if (userIssueExisting is not null)
             return Errors.General.ValueIsInvalid().ToErrorList();
 
-        var previousUserIssue = await _readDbContext.UserIssues
+        var previousUserIssue = await _readDbContext.ReadUserIssues
             .FirstOrDefaultAsync(u => u.UserId == command.UserId, cancellationToken);
 
         var previousUserIssueStatus =
-            previousUserIssue is null
-                ? IssueStatus.Completed
-                : Enum.Parse<IssueStatus>(previousUserIssue.Status);
+            previousUserIssue?.Status ?? IssueStatus.Completed;
 
         if (previousUserIssueStatus != IssueStatus.Completed)
             return Error.Failure("prev.issue.not.solved", "previous issue not solved").ToErrorList();
@@ -73,23 +71,23 @@ public class TakeOnWorkHandler : ICommandHandler<Guid, TakeOnWorkCommand>
         return result;
     }
 
-    private async Task<Result<IssueResponse, ErrorList>> GetIssueById(
+    private async Task<Result<IssueDto, ErrorList>> GetIssueById(
         Guid issueId,
         CancellationToken cancellationToken = default)
     {
-        var issueDto = await _readDbContext.Issues
+        var issueDto = await _readDbContext.ReadIssues
             .SingleOrDefaultAsync(i => i.Id == issueId, cancellationToken);
 
         if (issueDto is null)
             return Errors.General.NotFound(issueId).ToErrorList();
 
-        var response = new IssueResponse
+        var response = new IssueDto
         {
             Id = issueDto.Id,
             ModuleId = issueDto.ModuleId,
-            Title = issueDto.Title,
-            Description = issueDto.Description,
-            LessonId = issueDto.LessonId,
+            Title = issueDto.Title.Value,
+            Description = issueDto.Description.Value,
+            LessonId = issueDto.LessonId?.Value,
         };
 
         return response;

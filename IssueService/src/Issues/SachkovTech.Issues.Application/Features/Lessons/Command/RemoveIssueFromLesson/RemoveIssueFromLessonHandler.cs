@@ -10,13 +10,13 @@ namespace SachkovTech.Issues.Application.Features.Lessons.Command.RemoveIssueFro
 
 public class RemoveIssueFromLessonHandler : ICommandHandler<RemoveIssueFromLessonCommand>
 {
-    private readonly IReadDbContext _readDbContext;
+    private readonly IIssuesReadDbContext _readDbContext;
     private readonly ILessonsRepository _lessonsRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<RemoveIssueFromLessonHandler> _logger;
 
     public RemoveIssueFromLessonHandler(
-        IReadDbContext readDbContext,
+        IIssuesReadDbContext readDbContext,
         ILessonsRepository lessonsRepository,
         IUnitOfWork unitOfWork,
         ILogger<RemoveIssueFromLessonHandler> logger)
@@ -35,7 +35,7 @@ public class RemoveIssueFromLessonHandler : ICommandHandler<RemoveIssueFromLesso
             return Errors.General.NotFound(command.LessonId, "lesson").ToErrorList();
 
         var isIssueExists
-            = await _readDbContext.Issues.FirstOrDefaultAsync(i => i.Id == command.IssueId, cancellationToken);
+            = await _readDbContext.ReadIssues.FirstOrDefaultAsync(i => i.Id == command.IssueId, cancellationToken);
         if (isIssueExists is null)
             return Errors.General.NotFound(command.IssueId, "issue").ToErrorList();
 

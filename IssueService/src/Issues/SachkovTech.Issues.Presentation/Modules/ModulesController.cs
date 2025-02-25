@@ -5,18 +5,19 @@ using SachkovTech.Issues.Application.Features.Modules.Commands.Create;
 using SachkovTech.Issues.Application.Features.Modules.Commands.Delete;
 using SachkovTech.Issues.Application.Features.Modules.Commands.UpdateIssuePosition;
 using SachkovTech.Issues.Application.Features.Modules.Commands.UpdateMainInfo;
-using SachkovTech.Issues.Application.Features.Modules.Queries.GetModulesWithPagination;
+using SachkovTech.Issues.Application.Features.Modules.Queries.GetModules;
 using SachkovTech.Issues.Contracts.Module;
+using SharedKernel;
 
 namespace SachkovTech.Issues.Presentation.Modules;
 
 public class ModulesController : ApplicationController
 {
-    [Permission(Permissions.Modules.READ_MODULE)]
     [HttpGet]
+    [Permission(Permissions.Modules.READ_MODULE)]
     public async Task<IActionResult> Get(
-        [FromQuery] GetModulesWithPaginationQuery query,
-        [FromServices] GetModulesWithPaginationHandler handler,
+        [FromQuery] GetModulesQuery query,
+        [FromServices] GetModulesHandler handler,
         CancellationToken cancellationToken)
     {
         var response = await handler.Handle(query, cancellationToken);

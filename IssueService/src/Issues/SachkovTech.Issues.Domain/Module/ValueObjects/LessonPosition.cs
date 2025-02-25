@@ -1,10 +1,12 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Text.Json.Serialization;
+using CSharpFunctionalExtensions;
 using SachkovTech.Issues.Domain.ValueObjects.Ids;
 
 namespace SachkovTech.Issues.Domain.Module.ValueObjects;
 
-public class LessonPosition: ComparableValueObject, IPositionable
+public class LessonPosition : ComparableValueObject, IPositionable
 {
+    [JsonConstructor]
     public LessonPosition(LessonId lessonId, Position position)
     {
         LessonId = lessonId;

@@ -12,7 +12,7 @@ using SachkovTech.Issues.Application.Features.Modules.Commands.Delete;
 using SachkovTech.Issues.Application.Features.Modules.Commands.UpdateIssuePosition;
 using SachkovTech.Issues.Application.Features.Modules.Commands.UpdateLessonPosition;
 using SachkovTech.Issues.Application.Features.Modules.Commands.UpdateMainInfo;
-using SachkovTech.Issues.Application.Features.Modules.Queries.GetModulesWithPagination;
+using SachkovTech.Issues.Application.Features.Modules.Queries.GetModules;
 using SachkovTech.Issues.Domain.Module;
 using SachkovTech.Issues.Domain.ValueObjects;
 using SachkovTech.Issues.Domain.ValueObjects.Ids;
@@ -140,9 +140,9 @@ public static class FixtureExtensions
             .Create();
     }
 
-    public static GetModulesWithPaginationQuery CreateGetModulesQuery(this IFixture fixture)
+    public static GetModulesQuery CreateGetModulesQuery(this IFixture fixture)
     {
-        return fixture.Build<GetModulesWithPaginationQuery>()
+        return fixture.Build<GetModulesQuery>()
             .Create();
     }
 

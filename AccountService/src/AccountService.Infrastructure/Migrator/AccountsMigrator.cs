@@ -5,7 +5,7 @@ using SachkovTech.Core.Database;
 
 namespace AccountService.Infrastructure.Migrator;
 
-public class AccountsMigrator(AccountsWriteDbContext context, ILogger<AccountsMigrator> logger) : IMigrator
+public class AccountsMigrator(AccountsDbContext context, ILogger<AccountsMigrator> logger) : IMigrator
 {
     public async Task Migrate(CancellationToken cancellationToken = default)
     {

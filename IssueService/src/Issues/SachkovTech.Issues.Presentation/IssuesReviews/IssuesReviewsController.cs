@@ -15,21 +15,6 @@ namespace SachkovTech.Issues.Presentation.IssuesReviews;
 
 public class IssuesReviewsController : ApplicationController
 {
-    [Permission(Permissions.IssuesReview.READ_REVIEW_ISSUE)]
-    [Permission(Permissions.IssuesReview.COMMENT_REVIEW_ISSUE)]
-    [HttpGet("comments")]
-    public async Task<ActionResult> GetByIssueReviewId(
-        [FromServices] GetCommentsWithPaginationHandler handler,
-        [FromRoute] Guid issueReviewId,
-        [FromQuery] GetCommentsWithPaginationQuery query,
-        CancellationToken cancellationToken)
-    {
-        var result = await handler
-            .Handle(query.GetQueryWithId(issueReviewId), cancellationToken);
-
-        return Ok(result);
-    }
-
     [Permission(Permissions.IssuesReview.COMMENT_REVIEW_ISSUE)]
     [HttpPost("comment")]
     public async Task<ActionResult> Comment(

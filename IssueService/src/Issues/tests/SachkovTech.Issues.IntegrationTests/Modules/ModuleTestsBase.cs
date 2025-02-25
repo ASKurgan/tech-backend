@@ -11,8 +11,8 @@ namespace SachkovTech.Issues.IntegrationTests.Modules;
 public class ModuleTestsBase : IClassFixture<ModuleTestWebFactory>, IAsyncLifetime
 {
     protected readonly ModuleTestWebFactory Factory;
-    protected readonly IssuesWriteDbContext WriteDbContext;
-    protected readonly IReadDbContext ReadDbContext;
+    protected readonly IssuesDbContext DbContext;
+    protected readonly IIssuesReadDbContext ReadDbContext;
     protected readonly IServiceScope Scope;
     protected readonly Fixture Fixture;
 
@@ -22,8 +22,8 @@ public class ModuleTestsBase : IClassFixture<ModuleTestWebFactory>, IAsyncLifeti
     {
         _resetDatabase = factory.ResetDatabaseAsync;
         Scope = factory.Services.CreateScope();
-        WriteDbContext = Scope.ServiceProvider.GetRequiredService<IssuesWriteDbContext>();
-        ReadDbContext = Scope.ServiceProvider.GetRequiredService<IReadDbContext>();
+        DbContext = Scope.ServiceProvider.GetRequiredService<IssuesDbContext>();
+        ReadDbContext = Scope.ServiceProvider.GetRequiredService<IIssuesReadDbContext>();
         Fixture = new Fixture();
         Factory = factory;
     }
@@ -40,9 +40,9 @@ public class ModuleTestsBase : IClassFixture<ModuleTestWebFactory>, IAsyncLifeti
     {
         var module = Fixture.CreateModule();
 
-        await WriteDbContext.Modules.AddAsync(module);
+        await DbContext.Modules.AddAsync(module);
 
-        await WriteDbContext.SaveChangesAsync();
+        await DbContext.SaveChangesAsync();
 
         return module.Id;
     }
@@ -56,16 +56,16 @@ public class ModuleTestsBase : IClassFixture<ModuleTestWebFactory>, IAsyncLifeti
             modulesToSeed.Add(Fixture.CreateModule());
         }
 
-        await WriteDbContext.Modules.AddRangeAsync(modulesToSeed);
+        await DbContext.Modules.AddRangeAsync(modulesToSeed);
 
-        await WriteDbContext.SaveChangesAsync();
+        await DbContext.SaveChangesAsync();
 
         return modulesToSeed;
     }
 
     protected async Task<Guid> SeedIssuePositions(Guid moduleId, CancellationToken cancellationToken = default)
     {
-        var module = await WriteDbContext.Modules
+        var module = await DbContext.Modules
             .FirstOrDefaultAsync(x => x.Id == moduleId, cancellationToken);
         if (module is null)
             throw new Exception($"Seeded Module {moduleId} not found, something wrong with DB");
@@ -75,14 +75,14 @@ public class ModuleTestsBase : IClassFixture<ModuleTestWebFactory>, IAsyncLifeti
             module.AddIssue(IssueId.NewIssueId());
         }
 
-        await WriteDbContext.SaveChangesAsync(cancellationToken);
+        await DbContext.SaveChangesAsync(cancellationToken);
 
         return module.IssuesPosition[3].IssueId;
     }
 
     protected async Task<Guid> SeedLessonPositions(Guid moduleId, CancellationToken cancellationToken = default)
     {
-        var module = await WriteDbContext.Modules
+        var module = await DbContext.Modules
             .FirstOrDefaultAsync(x => x.Id == moduleId, cancellationToken);
         if (module is null)
             throw new Exception($"Seeded Module {moduleId} not found, something wrong with DB");
@@ -92,7 +92,7 @@ public class ModuleTestsBase : IClassFixture<ModuleTestWebFactory>, IAsyncLifeti
             module.AddLesson(LessonId.NewLessonId());
         }
 
-        await WriteDbContext.SaveChangesAsync(cancellationToken);
+        await DbContext.SaveChangesAsync(cancellationToken);
 
         return module.LessonsPosition[3].LessonId;
     }

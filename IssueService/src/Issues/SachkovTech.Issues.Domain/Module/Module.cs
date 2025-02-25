@@ -22,11 +22,12 @@ public class Module : Entity<ModuleId>, ISoftDeletable
     {
     }
 
-    public Title Title { get; private set; } = default!;
+    public Title Title { get; private set; } = null!;
 
-    public Description Description { get; private set; } = default!;
+    public Description Description { get; private set; } = null!;
 
     public IReadOnlyList<IssuePosition> IssuesPosition = [];
+
     public IReadOnlyList<LessonPosition> LessonsPosition = [];
 
     public bool IsDeleted { get; private set; }
@@ -57,7 +58,10 @@ public class Module : Entity<ModuleId>, ISoftDeletable
             issueId,
             Position.Create(IssuesPosition.Count + 1).Value);
 
-        var newIssuesPosition = new List<IssuePosition>(IssuesPosition) { newIssuePosition, };
+        var newIssuesPosition = new List<IssuePosition>(IssuesPosition)
+        {
+            newIssuePosition,
+        };
 
         IssuesPosition = newIssuesPosition;
     }
@@ -68,7 +72,10 @@ public class Module : Entity<ModuleId>, ISoftDeletable
             lessonId,
             Position.Create(LessonsPosition.Count + 1).Value);
 
-        var newLessonsPosition = new List<LessonPosition>(LessonsPosition) { newLessonPosition, };
+        var newLessonsPosition = new List<LessonPosition>(LessonsPosition)
+        {
+            newLessonPosition,
+        };
 
         LessonsPosition = newLessonsPosition;
     }
@@ -159,7 +166,10 @@ public class Module : Entity<ModuleId>, ISoftDeletable
         }
 
         var reorderedList = items
-            .Select((item, index) => new { Item = item, Index = index + 1 })
+            .Select((item, index) => new
+            {
+                Item = item, Index = index + 1
+            })
             .OrderBy(x =>
             {
                 if (x.Index == positionFrom) return positionTo;

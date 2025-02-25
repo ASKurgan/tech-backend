@@ -1,6 +1,6 @@
 ﻿namespace SachkovTech.Issues.Contracts.Issue;
 
-public class IssueResponse
+public class IssueDto
 {
     public Guid Id { get; init; }
 

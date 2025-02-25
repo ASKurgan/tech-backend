@@ -7,22 +7,22 @@ namespace AccountService.Infrastructure;
 
 internal class UnitOfWork : IUnitOfWork
 {
-    private readonly AccountsWriteDbContext _accountsWriteDbContext;
+    private readonly AccountsDbContext _accountsDbContext;
 
-    public UnitOfWork(AccountsWriteDbContext accountsWriteDbContext)
+    public UnitOfWork(AccountsDbContext accountsDbContext)
     {
-        _accountsWriteDbContext = accountsWriteDbContext;
+        _accountsDbContext = accountsDbContext;
     }
 
     public async Task<DbTransaction> BeginTransaction(CancellationToken cancellationToken = default)
     {
-        var transaction = await _accountsWriteDbContext.Database.BeginTransactionAsync(cancellationToken);
+        var transaction = await _accountsDbContext.Database.BeginTransactionAsync(cancellationToken);
 
         return transaction.GetDbTransaction();
     }
 
     public async Task SaveChanges(CancellationToken cancellationToken = default)
     {
-        await _accountsWriteDbContext.SaveChangesAsync(cancellationToken);
+        await _accountsDbContext.SaveChangesAsync(cancellationToken);
     }
 }

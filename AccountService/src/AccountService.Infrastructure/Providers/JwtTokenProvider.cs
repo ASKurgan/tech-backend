@@ -17,18 +17,18 @@ namespace AccountService.Infrastructure.Providers;
 public class JwtTokenProvider : ITokenProvider
 {
     private readonly IPermissionManager _permissionManager;
-    private readonly AccountsWriteDbContext _accountWriteContext;
+    private readonly AccountsDbContext _accountContext;
     private readonly IRsaKeyProvider _rsaKeyProvider;
     private readonly AuthOptions _authOptions;
 
     public JwtTokenProvider(
         IOptions<AuthOptions> options,
         IPermissionManager permissionManager,
-        AccountsWriteDbContext accountWriteContext,
+        AccountsDbContext accountContext,
         IRsaKeyProvider rsaKeyProvider)
     {
         _permissionManager = permissionManager;
-        _accountWriteContext = accountWriteContext;
+        _accountContext = accountContext;
         _rsaKeyProvider = rsaKeyProvider;
         _authOptions = options.Value;
     }
@@ -76,8 +76,8 @@ public class JwtTokenProvider : ITokenProvider
             RefreshToken = Guid.NewGuid(),
         };
 
-        _accountWriteContext.Add(refreshSession);
-        await _accountWriteContext.SaveChangesAsync(cancellationToken);
+        _accountContext.Add(refreshSession);
+        await _accountContext.SaveChangesAsync(cancellationToken);
 
         return refreshSession.RefreshToken;
     }

@@ -11,8 +11,8 @@ namespace SachkovTech.Issues.IntegrationTests.Lessons;
 public class LessonsTestsBase : IClassFixture<LessonTestWebFactory>, IAsyncLifetime
 {
     protected readonly LessonTestWebFactory Factory;
-    protected readonly IssuesWriteDbContext WriteDbContext;
-    protected readonly IReadDbContext ReadDbContext;
+    protected readonly IssuesDbContext DbContext;
+    protected readonly IIssuesReadDbContext ReadDbContext;
     protected readonly IServiceScope Scope;
     protected readonly Fixture Fixture;
 
@@ -23,8 +23,8 @@ public class LessonsTestsBase : IClassFixture<LessonTestWebFactory>, IAsyncLifet
         _resetDatabase = factory.ResetDatabaseAsync;
 
         Scope = factory.Services.CreateScope();
-        WriteDbContext = Scope.ServiceProvider.GetRequiredService<IssuesWriteDbContext>();
-        ReadDbContext = Scope.ServiceProvider.GetRequiredService<IReadDbContext>();
+        DbContext = Scope.ServiceProvider.GetRequiredService<IssuesDbContext>();
+        ReadDbContext = Scope.ServiceProvider.GetRequiredService<IIssuesReadDbContext>();
         Fixture = new Fixture();
         Factory = factory;
     }
@@ -44,9 +44,9 @@ public class LessonsTestsBase : IClassFixture<LessonTestWebFactory>, IAsyncLifet
             Title.Create("title").Value,
             Description.Create("description").Value);
 
-        await WriteDbContext.Modules.AddAsync(module);
+        await DbContext.Modules.AddAsync(module);
 
-        await WriteDbContext.SaveChangesAsync();
+        await DbContext.SaveChangesAsync();
 
         return module.Id;
     }

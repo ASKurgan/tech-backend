@@ -34,7 +34,7 @@ public class AddLessonTests : LessonsTestsBase
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
 
-        var lesson = await ReadDbContext.Lessons
+        var lesson = await ReadDbContext.ReadLessons
             .FirstOrDefaultAsync(l => l.Id == result.Value, cancellationToken);
 
         lesson.Should().NotBeNull();
@@ -59,7 +59,7 @@ public class AddLessonTests : LessonsTestsBase
         var result = await sut.Handle(command, cancellationToken);
 
         // Assert
-        var lesson = await ReadDbContext.Lessons
+        var lesson = await ReadDbContext.ReadLessons
             .FirstOrDefaultAsync(cancellationToken);
 
         result.IsFailure.Should().BeTrue();

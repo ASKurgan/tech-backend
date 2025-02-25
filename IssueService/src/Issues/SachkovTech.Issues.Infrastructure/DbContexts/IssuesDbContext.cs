@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
+using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Domain.Issue;
 using SachkovTech.Issues.Domain.IssueSolving.Entities;
 using SachkovTech.Issues.Domain.IssuesReviews;
@@ -10,11 +11,11 @@ using SachkovTech.Issues.Infrastructure.Outbox;
 
 namespace SachkovTech.Issues.Infrastructure.DbContexts;
 
-public class IssuesWriteDbContext : DbContext
+public class IssuesDbContext : DbContext, IIssuesReadDbContext
 {
     private readonly string _connectionString;
 
-    public IssuesWriteDbContext(string connectionString)
+    public IssuesDbContext(string connectionString)
     {
         _connectionString = connectionString;
     }
@@ -31,6 +32,17 @@ public class IssuesWriteDbContext : DbContext
 
     public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
 
+
+    public IQueryable<Module> ReadModules => Set<Module>().AsQueryable().AsNoTracking();
+
+    public IQueryable<Issue> ReadIssues => Set<Issue>().AsQueryable().AsNoTracking();
+
+    public IQueryable<UserIssue> ReadUserIssues => Set<UserIssue>().AsQueryable().AsNoTracking();
+
+    public IQueryable<IssueReview> ReadIssueReviews => Set<IssueReview>().AsQueryable().AsNoTracking();
+
+    public IQueryable<Lesson> ReadLessons => Set<Lesson>().AsQueryable().AsNoTracking();
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(_connectionString);
@@ -45,7 +57,7 @@ public class IssuesWriteDbContext : DbContext
     {
         modelBuilder.HasDefaultSchema("issues");
         modelBuilder.ApplyConfigurationsFromAssembly(
-            typeof(IssuesWriteDbContext).Assembly,
+            typeof(IssuesDbContext).Assembly,
             type => type.FullName?.Contains("Configurations.Write") ?? false);
     }
 

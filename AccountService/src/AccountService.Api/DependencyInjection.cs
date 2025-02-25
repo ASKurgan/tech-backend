@@ -18,7 +18,10 @@ public static class DependencyInjection
 {
     public static void AddProgramDependencies(this IServiceCollection services, IConfiguration configuration)
     {
-        var assemblies = new[] { typeof(AccountService.Application.DependencyInjection).Assembly, };
+        var assemblies = new[]
+        {
+            typeof(AccountService.Application.DependencyInjection).Assembly,
+        };
 
         services.AddControllers();
 
@@ -33,9 +36,8 @@ public static class DependencyInjection
         IConfiguration configuration,
         params Assembly[] assemblies)
     {
-        services.AddApplicationLoggingSeq(configuration);
-
         services.AddEndpointsApiExplorer()
+            .AddApplicationLoggingSeq(configuration)
             .AddValidatorsFromAssemblies(assemblies)
             .AddHandlers(assemblies)
             .AddCustomSwagger(configuration)

@@ -15,12 +15,6 @@ var app = builder.Build();
 
 await app.Configure();
 
-if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 app.Run();
 
 namespace SachkovTech.Web

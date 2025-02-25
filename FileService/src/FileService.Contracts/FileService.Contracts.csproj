@@ -13,9 +13,10 @@
 		</PackageDescription>
         <RepositoryUrl>https://github.com/SachkovTech/sachkov-tech-backend</RepositoryUrl>
     </PropertyGroup>
-
+  
     <ItemGroup>
-      <PackageReference Include="Framework" Version="1.2.9" />
+      <PackageReference Include="Framework" Version="1.3.0" />
+      <PackageReference Include="SharedKernel" Version="1.1.8" />
     </ItemGroup>
     
 </Project>

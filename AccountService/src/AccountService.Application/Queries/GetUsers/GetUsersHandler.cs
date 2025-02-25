@@ -1,11 +1,12 @@
 ﻿using AccountService.Application.Database;
-using AccountService.Application.DataModels;
+using AccountService.Application.Mappers;
+using AccountService.Contracts.Responses;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Database;
 
 namespace AccountService.Application.Queries.GetUsers;
 
-public class GetUsersHandler : IQueryHandler<PagedList<UserDataModel>, GetUsersQuery>
+public class GetUsersHandler : IQueryHandler<PagedList<UserDto>, GetUsersQuery>
 {
     private readonly IAccountsReadDbContext _accountsReadDbContext;
 
@@ -15,11 +16,11 @@ public class GetUsersHandler : IQueryHandler<PagedList<UserDataModel>, GetUsersQ
         _accountsReadDbContext = accountsReadDbContext;
     }
 
-    public async Task<PagedList<UserDataModel>> Handle(
+    public async Task<PagedList<UserDto>> Handle(
         GetUsersQuery query,
         CancellationToken cancellationToken = default)
     {
-        var userQueryBuilder = new UserQueryBuilder(_accountsReadDbContext.Users);
+        var userQueryBuilder = new UserQueryBuilder(_accountsReadDbContext.ReadUsers);
 
         return await userQueryBuilder
             .IncludeAdminAccount()
@@ -34,6 +35,10 @@ public class GetUsersHandler : IQueryHandler<PagedList<UserDataModel>, GetUsersQ
             .WithRegistrationAfter(query.RegistrationDate)
             .SortByWithDirection(query.SortBy, query.SortDirection)
             .Build()
-            .ToPagedList(query.Page, query.PageSize, cancellationToken);
+            .ToPagedList(
+                query.Page,
+                query.PageSize,
+                u => u.ToUserDto(),
+                cancellationToken);
     }
 }

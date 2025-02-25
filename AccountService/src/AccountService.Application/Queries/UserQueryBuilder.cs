@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using AccountService.Application.DataModels;
+using AccountService.Domain;
 using Microsoft.EntityFrameworkCore;
 using SachkovTech.Core.Database;
 
@@ -7,9 +7,9 @@ namespace AccountService.Application.Queries;
 
 internal class UserQueryBuilder
 {
-    private IQueryable<UserDataModel> _userQuery;
+    private IQueryable<User> _userQuery;
 
-    public UserQueryBuilder(IQueryable<UserDataModel> userQuery)
+    public UserQueryBuilder(IQueryable<User> userQuery)
     {
         _userQuery = userQuery;
     }
@@ -27,7 +27,7 @@ internal class UserQueryBuilder
     {
         _userQuery = _userQuery.WhereIf(
             string.IsNullOrWhiteSpace(roleName) == false,
-            ud => ud.Roles.Any(r => r.Name.ToLower() == roleName!.ToLower()));
+            ud => ud.Roles.Any(r => r.Name != null && r.Name.Equals(roleName, StringComparison.CurrentCultureIgnoreCase)));
 
         return this;
     }
@@ -43,7 +43,7 @@ internal class UserQueryBuilder
     {
         _userQuery = _userQuery.WhereIf(
             string.IsNullOrWhiteSpace(roleName) == false,
-            ud => ud.Roles.All(r => r.Name.ToLower() != roleName!.ToLower()));
+            ud => ud.Roles.All(r => r.Name != null && !r.Name.Equals(roleName, StringComparison.CurrentCultureIgnoreCase)));
 
         return this;
     }
@@ -52,7 +52,7 @@ internal class UserQueryBuilder
     {
         _userQuery = _userQuery.WhereIf(
             string.IsNullOrWhiteSpace(firstName) == false,
-            ud => ud.FirstName == firstName);
+            ud => ud.FullName.FirstName == firstName);
 
         return this;
     }
@@ -61,7 +61,7 @@ internal class UserQueryBuilder
     {
         _userQuery = _userQuery.WhereIf(
             string.IsNullOrWhiteSpace(sequence) == false,
-            ud => ud.FirstName != null && ud.FirstName.StartsWith(sequence!));
+            ud => ud.FullName.FirstName != null && ud.FullName.FirstName.StartsWith(sequence!));
 
         return this;
     }
@@ -70,7 +70,7 @@ internal class UserQueryBuilder
     {
         _userQuery = _userQuery.WhereIf(
             string.IsNullOrWhiteSpace(secondName) == false,
-            ud => ud.SecondName == secondName);
+            ud => ud.FullName.SecondName == secondName);
 
         return this;
     }
@@ -79,7 +79,7 @@ internal class UserQueryBuilder
     {
         _userQuery = _userQuery.WhereIf(
             string.IsNullOrWhiteSpace(thirdName) == false,
-            ud => ud.ThirdName == thirdName);
+            ud => ud.FullName.ThirdName == thirdName);
 
         return this;
     }
@@ -160,19 +160,19 @@ internal class UserQueryBuilder
         return this;
     }
 
-    public IQueryable<UserDataModel> Build()
+    public IQueryable<User> Build()
     {
         return _userQuery;
     }
 
-    private Expression<Func<UserDataModel, object>> KeySelector(string? sortBy)
+    private Expression<Func<User, object>> KeySelector(string? sortBy)
     {
         return sortBy?.ToLower() switch
         {
-            "email" => (user) => user.Email,
-            "first_name" => (user) => user.FirstName ?? string.Empty,
-            "second_name" => (user) => user.SecondName ?? string.Empty,
-            "third_name" => (user) => user.ThirdName ?? string.Empty,
+            "email" => (user) => user.Email ?? string.Empty,
+            "first_name" => (user) => user.FullName.FirstName ?? string.Empty,
+            "second_name" => (user) => user.FullName.SecondName ?? string.Empty,
+            "third_name" => (user) => user.FullName.ThirdName ?? string.Empty,
             _ => (user) => user.Id
         };
     }

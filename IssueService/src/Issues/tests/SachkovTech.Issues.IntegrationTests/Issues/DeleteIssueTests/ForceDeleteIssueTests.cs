@@ -34,13 +34,13 @@ public class ForceDeleteIssueTests : IssueTestsBase
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
 
-        var issue = await ReadDbContext.Issues
+        var issue = await ReadDbContext.ReadIssues
             .IgnoreQueryFilters()
             .FirstOrDefaultAsync(l => l.Id == result.Value, cancellationToken);
 
         issue.Should().BeNull();
 
-        var module = await ReadDbContext.Modules
+        var module = await ReadDbContext.ReadModules
             .FirstOrDefaultAsync(m => m.Id == moduleId, cancellationToken);
 
         module.Should().NotBeNull();

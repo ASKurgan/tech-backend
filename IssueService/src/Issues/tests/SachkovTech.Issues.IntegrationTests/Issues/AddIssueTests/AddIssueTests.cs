@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Issues.Application.Features.Issue.Commands.AddIssue;
+using YamlDotNet.Core.Tokens;
 
 namespace SachkovTech.Issues.IntegrationTests.Issues.AddIssueTests;
 
@@ -35,13 +36,13 @@ public class AddIssueTests : IssueTestsBase
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
 
-        var issue = await ReadDbContext.Issues
+        var issue = await ReadDbContext.ReadIssues
             .FirstOrDefaultAsync(l => l.Id == result.Value, cancellationToken);
 
         issue.Should().NotBeNull();
-        issue?.ModuleId.Should().Be(moduleId);
+        issue?.ModuleId.Value.Should().Be(moduleId);
 
-        var module = await ReadDbContext.Modules
+        var module = await ReadDbContext.ReadModules
             .FirstOrDefaultAsync(m => m.Id == moduleId, cancellationToken);
 
         module!.IssuesPosition.Should().NotBeEmpty();
@@ -65,7 +66,7 @@ public class AddIssueTests : IssueTestsBase
         var result = await sut.Handle(command, cancellationToken);
 
         // Assert
-        var issue = await ReadDbContext.Issues
+        var issue = await ReadDbContext.ReadIssues
             .FirstOrDefaultAsync(cancellationToken);
 
         result.IsFailure.Should().BeTrue();

@@ -7,32 +7,32 @@ using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Issue.Queries.GetIssueById;
 
-public class GetIssueByIdHandler : IQueryHandlerWithResult<IssueResponse, GetIssueByIdQuery>
+public class GetIssueByIdHandler : IQueryHandlerWithResult<IssueDto, GetIssueByIdQuery>
 {
-    private readonly IReadDbContext _readDbContext;
+    private readonly IIssuesReadDbContext _readDbContext;
 
-    public GetIssueByIdHandler(IReadDbContext readDbContext)
+    public GetIssueByIdHandler(IIssuesReadDbContext readDbContext)
     {
         _readDbContext = readDbContext;
     }
 
-    public async Task<Result<IssueResponse, ErrorList>> Handle(
+    public async Task<Result<IssueDto, ErrorList>> Handle(
         GetIssueByIdQuery query,
         CancellationToken cancellationToken = default)
     {
-        var issueDto = await _readDbContext.Issues
+        var issueDto = await _readDbContext.ReadIssues
             .SingleOrDefaultAsync(i => i.Id == query.IssueId, cancellationToken);
 
         if (issueDto is null)
             return Errors.General.NotFound(query.IssueId).ToErrorList();
 
-        var response = new IssueResponse
+        var response = new IssueDto
         {
             Id = issueDto.Id,
             ModuleId = issueDto.ModuleId,
-            Title = issueDto.Title,
-            Description = issueDto.Description,
-            LessonId = issueDto.LessonId,
+            Title = issueDto.Title.Value,
+            Description = issueDto.Description.Value,
+            LessonId = issueDto.LessonId?.Value,
         };
 
         return response;

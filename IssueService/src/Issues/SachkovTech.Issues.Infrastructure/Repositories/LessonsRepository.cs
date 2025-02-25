@@ -11,9 +11,9 @@ namespace SachkovTech.Issues.Infrastructure.Repositories;
 
 public class LessonsRepository : ILessonsRepository
 {
-    private readonly IssuesWriteDbContext _dbContext;
+    private readonly IssuesDbContext _dbContext;
 
-    public LessonsRepository(IssuesWriteDbContext dbContext)
+    public LessonsRepository(IssuesDbContext dbContext)
     {
         _dbContext = dbContext;
     }

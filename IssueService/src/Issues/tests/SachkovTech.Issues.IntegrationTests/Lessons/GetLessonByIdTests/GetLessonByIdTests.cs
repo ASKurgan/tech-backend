@@ -26,7 +26,7 @@ public class GetLessonByIdTest : LessonsTestsBase
         // Arrange
         var cancellationToken = new CancellationTokenSource().Token;
 
-        var lesson = await SeedLessonToDatabase(WriteDbContext, cancellationToken);
+        var lesson = await SeedLessonToDatabase(DbContext, cancellationToken);
 
         var query = Fixture.CreateGetLessonByIdQuery(lesson.Id);
 
@@ -52,7 +52,7 @@ public class GetLessonByIdTest : LessonsTestsBase
 
         var cancellationToken = new CancellationTokenSource().Token;
 
-        var lesson = await SeedLessonToDatabase(WriteDbContext, cancellationToken);
+        var lesson = await SeedLessonToDatabase(DbContext, cancellationToken);
 
         var query = Fixture.CreateGetLessonByIdQuery(lesson.Id);
 
@@ -65,7 +65,7 @@ public class GetLessonByIdTest : LessonsTestsBase
     }
 
     private async Task<Lesson> SeedLessonToDatabase(
-        IssuesWriteDbContext dbContext,
+        IssuesDbContext dbContext,
         CancellationToken cancellationToken = default)
     {
         var lesson = new Lesson(
@@ -76,7 +76,7 @@ public class GetLessonByIdTest : LessonsTestsBase
             Experience.Create(1).Value,
             [Guid.NewGuid()],
             [Guid.NewGuid()]);
-        WriteDbContext.Lessons.Add(lesson);
+        DbContext.Lessons.Add(lesson);
 
         await dbContext.Lessons.AddAsync(lesson, cancellationToken);
 

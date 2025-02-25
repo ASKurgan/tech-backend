@@ -7,9 +7,9 @@ namespace SachkovTech.Issues.Infrastructure;
 
 internal class UnitOfWork : IUnitOfWork
 {
-    private readonly IssuesWriteDbContext _dbContext;
+    private readonly IssuesDbContext _dbContext;
 
-    public UnitOfWork(IssuesWriteDbContext dbContext)
+    public UnitOfWork(IssuesDbContext dbContext)
     {
         _dbContext = dbContext;
     }

@@ -31,7 +31,7 @@ public class IntegrationTestsWebFactory : WebApplicationFactory<Program>, IAsync
         await _dbContainer.StartAsync();
 
         using var scope = Services.CreateScope();
-        var issuesDbContext = scope.ServiceProvider.GetRequiredService<IssuesWriteDbContext>();
+        var issuesDbContext = scope.ServiceProvider.GetRequiredService<IssuesDbContext>();
 
         await issuesDbContext.Database.EnsureDeletedAsync();
         await issuesDbContext.Database.EnsureCreatedAsync();
@@ -58,17 +58,14 @@ public class IntegrationTestsWebFactory : WebApplicationFactory<Program>, IAsync
 
     protected virtual void ConfigureDefaultServices(IServiceCollection services)
     {
-        services.RemoveAll(typeof(IssuesWriteDbContext));
-        services.RemoveAll(typeof(IReadDbContext));
-        services.RemoveAll(typeof(IAutoSeeder));
+        services.RemoveAll(typeof(IssuesDbContext));
+        services.RemoveAll(typeof(IIssuesReadDbContext));
 
-        services.AddScoped<IssuesWriteDbContext>(_ =>
-            new IssuesWriteDbContext(_dbContainer.GetConnectionString()));
+        services.AddScoped<IssuesDbContext>(_ =>
+            new IssuesDbContext(_dbContainer.GetConnectionString()));
 
-        services.AddScoped<IReadDbContext, IssuesReadDbContext>(_ =>
-            new IssuesReadDbContext(_dbContainer.GetConnectionString()));
-
-        services.AddSingleton<IAutoSeeder, FakeAccountsSeeder>();
+        services.AddScoped<IIssuesReadDbContext, IssuesDbContext>(_ =>
+            new IssuesDbContext(_dbContainer.GetConnectionString()));
     }
 
     private async Task InitializeRespawner()
@@ -77,13 +74,5 @@ public class IntegrationTestsWebFactory : WebApplicationFactory<Program>, IAsync
         _respawner = await Respawner.CreateAsync(
             _dbConnection,
             new RespawnerOptions { DbAdapter = DbAdapter.Postgres, SchemasToInclude = ["issues"] });
-    }
-}
-
-public class FakeAccountsSeeder : IAutoSeeder
-{
-    public Task SeedAsync()
-    {
-        return Task.CompletedTask;
     }
 }

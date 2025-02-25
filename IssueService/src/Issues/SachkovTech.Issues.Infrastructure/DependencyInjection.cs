@@ -105,11 +105,11 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddScoped<IssuesWriteDbContext>(provider =>
-            new IssuesWriteDbContext(configuration.GetConnectionString("Database")!));
+        services.AddScoped<IssuesDbContext>(provider =>
+            new IssuesDbContext(configuration.GetConnectionString("Database")!));
 
-        services.AddScoped<IReadDbContext, IssuesReadDbContext>(provider =>
-            new IssuesReadDbContext(configuration.GetConnectionString("Database")!));
+        services.AddScoped<IIssuesReadDbContext, IssuesDbContext>(provider =>
+            new IssuesDbContext(configuration.GetConnectionString("Database")!));
 
         return services;
     }

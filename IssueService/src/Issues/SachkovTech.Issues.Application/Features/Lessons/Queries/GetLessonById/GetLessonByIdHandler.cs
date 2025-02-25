@@ -6,29 +6,30 @@ using SachkovTech.Core.Abstractions;
 using SachkovTech.Issues.Application.DataModels;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Contracts.Lesson;
+using SachkovTech.Issues.Domain.Lesson;
 using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonById;
 
 public class GetLessonByIdHandler : IQueryHandlerWithResult<LessonResponse, GetLessonByIdQuery>
 {
-    private readonly IReadDbContext _context;
+    private readonly IIssuesReadDbContext _readDbContext;
     private readonly IFileService _fileService;
 
-    public GetLessonByIdHandler(IReadDbContext context, IFileService fileService)
+    public GetLessonByIdHandler(IIssuesReadDbContext readDbContext, IFileService fileService)
     {
-        _context = context;
+        _readDbContext = readDbContext;
         _fileService = fileService;
     }
 
     public async Task<Result<LessonResponse, ErrorList>> Handle(
         GetLessonByIdQuery query, CancellationToken cancellationToken = default)
     {
-        var lesson = await _context.Lessons.FirstOrDefaultAsync(l => l.Id == query.LessonId, cancellationToken);
+        var lesson = await _readDbContext.ReadLessons.FirstOrDefaultAsync(l => l.Id == query.LessonId, cancellationToken);
         if (lesson is null)
             return Errors.General.NotFound(query.LessonId, "lesson").ToErrorList();
 
-        var fileServiceRequest = new GetDownloadUrlRequest(lesson.FileId.ToString(), lesson.FileLocation);
+        var fileServiceRequest = new GetDownloadUrlRequest(lesson.Video.FileId.ToString(), lesson.Video.FileLocation);
 
         var urlResult = await _fileService.GetDownloadUrl(fileServiceRequest, cancellationToken);
         if (urlResult.IsFailure)
@@ -39,19 +40,19 @@ public class GetLessonByIdHandler : IQueryHandlerWithResult<LessonResponse, GetL
         return lessonResponse;
     }
 
-    private LessonResponse ToLessonResponse(LessonDataModel lesson, string url) =>
+    private LessonResponse ToLessonResponse(Lesson lesson, string url) =>
         new()
         {
             Id = lesson.Id,
             ModuleId = lesson.ModuleId,
-            Title = lesson.Title,
-            Description = lesson.Description,
-            Experience = lesson.Experience,
-            VideoId = lesson.FileId,
+            Title = lesson.Title.Value,
+            Description = lesson.Description.Value,
+            Experience = lesson.Experience.Value,
+            VideoId = lesson.Video.FileId,
             VideoUrl = url,
-            PreviewId = lesson.PreviewId,
 
             // TODO: Сделайть получение превью
+            PreviewId = Guid.Empty,
             PreviewUrl = string.Empty,
 
             // TODO: Сделать получение Tags и Issues

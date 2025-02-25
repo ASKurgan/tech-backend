@@ -65,9 +65,7 @@ public class IssueConfiguration : IEntityTypeConfiguration<Issue>
         });
 
         builder.Property(i => i.Files)
-            .ValueObjectsCollectionJsonConversion(
-                fileId => fileId.Value,
-                FileId.Create)
+            .ValueObjectsCollectionJsonConversion()
             .HasColumnName("files");
 
         builder.Property<bool>("IsDeleted")

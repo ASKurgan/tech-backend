@@ -1,9 +1,11 @@
+using System.Text.Json.Serialization;
 using CSharpFunctionalExtensions;
 
 namespace SachkovTech.Issues.Domain.ValueObjects.Ids;
 
 public class IssueId : ComparableValueObject
 {
+    [JsonConstructor]
     private IssueId(Guid value)
     {
         Value = value;

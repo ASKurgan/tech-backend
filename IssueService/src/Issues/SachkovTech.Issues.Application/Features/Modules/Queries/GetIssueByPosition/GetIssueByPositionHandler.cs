@@ -8,9 +8,9 @@ namespace SachkovTech.Issues.Application.Features.Modules.Queries.GetIssueByPosi
 
 public class GetIssueByPositionHandler : IQueryHandlerWithResult<Guid, GetIssueByPositionQuery>
 {
-    private readonly IReadDbContext _readDbContext;
+    private readonly IIssuesReadDbContext _readDbContext;
 
-    public GetIssueByPositionHandler(IReadDbContext readDbContext)
+    public GetIssueByPositionHandler(IIssuesReadDbContext readDbContext)
     {
         _readDbContext = readDbContext;
     }
@@ -19,7 +19,7 @@ public class GetIssueByPositionHandler : IQueryHandlerWithResult<Guid, GetIssueB
         GetIssueByPositionQuery query,
         CancellationToken cancellationToken = default)
     {
-        var module = await _readDbContext.Modules
+        var module = await _readDbContext.ReadModules
             .FirstOrDefaultAsync(i => i.Id == query.ModuleId, cancellationToken);
 
         if (module is null)
@@ -31,6 +31,6 @@ public class GetIssueByPositionHandler : IQueryHandlerWithResult<Guid, GetIssueB
         if (issueDto is null)
             return Errors.General.NotFound().ToErrorList();
 
-        return issueDto.IssueId;
+        return issueDto.IssueId.Value;
     }
 }

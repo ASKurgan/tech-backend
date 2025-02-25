@@ -32,12 +32,12 @@ public class UpdateMainInfoTests : ModuleTestsBase
         result.Should().NotBeNull();
         result.IsSuccess.Should().BeTrue();
 
-        var module = await ReadDbContext.Modules
+        var module = await ReadDbContext.ReadModules
             .FirstOrDefaultAsync(x => x.Id == moduleId, cancellationToken);
 
         module.Should().NotBeNull();
 
-        module?.Title.Should().Be(command.Title);
-        module?.Description.Should().Be(command.Description);
+        module?.Title.Value.Should().Be(command.Title);
+        module?.Description.Value.Should().Be(command.Description);
     }
 }

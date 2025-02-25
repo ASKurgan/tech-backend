@@ -2,9 +2,9 @@
 
 namespace SachkovTech.Issues.Contracts.Module;
 
-public record ModuleResponse(
+public record ModuleDto(
     Guid Id,
     string Title,
     string Description,
-    IssuePositionDto[] IssuesPosition,
-    LessonPositionDto[] LessonPositions);
+    IReadOnlyList<IssuePositionDto> IssuesPositions,
+    IReadOnlyList<LessonPositionDto> LessonPositions);

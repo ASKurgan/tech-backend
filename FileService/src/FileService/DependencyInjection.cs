@@ -25,6 +25,7 @@ public static class DependencyInjection
         services.AddCustomSwagger(configuration);
 
         services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
 
         services.AddApplicationLoggingSeq(configuration);
 
@@ -36,8 +37,6 @@ public static class DependencyInjection
 
         services.AddObservability(configuration, [InstrumentationOptions.MeterName],
             [DiagnosticHeaders.DefaultListenerName]);
-
-        // services.AddScoped<VideoProcessor>();
 
         return services;
     }

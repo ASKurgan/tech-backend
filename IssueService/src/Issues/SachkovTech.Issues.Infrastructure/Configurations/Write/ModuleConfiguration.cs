@@ -1,4 +1,6 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SachkovTech.Core.Database;
 using SachkovTech.Issues.Contracts.Dtos;
@@ -39,18 +41,11 @@ public class ModuleConfiguration : IEntityTypeConfiguration<Module>
         });
 
         builder.Property(i => i.IssuesPosition)
-            .ValueObjectsCollectionJsonConversion(
-                valueObject
-                    => new IssuePositionDto(valueObject.IssueId, valueObject.Position),
-                issuePosition =>
-                    new IssuePosition(issuePosition.IssueId, Position.Create(issuePosition.Position).Value))
+            .ValueObjectsCollectionJsonConversion()
             .HasColumnName("issues_position");
 
         builder.Property(i => i.LessonsPosition)
-            .ValueObjectsCollectionJsonConversion(
-                valueObject => new LessonPositionDto(valueObject.LessonId, valueObject.Position),
-                lessonPosition =>
-                    new LessonPosition(lessonPosition.LessonId, Position.Create(lessonPosition.Position).Value))
+            .ValueObjectsCollectionJsonConversion()
             .HasColumnName("lessons_position");
 
         builder.Property(m => m.IsDeleted)

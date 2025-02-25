@@ -13,13 +13,13 @@ namespace SachkovTech.Issues.Infrastructure.Outbox;
 
 public class ProcessOutboxMessagesService
 {
-    private readonly IssuesWriteDbContext _dbContext;
+    private readonly IssuesDbContext _dbContext;
     private readonly IPublishEndpoint _publisher;
     private readonly ILogger<ProcessOutboxMessagesService> _logger;
 
     public ProcessOutboxMessagesService(
         Bind<IIssueMessageBus, IPublishEndpoint> publisher,
-        IssuesWriteDbContext dbContext,
+        IssuesDbContext dbContext,
         ILogger<ProcessOutboxMessagesService> logger)
     {
         _dbContext = dbContext;

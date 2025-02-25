@@ -1,10 +1,12 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Text.Json.Serialization;
+using CSharpFunctionalExtensions;
 using SachkovTech.Issues.Domain.ValueObjects.Ids;
 
 namespace SachkovTech.Issues.Domain.Module.ValueObjects;
 
 public class IssuePosition : ComparableValueObject, IPositionable
 {
+    [JsonConstructor]
     public IssuePosition(IssueId issueId, Position position)
     {
         IssueId = issueId;

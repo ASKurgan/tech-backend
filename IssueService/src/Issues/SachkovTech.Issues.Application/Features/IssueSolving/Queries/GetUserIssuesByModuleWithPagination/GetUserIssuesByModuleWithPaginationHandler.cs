@@ -9,9 +9,9 @@ namespace SachkovTech.Issues.Application.Features.IssueSolving.Queries.GetUserIs
 public class GetUserIssuesByModuleWithPaginationHandler
     : IQueryHandler<PagedList<UserIssueResponse>, GetUserIssuesByModuleWithPaginationQuery>
 {
-    private readonly IReadDbContext _readDbContext;
+    private readonly IIssuesReadDbContext _readDbContext;
 
-    public GetUserIssuesByModuleWithPaginationHandler(IReadDbContext readDbContext)
+    public GetUserIssuesByModuleWithPaginationHandler(IIssuesReadDbContext readDbContext)
     {
         _readDbContext = readDbContext;
     }
@@ -21,26 +21,26 @@ public class GetUserIssuesByModuleWithPaginationHandler
         CancellationToken cancellationToken)
     {
         var userIssuesQuery =
-            from userIssue in _readDbContext.UserIssues
-            join issue in _readDbContext.Issues
+            from userIssue in _readDbContext.ReadUserIssues
+            join issue in _readDbContext.ReadIssues
                 on userIssue.IssueId equals issue.Id
             where userIssue.UserId == query.UserId
                   && userIssue.ModuleId == query.ModuleId
-                  && userIssue.Status == query.Status
-            orderby Enum.Parse<IssueStatus>(userIssue.Status)
-            select new UserIssueResponse()
+                  && userIssue.Status == Enum.Parse<IssueStatus>(query.Status)
+            orderby userIssue.Status
+            select new UserIssueResponse
             {
                 Id = userIssue.Id,
                 UserId = userIssue.UserId,
                 IssueId = userIssue.IssueId,
                 ModuleId = userIssue.ModuleId,
-                IssueTitle = issue.Title,
-                IssueDescription = issue.Description,
-                Status = userIssue.Status,
+                IssueTitle = issue.Title.Value,
+                IssueDescription = issue.Description.Value,
+                Status = userIssue.Status.ToString(), //TODO: enum to russian string method
                 StartDateOfExecution = userIssue.StartDateOfExecution,
                 EndDateOfExecution = userIssue.EndDateOfExecution,
-                Attempts = userIssue.Attempts,
-                PullRequestUrl = userIssue.PullRequestUrl,
+                Attempts = userIssue.Attempts.Value,
+                PullRequestUrl = userIssue.PullRequestUrl.Value,
             };
 
         return await userIssuesQuery

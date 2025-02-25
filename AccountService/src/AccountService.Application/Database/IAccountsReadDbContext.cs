@@ -1,15 +1,14 @@
-using AccountService.Application.DataModels;
-using AccountService.Contracts.Dtos;
+using AccountService.Domain;
 
 namespace AccountService.Application.Database;
 
 public interface IAccountsReadDbContext
 {
-    IQueryable<UserDataModel> Users { get; }
+    IQueryable<User> ReadUsers { get; }
 
-    IQueryable<RoleDto> Roles { get; }
+    IQueryable<Role> ReadRoles { get; }
 
-    IQueryable<StudentAccountDto> StudentAccounts { get; }
+    IQueryable<StudentAccount> ReadStudentAccounts { get; }
 
-    IQueryable<SupportAccountDto> SupportAccounts { get; }
+    IQueryable<SupportAccount> ReadSupportAccounts { get; }
 }

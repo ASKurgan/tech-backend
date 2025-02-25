@@ -1,3 +1,4 @@
+using AccountService.Application.Database;
 using AccountService.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -7,11 +8,11 @@ using Microsoft.Extensions.Logging;
 
 namespace AccountService.Infrastructure.DbContexts;
 
-public class AccountsWriteDbContext : IdentityDbContext<User, Role, Guid>
+public class AccountsDbContext : IdentityDbContext<User, Role, Guid>, IAccountsReadDbContext
 {
     private readonly string _connectionString;
 
-    public AccountsWriteDbContext(string connectionString)
+    public AccountsDbContext(string connectionString)
     {
         _connectionString = connectionString;
     }
@@ -27,6 +28,16 @@ public class AccountsWriteDbContext : IdentityDbContext<User, Role, Guid>
     public DbSet<StudentAccount> StudentAccounts => Set<StudentAccount>();
 
     public DbSet<RefreshSession> RefreshSessions => Set<RefreshSession>();
+
+
+    public IQueryable<User> ReadUsers => Set<User>().AsQueryable().AsNoTracking();
+
+    public IQueryable<Role> ReadRoles => Set<Role>().AsQueryable().AsNoTracking();
+
+    public IQueryable<StudentAccount> ReadStudentAccounts => Set<StudentAccount>().AsQueryable().AsNoTracking();
+
+    public IQueryable<SupportAccount> ReadSupportAccounts => Set<SupportAccount>().AsQueryable().AsNoTracking();
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -61,7 +72,7 @@ public class AccountsWriteDbContext : IdentityDbContext<User, Role, Guid>
             .ToTable("user_roles");
 
         modelBuilder.ApplyConfigurationsFromAssembly(
-            typeof(AccountsWriteDbContext).Assembly,
+            typeof(AccountsDbContext).Assembly,
             type => type.FullName?.Contains("Configurations.Write") ?? false);
 
         modelBuilder.HasDefaultSchema("accounts");

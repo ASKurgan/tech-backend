@@ -33,7 +33,7 @@ public class GetLessonWithPaginationTests : LessonsTestsBase
         var cancellationToken = new CancellationTokenSource().Token;
 
         const int countLessons = 5;
-        var lessons = await SeedLessonsToDatabase(WriteDbContext, countLessons, cancellationToken);
+        var lessons = await SeedLessonsToDatabase(DbContext, countLessons, cancellationToken);
 
         var lessonIds = lessons.Select(l => l.Video.FileId);
         Factory.SetupSuccessFileServiceMock(lessonIds);
@@ -92,7 +92,7 @@ public class GetLessonWithPaginationTests : LessonsTestsBase
     }
 
     private async Task<List<Lesson>> SeedLessonsToDatabase(
-        IssuesWriteDbContext dbContext,
+        IssuesDbContext dbContext,
         int count,
         CancellationToken cancellationToken = default)
     {

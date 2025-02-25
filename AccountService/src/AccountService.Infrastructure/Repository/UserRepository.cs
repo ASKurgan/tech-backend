@@ -10,16 +10,16 @@ namespace AccountService.Infrastructure.Repository;
 
 public class UserRepository : IUserRepository
 {
-    private readonly AccountsWriteDbContext _dbContext;
+    private readonly AccountsDbContext _dbContext;
 
-    public UserRepository(AccountsWriteDbContext dbContext)
+    public UserRepository(AccountsDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
     public async Task<Result<User, Error>> GetById(Guid userId, CancellationToken cancellationToken = default)
     {
-        var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+        var user = await _dbContext.ReadUsers.FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
         if (user is null)
             return Errors.General.NotFound(userId, nameof(userId));
 
@@ -30,14 +30,14 @@ public class UserRepository : IUserRepository
         string phoneNumber,
         CancellationToken cancellationToken = default)
     {
-        var user = await _dbContext.Users.FirstOrDefaultAsync(p => p.PhoneNumber == phoneNumber, cancellationToken);
+        var user = await _dbContext.ReadUsers.FirstOrDefaultAsync(p => p.PhoneNumber == phoneNumber, cancellationToken);
 
         return user;
     }
 
     public async Task<bool> IsUserExistsByUserName(string userName, CancellationToken cancellationToken)
     {
-        var user = await _dbContext.Users.FirstOrDefaultAsync(p => p.UserName == userName, cancellationToken);
+        var user = await _dbContext.ReadUsers.FirstOrDefaultAsync(p => p.UserName == userName, cancellationToken);
 
         if (user is null)
             return false;

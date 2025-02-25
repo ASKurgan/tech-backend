@@ -32,7 +32,7 @@ public class DeleteModuleTests : ModuleTestsBase
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
 
-        var modules = await ReadDbContext.Modules
+        var modules = await ReadDbContext.ReadModules
             .ToListAsync(cancellationToken);
 
         modules.Should().BeNullOrEmpty();

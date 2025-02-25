@@ -9,34 +9,12 @@ using SachkovTech.Issues.Application.Features.Issue.Commands.RestoreIssue;
 using SachkovTech.Issues.Application.Features.Issue.Commands.UpdateIssueMainInfo;
 using SachkovTech.Issues.Application.Features.Issue.Queries.GetIssueById;
 using SachkovTech.Issues.Application.Features.Issue.Queries.GetIssuesByModuleWithPagination;
-using SachkovTech.Issues.Application.Features.Issue.Queries.GetIssuesWithPagination;
 using SachkovTech.Issues.Contracts.Issue;
 
 namespace SachkovTech.Issues.Presentation.Issues;
 
 public class IssuesController : ApplicationController
 {
-    [Permission(Permissions.Issues.READ_ISSUE)]
-    [HttpGet]
-    public async Task<ActionResult> Get(
-        [FromQuery] GetIssuesWithPaginationRequest request,
-        [FromServices] GetIssuesWithPaginationHandler handler,
-        CancellationToken cancellationToken)
-    {
-        var query = new GetFilteredIssuesWithPaginationQuery(
-            request.Title,
-            request.PositionFrom,
-            request.PositionTo,
-            request.SortBy,
-            request.SortDirection,
-            request.Page,
-            request.PageSize);
-
-        var response = await handler.Handle(query, cancellationToken);
-
-        return Ok(response);
-    }
-
     [Permission(Permissions.Issues.READ_ISSUE)]
     [HttpGet("module/{moduleId:guid}")]
     public async Task<ActionResult> GetByModule(

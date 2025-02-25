@@ -32,7 +32,7 @@ public class SoftDeleteIssueTests : IssueTestsBase
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
 
-        var issue = await ReadDbContext.Issues
+        var issue = await ReadDbContext.ReadIssues
             .IgnoreQueryFilters()
             .FirstOrDefaultAsync(l => l.Id == result.Value, cancellationToken);
 
@@ -56,7 +56,7 @@ public class SoftDeleteIssueTests : IssueTestsBase
         // Assert
         result.IsSuccess.Should().Be(false);
 
-        var issue = await ReadDbContext.Issues
+        var issue = await ReadDbContext.ReadIssues
             .IgnoreQueryFilters()
             .FirstOrDefaultAsync(l => l.Id == issueId, cancellationToken);
 

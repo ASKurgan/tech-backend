@@ -10,9 +10,9 @@ namespace SachkovTech.Issues.Infrastructure.Repositories;
 
 public class UserIssueRepository : IUserIssueRepository
 {
-    private readonly IssuesWriteDbContext _dbContext;
+    private readonly IssuesDbContext _dbContext;
 
-    public UserIssueRepository(IssuesWriteDbContext dbContext)
+    public UserIssueRepository(IssuesDbContext dbContext)
     {
         _dbContext = dbContext;
     }
