@@ -10,7 +10,7 @@ public static class LessonMapper
 {
     public static LessonDto ToDto(
         this Lesson lesson,
-        Dictionary<LessonId, Position> positions,
+        Dictionary<LessonId, Position>? positions,
         Dictionary<Video, string>? videoUrls) =>
         new()
         {
@@ -20,7 +20,7 @@ public static class LessonMapper
             Description = lesson.Description.Value,
             Experience = lesson.Experience.Value,
             VideoUrl = videoUrls?[lesson.Video] ?? string.Empty,
-            Position = positions[lesson.Id],
+            Position = positions?[lesson.Id] ?? 0,
 
             // TODO
             PreviewUrl = string.Empty,

@@ -19,7 +19,6 @@ namespace SachkovTech.Issues.Presentation.Lessons;
 
 public class LessonsController : ApplicationController
 {
-
     [HttpGet]
     [Permission(Permissions.Lessons.READ_LESSON)]
     public async Task<IActionResult> GetLessons(
