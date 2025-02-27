@@ -9,6 +9,7 @@ using SachkovTech.Core.Validation;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Application.Mappers;
 using SachkovTech.Issues.Contracts.Lesson;
+using SachkovTech.Issues.Domain.ValueObjects;
 using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessons;
@@ -36,6 +37,15 @@ public class GetLessonsHandler : IQueryHandlerWithResult<PagedList<LessonDto>, G
         if (validationResult.IsValid == false)
             return validationResult.ToList();
 
+        var module = await _readDbContext.ReadModules.FirstOrDefaultAsync(m => m.Id == query.ModuleId, cancellationToken);
+        if (module is null)
+        {
+            return new PagedList<LessonDto>
+            {
+                Items = [], TotalCount = 0, PageSize = query.PageSize, Page = query.Page,
+            };
+        }
+
         var lessonsQuery = _readDbContext.ReadLessons;
 
         int totalCount = await lessonsQuery.CountAsync(cancellationToken);
@@ -51,6 +61,9 @@ public class GetLessonsHandler : IQueryHandlerWithResult<PagedList<LessonDto>, G
             .Take(query.PageSize)
             .ToListAsync(cancellationToken: cancellationToken);
 
+        var positionsDict = module.LessonsPosition
+            .ToDictionary(l => l.LessonId, l => l.Position);
+
         var fileLocations = items
             .Select(l => new FileLocation(l.Video.FileId.ToString(), l.Video.FileLocation))
             .ToList();
@@ -59,7 +72,7 @@ public class GetLessonsHandler : IQueryHandlerWithResult<PagedList<LessonDto>, G
         {
             return new PagedList<LessonDto>
             {
-                Items = items.Select(l => l.ToDto(null)).ToList(), TotalCount = totalCount, PageSize = query.PageSize, Page = query.Page,
+                Items = items.Select(l => l.ToDto(positionsDict, null)).ToList(), TotalCount = totalCount, PageSize = query.PageSize, Page = query.Page,
             };
         }
 
@@ -71,11 +84,11 @@ public class GetLessonsHandler : IQueryHandlerWithResult<PagedList<LessonDto>, G
 
         var videoUrls = videoUrlsResult.Value.FileUrls
             .Where(f => f != null)
-            .ToDictionary(f => f!.FileId, f => f!.Url);
+            .ToDictionary(f => new Video(Guid.Parse(f!.FileId)), f => f!.Url);
 
         return new PagedList<LessonDto>
         {
-            Items = items.Select(l => l.ToDto(videoUrls)).ToList(), TotalCount = totalCount, PageSize = query.PageSize, Page = query.Page,
+            Items = items.Select(l => l.ToDto(positionsDict, videoUrls)).ToList(), TotalCount = totalCount, PageSize = query.PageSize, Page = query.Page,
         };
     }
 }
