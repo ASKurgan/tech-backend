@@ -3,7 +3,7 @@ using FileService.Communication;
 using FluentValidation;
 using MassTransit.Logging;
 using MassTransit.Monitoring;
-using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Mvc;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Caching;
 using SachkovTech.Framework.Authorization;
@@ -21,9 +21,17 @@ public static class DependencyInjection
     {
         services.AddApplicationLoggingSeq(configuration);
 
-        var assemblies = new[] { typeof(SachkovTech.Issues.Application.DependencyInjection).Assembly, };
+        var assemblies = new[]
+        {
+            typeof(SachkovTech.Issues.Application.DependencyInjection).Assembly,
+        };
 
         services.AddControllers();
+
+        services.Configure<ApiBehaviorOptions>(options =>
+        {
+            options.SuppressModelStateInvalidFilter = true;
+        });
 
         services
             .AddApplication()

@@ -7,7 +7,6 @@ using SachkovTech.Issues.Application.Features.Modules.Commands.UpdateIssuePositi
 using SachkovTech.Issues.Application.Features.Modules.Commands.UpdateMainInfo;
 using SachkovTech.Issues.Application.Features.Modules.Queries.GetModules;
 using SachkovTech.Issues.Contracts.Module;
-using SharedKernel;
 
 namespace SachkovTech.Issues.Presentation.Modules;
 

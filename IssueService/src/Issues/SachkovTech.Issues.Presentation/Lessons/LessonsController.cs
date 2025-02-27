@@ -19,16 +19,16 @@ namespace SachkovTech.Issues.Presentation.Lessons;
 
 public class LessonsController : ApplicationController
 {
+
     [HttpGet]
     [Permission(Permissions.Lessons.READ_LESSON)]
-    public async Task<IActionResult> GetLessonsWithPagination(
-        [FromQuery] int page,
-        [FromQuery] int pageSize,
+    public async Task<IActionResult> GetLessons(
+        [FromQuery] GetLessonsRequest request,
         [FromServices] GetLessonsHandler handler,
         CancellationToken cancellationToken)
     {
         var result = await handler.Handle(
-            new GetLessonsWithPaginationQuery(page, pageSize),
+            new GetLessonsWithPaginationQuery(request.Page, request.PageSize, request.ModuleId, request.Search),
             cancellationToken);
 
         if (result.IsFailure)

@@ -1,7 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace SachkovTech.Issues.Contracts.Issue;
 
 public record AddIssueRequest(
-    Guid ModuleId,
+    [Required] Guid ModuleId,
     Guid? LessonId,
     string Title,
     string Description,

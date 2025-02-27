@@ -3,7 +3,7 @@ using SachkovTech.Issues.Contracts.Issue;
 
 namespace SachkovTech.Issues.Contracts.Lesson;
 
-public class LessonResponse
+public class LessonDto
 {
     public Guid Id { get; init; }
 

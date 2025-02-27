@@ -21,10 +21,10 @@ public class GetLessonWithPaginationTests : LessonsTestsBase
         : base(factory)
     {
         _sut = Scope.ServiceProvider
-            .GetRequiredService<IQueryHandlerWithResult<PagedList<LessonResponse>, GetLessonsWithPaginationQuery>>();
+            .GetRequiredService<IQueryHandlerWithResult<PagedList<LessonDto>, GetLessonsWithPaginationQuery>>();
     }
 
-    private IQueryHandlerWithResult<PagedList<LessonResponse>, GetLessonsWithPaginationQuery> _sut;
+    private IQueryHandlerWithResult<PagedList<LessonDto>, GetLessonsWithPaginationQuery> _sut;
 
     [Fact]
     public async Task Get_lessons_with_pagination()

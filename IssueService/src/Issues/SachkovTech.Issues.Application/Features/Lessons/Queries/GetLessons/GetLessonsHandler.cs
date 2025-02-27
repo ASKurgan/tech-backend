@@ -2,17 +2,18 @@
 using FileService.Communication;
 using FileService.Contracts;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Core.Database;
 using SachkovTech.Core.Validation;
 using SachkovTech.Issues.Application.Interfaces;
+using SachkovTech.Issues.Application.Mappers;
 using SachkovTech.Issues.Contracts.Lesson;
-using SachkovTech.Issues.Domain.Lesson;
 using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessons;
 
-public class GetLessonsHandler : IQueryHandlerWithResult<PagedList<LessonResponse>, GetLessonsWithPaginationQuery>
+public class GetLessonsHandler : IQueryHandlerWithResult<PagedList<LessonDto>, GetLessonsWithPaginationQuery>
 {
     private readonly IValidator<GetLessonsWithPaginationQuery> _validator;
     private readonly IFileService _fileService;
@@ -28,7 +29,7 @@ public class GetLessonsHandler : IQueryHandlerWithResult<PagedList<LessonRespons
         _readDbContext = readDbContext;
     }
 
-    public async Task<Result<PagedList<LessonResponse>, ErrorList>> Handle(
+    public async Task<Result<PagedList<LessonDto>, ErrorList>> Handle(
         GetLessonsWithPaginationQuery query, CancellationToken cancellationToken = default)
     {
         var validationResult = await _validator.ValidateAsync(query, cancellationToken);
@@ -36,50 +37,45 @@ public class GetLessonsHandler : IQueryHandlerWithResult<PagedList<LessonRespons
             return validationResult.ToList();
 
         var lessonsQuery = _readDbContext.ReadLessons;
-        var lessonsPagedList = await lessonsQuery.ToPagedList(query.Page, query.PageSize, cancellationToken);
 
-        var fileLocations = lessonsPagedList.Items
-            .Select(l => new FileLocation(l.Video.FileId.ToString(), l.Video.FileLocation));
+        int totalCount = await lessonsQuery.CountAsync(cancellationToken);
 
-        var urlsRequest = new GetDownloadUrlsRequest(fileLocations);
+        if (!string.IsNullOrWhiteSpace(query.Search))
+        {
+            lessonsQuery = lessonsQuery.Where(l => EF.Functions.Like(l.Title.Value.ToLower(), $"%{query.Search.ToLower()}%"));
+        }
 
-        var videoUrlsResult = await _fileService.GetDownloadUrls(urlsRequest, cancellationToken);
+        var items = await lessonsQuery
+            .Where(l => l.ModuleId == query.ModuleId)
+            .Skip((query.Page - 1) * query.PageSize)
+            .Take(query.PageSize)
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        var fileLocations = items
+            .Select(l => new FileLocation(l.Video.FileId.ToString(), l.Video.FileLocation))
+            .ToList();
+
+        if (fileLocations.Count == 0)
+        {
+            return new PagedList<LessonDto>
+            {
+                Items = items.Select(l => l.ToDto(null)).ToList(), TotalCount = totalCount, PageSize = query.PageSize, Page = query.Page,
+            };
+        }
+
+        var videoUrlsRequest = new GetDownloadUrlsRequest(fileLocations);
+
+        var videoUrlsResult = await _fileService.GetDownloadUrls(videoUrlsRequest, cancellationToken);
         if (videoUrlsResult.IsFailure)
             return Errors.General.NotFound().ToErrorList();
 
-        var urlsDict = videoUrlsResult.Value.FileUrls
+        var videoUrls = videoUrlsResult.Value.FileUrls
             .Where(f => f != null)
             .ToDictionary(f => f!.FileId, f => f!.Url);
 
-        return ConvertToLessonResponses(urlsDict, lessonsPagedList);
-    }
-
-    private PagedList<LessonResponse> ConvertToLessonResponses(
-        Dictionary<string, string> urls, PagedList<Lesson> lessonsPagedList)
-    {
-        var lessons = lessonsPagedList.Items
-            .Select(lesson => new LessonResponse
-            {
-                Id = lesson.Id,
-                ModuleId = lesson.ModuleId,
-                Title = lesson.Title.Value,
-                Description = lesson.Description.Value,
-                Experience = lesson.Experience.Value,
-                VideoId = lesson.Video.FileId,
-                VideoUrl = urls[lesson.Video.FileId.ToString()],
-
-                // TODO: Сделать получение превью
-                PreviewId = Guid.Empty,
-                PreviewUrl = string.Empty,
-
-                // TODO: Сделать получение Tags и Issues
-                Tags = [],
-                Issues = [],
-            }).ToList();
-
-        return new PagedList<LessonResponse>
+        return new PagedList<LessonDto>
         {
-            Items = lessons.AsReadOnly(), TotalCount = lessonsPagedList.TotalCount, PageSize = lessonsPagedList.PageSize, Page = lessonsPagedList.Page,
+            Items = items.Select(l => l.ToDto(videoUrls)).ToList(), TotalCount = totalCount, PageSize = query.PageSize, Page = query.Page,
         };
     }
 }

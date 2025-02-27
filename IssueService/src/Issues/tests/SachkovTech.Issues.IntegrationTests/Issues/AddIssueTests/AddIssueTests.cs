@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Core.Abstractions;
 using SachkovTech.Issues.Application.Features.Issue.Commands.AddIssue;
-using YamlDotNet.Core.Tokens;
 
 namespace SachkovTech.Issues.IntegrationTests.Issues.AddIssueTests;
 

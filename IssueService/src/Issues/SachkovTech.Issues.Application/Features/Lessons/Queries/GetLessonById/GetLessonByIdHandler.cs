@@ -3,7 +3,6 @@ using FileService.Communication;
 using FileService.Contracts;
 using Microsoft.EntityFrameworkCore;
 using SachkovTech.Core.Abstractions;
-using SachkovTech.Issues.Application.DataModels;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Contracts.Lesson;
 using SachkovTech.Issues.Domain.Lesson;
@@ -11,7 +10,7 @@ using SharedKernel;
 
 namespace SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonById;
 
-public class GetLessonByIdHandler : IQueryHandlerWithResult<LessonResponse, GetLessonByIdQuery>
+public class GetLessonByIdHandler : IQueryHandlerWithResult<LessonDto, GetLessonByIdQuery>
 {
     private readonly IIssuesReadDbContext _readDbContext;
     private readonly IFileService _fileService;
@@ -22,7 +21,7 @@ public class GetLessonByIdHandler : IQueryHandlerWithResult<LessonResponse, GetL
         _fileService = fileService;
     }
 
-    public async Task<Result<LessonResponse, ErrorList>> Handle(
+    public async Task<Result<LessonDto, ErrorList>> Handle(
         GetLessonByIdQuery query, CancellationToken cancellationToken = default)
     {
         var lesson = await _readDbContext.ReadLessons.FirstOrDefaultAsync(l => l.Id == query.LessonId, cancellationToken);
@@ -40,7 +39,7 @@ public class GetLessonByIdHandler : IQueryHandlerWithResult<LessonResponse, GetL
         return lessonResponse;
     }
 
-    private LessonResponse ToLessonResponse(Lesson lesson, string url) =>
+    private LessonDto ToLessonResponse(Lesson lesson, string url) =>
         new()
         {
             Id = lesson.Id,
