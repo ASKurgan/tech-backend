@@ -2,6 +2,7 @@ using System.Net.Http.Json;
 using FileService.Contracts;
 using FluentAssertions;
 using SharedKernel;
+using FileInfo = System.IO.FileInfo;
 
 namespace FileService.IntegrationTests;
 
