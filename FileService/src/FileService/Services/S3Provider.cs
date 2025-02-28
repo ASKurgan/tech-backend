@@ -16,6 +16,13 @@ public class S3Provider : IS3Provider
         _logger = logger;
     }
 
+    public async Task<List<string>> ListBucketsAsync(CancellationToken cancellationToken)
+    {
+        var response = await _s3Client.ListBucketsAsync(cancellationToken);
+
+        return response.Buckets.Select(b => b.BucketName!).ToList();
+    }
+
     public async Task<string> StartMultipartUpload(
         string fileName,
         string contentType,
@@ -91,6 +98,30 @@ public class S3Provider : IS3Provider
         return response.Key;
     }
 
+    public async Task AbortMultipartUploadAsync(
+        FileLocation fileLocation,
+        string uploadId,
+        CancellationToken cancellationToken)
+    {
+        var abortRequest = new AbortMultipartUploadRequest
+        {
+            BucketName = fileLocation.BucketName, Key = fileLocation.FileId, UploadId = uploadId,
+        };
+
+        await _s3Client.AbortMultipartUploadAsync(abortRequest, cancellationToken);
+    }
+
+    public async Task<ListMultipartUploadsResponse> ListMultipartUploadAsync(
+        string bucketName,
+        CancellationToken cancellationToken)
+    {
+        var listRequest = new ListMultipartUploadsRequest { BucketName = bucketName };
+
+        var response = await _s3Client.ListMultipartUploadsAsync(listRequest, cancellationToken);
+
+        return response;
+    }
+
     public async Task<string> GenerateDownloadUrlAsync(FileLocation location, int expirationHours)
     {
         var request = new GetPreSignedUrlRequest
@@ -105,7 +136,9 @@ public class S3Provider : IS3Provider
         return await _s3Client.GetPreSignedURLAsync(request);
     }
 
-    public async Task<IReadOnlyList<FileUrl?>> GenerateDownloadUrlsAsync(IEnumerable<FileLocation> locations, int expirationHours)
+    public async Task<IReadOnlyList<FileUrl?>> GenerateDownloadUrlsAsync(
+        IEnumerable<FileLocation> locations,
+        int expirationHours)
     {
         var semaphore = new SemaphoreSlim(50);
 
@@ -142,12 +175,10 @@ public class S3Provider : IS3Provider
         return await Task.WhenAll(tasks);
     }
 
-    public async Task DownloadFileAsync(FileLocation location, string tempInputPath, CancellationToken cancellationToken)
+    public async Task DownloadFileAsync(FileLocation location, string tempInputPath,
+        CancellationToken cancellationToken)
     {
-        var request = new GetObjectRequest
-        {
-            BucketName = location.BucketName, Key = location.FileId,
-        };
+        var request = new GetObjectRequest { BucketName = location.BucketName, Key = location.FileId, };
 
         using var response = await _s3Client.GetObjectAsync(request, cancellationToken);
         await using var fileStream = File.Create(tempInputPath);
@@ -158,7 +189,9 @@ public class S3Provider : IS3Provider
     {
         var request = new PutObjectRequest
         {
-            BucketName = location.BucketName, Key = location.FileId, InputStream = file, // Укажите MIME-тип, если известен
+            BucketName = location.BucketName,
+            Key = location.FileId,
+            InputStream = file, // Укажите MIME-тип, если известен
         };
 
         await _s3Client.PutObjectAsync(request, cancellationToken);
@@ -172,10 +205,7 @@ public class S3Provider : IS3Provider
             return;
         }
 
-        var bucketRequest = new PutBucketRequest
-        {
-            BucketName = bucketName, UseClientRegion = true,
-        };
+        var bucketRequest = new PutBucketRequest { BucketName = bucketName, UseClientRegion = true, };
 
         await _s3Client.PutBucketAsync(bucketRequest, cancellationToken);
     }

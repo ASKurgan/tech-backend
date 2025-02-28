@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 using Amazon.S3;
+using FileService.BackgroundServices;
 using FileService.Options;
 using FileService.Services;
 using MassTransit;
 using MassTransit.Logging;
 using MassTransit.Monitoring;
-using Microsoft.OpenApi.Models;
 using SachkovTech.Framework.Authorization;
 using SachkovTech.Framework.Endpoints;
 using SachkovTech.Framework.Logging;
@@ -35,8 +35,17 @@ public static class DependencyInjection
 
         services.AddCors();
 
+        services.AddBackgroundServices();
+
         services.AddObservability(configuration, [InstrumentationOptions.MeterName],
             [DiagnosticHeaders.DefaultListenerName]);
+
+        return services;
+    }
+
+    private static IServiceCollection AddBackgroundServices(this IServiceCollection services)
+    {
+        services.AddHostedService<CancelMultipartUploadService>();
 
         return services;
     }

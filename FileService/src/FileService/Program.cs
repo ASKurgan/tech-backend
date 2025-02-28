@@ -1,5 +1,4 @@
 using FileService;
-using MassTransit;
 using SachkovTech.Framework.Endpoints;
 using SachkovTech.Framework.Middlewares;
 using Serilog;

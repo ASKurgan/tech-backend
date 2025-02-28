@@ -1,6 +1,5 @@
 ﻿using FileService.Contracts;
 using FileService.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
 using SachkovTech.Framework.Authorization;
 using SachkovTech.Framework.Endpoints;
 using SharedKernel;

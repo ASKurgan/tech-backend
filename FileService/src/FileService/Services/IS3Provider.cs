@@ -1,9 +1,25 @@
-﻿using FileService.Contracts;
+﻿using Amazon.S3.Model;
+using FileService.Contracts;
 
 namespace FileService.Services;
 
 public interface IS3Provider
 {
+    /// <summary>
+    /// Получение списка всех multipart-загрузок в указанном бакете.
+    /// </summary>
+    /// <param name="bucketName">Имя бакета.</param>
+    /// <param name="cancellationToken">Токен отмены.</param>
+    /// <returns>Ответ со списком multipart-загрузок.</returns>
+    Task<ListMultipartUploadsResponse> ListMultipartUploadAsync(string bucketName, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Получение списка всех бакетов в аккаунте.
+    /// </summary>
+    /// <param name="cancellationToken">Токен отмены.</param>
+    /// <returns>Список имён бакетов.</returns>
+    Task<List<string>> ListBucketsAsync(CancellationToken cancellationToken);
+
     /// <summary>
     /// Инициализация multipart-загрузки
     /// </summary>
@@ -52,6 +68,18 @@ public interface IS3Provider
         FileLocation fileLocation,
         string uploadId,
         List<(int PartNumber, string ETag)> partETags,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Прерывание multipart-загрузки.
+    /// </summary>
+    /// <param name="fileLocation">Локация файла.</param>
+    /// <param name="uploadId">Идентификатор multipart-загрузки.</param>
+    /// <param name="cancellationToken">Токен отмены.</param>
+    /// <returns>Task.</returns>
+    Task AbortMultipartUploadAsync(
+        FileLocation fileLocation,
+        string uploadId,
         CancellationToken cancellationToken);
 
     /// <summary>
