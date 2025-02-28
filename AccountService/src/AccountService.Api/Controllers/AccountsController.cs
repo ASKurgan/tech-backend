@@ -27,14 +27,14 @@ public class AccountsController : ApplicationController
         _httpContextProvider = httpContextProvider;
     }
 
-    [HttpGet("{userId:guid}")]
+    [HttpGet("user")]
     [Permission(Permissions.Accounts.READ_ACCOUNT)]
     public async Task<IActionResult> GetUserById(
-        [FromRoute] Guid userId,
+        [FromServices] UserScopedData userScopedData,
         [FromServices] GetUserByIdHandler handler,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetUserByIdQuery(userId);
+        var query = new GetUserByIdQuery(userScopedData.UserId);
 
         var result = await handler.Handle(query, cancellationToken);
         if (result.IsFailure)

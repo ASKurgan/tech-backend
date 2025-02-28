@@ -44,6 +44,6 @@ public class GetLessonByIdHandler : IQueryHandlerWithResult<LessonDto, GetLesson
             .Where(f => f != null)
             .ToDictionary(f => new Video(Guid.Parse(f!.FileId)), f => f!.Url);
 
-        return lesson.ToDto([], videoUrls);
+        return lesson.ToDto(null, videoUrls);
     }
 }
