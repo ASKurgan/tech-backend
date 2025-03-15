@@ -1,4 +1,3 @@
-using SachkovTech.Issues.Contracts.Dtos;
 using SachkovTech.Issues.Contracts.Issue;
 
 namespace SachkovTech.Issues.Contracts.Lesson;
@@ -19,13 +18,15 @@ public class LessonDto
 
     public Guid VideoId { get; init; }
 
+    public string FileLocation { get; init; } = string.Empty;
+
     public string VideoUrl { get; init; } = string.Empty;
 
     public Guid PreviewId { get; init; }
 
     public string PreviewUrl { get; init; } = string.Empty;
 
-    public TagResponse[] Tags { get; init; } = [];
+    public Guid[] Tags { get; init; } = [];
 
-    public IssueDto[] Issues { get; init; } = [];
+    public Guid[] Issues { get; init; } = [];
 }

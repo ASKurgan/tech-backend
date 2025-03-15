@@ -6,5 +6,5 @@ public interface IPositionable
 {
     Position Position { get; }
 
-    IPositionable Move(Position position);
+    void SetPosition(Position position);
 }

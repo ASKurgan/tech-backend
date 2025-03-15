@@ -37,6 +37,7 @@ public class UpdateIssuePositionTests : ModuleTestsBase
         result.IsSuccess.Should().BeTrue();
 
         var module = await ReadDbContext.ReadModules
+            .Include(m => m.IssuesPosition)
             .FirstOrDefaultAsync(x => x.Id == moduleId, cancellationToken);
 
         module?.IssuesPosition.Should().NotBeNull();

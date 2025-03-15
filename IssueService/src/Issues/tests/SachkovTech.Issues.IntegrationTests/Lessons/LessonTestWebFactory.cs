@@ -11,27 +11,29 @@ public class LessonTestWebFactory : IntegrationTestsWebFactory
 {
     private readonly IFileService _fileServiceMock = Substitute.For<IFileService>();
 
+    private const string FILE_ID_TEST = "106c352b-98d2-4a31-8ea6-3f63c5f2d27a";
+
     public void SetupSuccessFileServiceMock()
     {
-        var response = new CompleteMultipartUploadResponse("testUrl");
+        var response = new CompleteMultipartUploadResponse(FILE_ID_TEST);
         _fileServiceMock
             .CompleteMultipartUpload(Arg.Any<CompleteMultipartUploadRequest>(), Arg.Any<CancellationToken>())
             .Returns(Result.Success<CompleteMultipartUploadResponse, ErrorList>(response));
 
         _fileServiceMock
             .GetDownloadUrls(Arg.Any<GetDownloadUrlsRequest>(), Arg.Any<CancellationToken>())
-            .Returns(Result.Success<GetDownloadUrlsResponse, ErrorList>(new GetDownloadUrlsResponse([new FileUrl("test", "test")])));
+            .Returns(Result.Success<GetDownloadUrlsResponse, ErrorList>(new GetDownloadUrlsResponse([new FileUrl($"testUrl/{FILE_ID_TEST}", "test")])));
     }
 
     public void SetupSuccessFileServiceMock(IEnumerable<Guid> fileIds)
     {
-        var response = new CompleteMultipartUploadResponse("testUrl");
+        var response = new CompleteMultipartUploadResponse(FILE_ID_TEST);
         _fileServiceMock
             .CompleteMultipartUpload(Arg.Any<CompleteMultipartUploadRequest>(), Arg.Any<CancellationToken>())
             .Returns(Result.Success<CompleteMultipartUploadResponse, ErrorList>(response));
 
         var urls = fileIds
-            .Select(id => new FileUrl($"testUrl/{id}", $"test/{id}"))
+            .Select(id => new FileUrl($"{id}", $"test/{id}"))
             .ToArray();
         _fileServiceMock
             .GetDownloadUrls(Arg.Any<GetDownloadUrlsRequest>(), Arg.Any<CancellationToken>())

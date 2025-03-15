@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Domain.Issue;
@@ -66,6 +67,10 @@ public class IssueTestsBase : IClassFixture<IntegrationTestsWebFactory>, IAsyncL
             null);
 
         await DbContext.Issues.AddAsync(issue);
+
+        var module = await DbContext.Modules.SingleOrDefaultAsync(x => x.Id == moduleId);
+
+        module?.AddIssue(issue.Id);
 
         await DbContext.SaveChangesAsync();
 

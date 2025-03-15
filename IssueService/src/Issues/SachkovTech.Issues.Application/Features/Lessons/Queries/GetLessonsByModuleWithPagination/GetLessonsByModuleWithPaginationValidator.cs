@@ -2,11 +2,11 @@
 using SachkovTech.Core.Validation;
 using SharedKernel;
 
-namespace SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessons;
+namespace SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonsByModuleWithPagination;
 
-public class GetLessonsValidator : AbstractValidator<GetLessonsWithPaginationQuery>
+public class GetLessonsByModuleWithPaginationValidator : AbstractValidator<GetLessonsWithPaginationQuery>
 {
-    public GetLessonsValidator()
+    public GetLessonsByModuleWithPaginationValidator()
     {
         RuleFor(v => v.Page)
             .GreaterThanOrEqualTo(1)

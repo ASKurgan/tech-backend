@@ -11,7 +11,7 @@ using SachkovTech.Issues.Application.Features.Lessons.Command.SoftDeleteLesson;
 using SachkovTech.Issues.Application.Features.Lessons.Command.StartUploadVideo;
 using SachkovTech.Issues.Application.Features.Lessons.Command.UpdateLesson;
 using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonById;
-using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessons;
+using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonsByModuleWithPagination;
 using SachkovTech.Issues.Application.Features.Modules.Commands.UpdateLessonPosition;
 using SachkovTech.Issues.Contracts.Lesson;
 
@@ -23,10 +23,10 @@ public class LessonsController : ApplicationController
     [Permission(Permissions.Lessons.READ_LESSON)]
     public async Task<IActionResult> GetLessons(
         [FromQuery] GetLessonsRequest request,
-        [FromServices] GetLessonsHandler handler,
+        [FromServices] GetLessonsByModuleWithPaginationHandler byModuleWithPaginationHandler,
         CancellationToken cancellationToken)
     {
-        var result = await handler.Handle(
+        var result = await byModuleWithPaginationHandler.Handle(
             new GetLessonsWithPaginationQuery(request.Page, request.PageSize, request.ModuleId, request.Search),
             cancellationToken);
 

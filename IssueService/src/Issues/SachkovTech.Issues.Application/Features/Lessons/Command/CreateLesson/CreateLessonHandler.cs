@@ -47,7 +47,7 @@ public class CreateLessonHandler : ICommandHandler<Guid, CreateLessonCommand>
         if (validationResult.IsValid == false)
             return validationResult.ToList();
 
-        var transaction = await _unitOfWork.BeginTransaction(cancellationToken);
+        await using var transaction = await _unitOfWork.BeginTransaction(cancellationToken);
 
         (_, bool isFailure, Module? module, Error? error) =
             await _modulesRepository.GetById(command.ModuleId, cancellationToken);

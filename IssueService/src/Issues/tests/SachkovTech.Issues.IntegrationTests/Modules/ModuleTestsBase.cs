@@ -84,6 +84,7 @@ public class ModuleTestsBase : IClassFixture<ModuleTestWebFactory>, IAsyncLifeti
     {
         var module = await DbContext.Modules
             .FirstOrDefaultAsync(x => x.Id == moduleId, cancellationToken);
+
         if (module is null)
             throw new Exception($"Seeded Module {moduleId} not found, something wrong with DB");
 
