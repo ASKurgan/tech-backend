@@ -1,11 +1,12 @@
 ﻿using System.Reflection;
 using Amazon.S3;
 using FileService.BackgroundServices;
-using FileService.Options;
+using FileService.Contracts.Options;
 using FileService.Services;
 using MassTransit;
 using MassTransit.Logging;
 using MassTransit.Monitoring;
+using SachkovTech.Core.Caching;
 using SachkovTech.Framework.Authorization;
 using SachkovTech.Framework.Endpoints;
 using SachkovTech.Framework.Logging;
@@ -59,6 +60,8 @@ public static class DependencyInjectionInfrastructure
             .AddMinio(configuration)
             .FileServices(configuration);
 
+        services.AddDistributedCache(configuration);
+
         return services;
     }
 
@@ -90,7 +93,6 @@ public static class DependencyInjectionInfrastructure
             configure.SetKebabCaseEndpointNameFormatter();
 
             // configure.AddConsumer<VideoProcessConsumer>();
-
             configure.UsingRabbitMq((context, cfg) =>
             {
                 cfg.Host(new Uri(configuration["RabbitMQ:Host"]!), h =>

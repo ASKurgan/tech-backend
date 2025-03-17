@@ -20,4 +20,12 @@ public static class FileServiceExtensions
 
         return services;
     }
+
+    public static IServiceCollection AddFileServiceCacheDecorator(
+        this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Decorate<IFileService, FileServiceCachingDecorator>();
+
+        return services;
+    }
 }
