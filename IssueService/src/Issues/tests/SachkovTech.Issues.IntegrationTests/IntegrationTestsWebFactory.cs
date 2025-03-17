@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
 using Respawn;
+using SachkovTech.Core.Database;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Infrastructure.DbContexts;
 using SachkovTech.Web;
@@ -59,12 +60,16 @@ public class IntegrationTestsWebFactory : WebApplicationFactory<Program>, IAsync
     {
         services.RemoveAll(typeof(IssuesDbContext));
         services.RemoveAll(typeof(IIssuesReadDbContext));
+        services.RemoveAll(typeof(ISqlConnectionFactory));
 
         services.AddScoped<IssuesDbContext>(_ =>
             new IssuesDbContext(_dbContainer.GetConnectionString()));
 
         services.AddScoped<IIssuesReadDbContext, IssuesDbContext>(_ =>
             new IssuesDbContext(_dbContainer.GetConnectionString()));
+
+        services.AddScoped<ISqlConnectionFactory>(_ =>
+            new SqlConnectionFactory(_dbContainer.GetConnectionString()));
     }
 
     private async Task InitializeRespawner()

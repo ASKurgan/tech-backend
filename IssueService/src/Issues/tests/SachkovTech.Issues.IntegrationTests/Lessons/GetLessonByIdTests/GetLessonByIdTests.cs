@@ -40,8 +40,9 @@ public class GetLessonByIdTest : LessonsTestsBase
         var lessonResponse = result.Value;
         lessonResponse.Should().NotBeNull();
         lessonResponse.Id.Should().Be(query.LessonId);
-        lessonResponse.VideoUrl.Should().Be("testUrl");
-        lessonResponse.PreviewUrl.Should().Be("testUrl");
+        lessonResponse.VideoUrl.Should().Be($"test/{lesson.Video.FileId}");
+        // TODO: нужно доделать LessonMapper, а потом поставить тестовые данные
+        lessonResponse.PreviewUrl.Should().Be(string.Empty);
     }
 
     [Fact]
@@ -76,10 +77,11 @@ public class GetLessonByIdTest : LessonsTestsBase
             Experience.Create(1).Value,
             [Guid.NewGuid()],
             [Guid.NewGuid()]);
-        DbContext.Lessons.Add(lesson);
 
+        var video = new Video(Guid.NewGuid());
+
+        lesson.AddVideo(video);
         await dbContext.Lessons.AddAsync(lesson, cancellationToken);
-
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return lesson;

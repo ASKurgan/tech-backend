@@ -167,18 +167,9 @@ public class ModuleTests
         var issueGuid2 = IssueId.Create(Guid.NewGuid());
         var issueGuid3 = IssueId.Create(Guid.NewGuid());
 
-        var position1 = Position.Create(1).Value;
-        var position2 = Position.Create(2).Value;
-        var position3 = Position.Create(3).Value;
-
-        var issuesPosition = new List<IssuePosition>
-        {
-            new IssuePosition(issueGuid1, position1),
-            new IssuePosition(issueGuid2, position2),
-            new IssuePosition(issueGuid3, position3),
-        };
-
-        module.IssuesPosition = issuesPosition;
+        module.AddIssue(issueGuid1);
+        module.AddIssue(issueGuid2);
+        module.AddIssue(issueGuid3);
 
         var issuesPositions = module.IssuesPosition.OrderBy(i => i.Position.Value).ToList();
 
@@ -207,18 +198,9 @@ public class ModuleTests
         var issueGuid2 = IssueId.Create(Guid.NewGuid());
         var issueGuid3 = IssueId.Create(Guid.NewGuid());
 
-        var position1 = Position.Create(1).Value;
-        var position2 = Position.Create(2).Value;
-        var position3 = Position.Create(3).Value;
-
-        var issuesPosition = new List<IssuePosition>
-        {
-            new IssuePosition(issueGuid1, position1),
-            new IssuePosition(issueGuid2, position2),
-            new IssuePosition(issueGuid3, position3),
-        };
-
-        module.IssuesPosition = issuesPosition;
+        module.AddIssue(issueGuid1);
+        module.AddIssue(issueGuid2);
+        module.AddIssue(issueGuid3);
 
         var issuesPositions = module.IssuesPosition.OrderBy(i => i.Position.Value).ToList();
 
@@ -316,17 +298,11 @@ public class ModuleTests
             Title.Create("test title").Value,
             Description.Create("test description").Value);
 
-        var issuesPosition = new List<IssuePosition>();
-        var lessonsPosition = new List<LessonPosition>();
-
         for (int i = 1; i < collectionsItemsCount + 1; i++)
         {
-            issuesPosition.Add(new IssuePosition(Guid.NewGuid(), Position.Create(i).Value));
-            lessonsPosition.Add(new LessonPosition(Guid.NewGuid(), Position.Create(i).Value));
+            module.AddIssue(IssueId.NewIssueId());
+            module.AddLesson(LessonId.NewLessonId());
         }
-
-        module.IssuesPosition = issuesPosition;
-        module.LessonsPosition = lessonsPosition;
 
         return module;
     }

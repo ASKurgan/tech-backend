@@ -3,11 +3,9 @@ using FileService.Communication;
 using FileService.Contracts;
 using Microsoft.EntityFrameworkCore;
 using SachkovTech.Core.Abstractions;
-using SachkovTech.Core.Database;
 using SachkovTech.Issues.Application.Interfaces;
 using SachkovTech.Issues.Application.Mappers;
 using SachkovTech.Issues.Contracts.Lesson;
-using SachkovTech.Issues.Domain.Lesson;
 using SachkovTech.Issues.Domain.ValueObjects;
 using SharedKernel;
 

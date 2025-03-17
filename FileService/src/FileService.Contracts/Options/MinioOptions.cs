@@ -1,4 +1,4 @@
-﻿namespace FileService.Options;
+﻿namespace FileService.Contracts.Options;
 
 public class MinioOptions
 {
@@ -11,4 +11,6 @@ public class MinioOptions
     public string SecretKey { get; init; } = string.Empty;
 
     public bool WithSsl { get; init; } = false;
+
+    public int UrlExpirationDays { get; init; }
 }

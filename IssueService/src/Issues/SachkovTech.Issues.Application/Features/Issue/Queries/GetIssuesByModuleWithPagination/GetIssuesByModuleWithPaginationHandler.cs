@@ -25,31 +25,24 @@ public class GetIssuesByModuleWithPaginationHandler
         using var connection = _sqlConnectionFactory.Create();
 
         var parameters = new DynamicParameters();
+        parameters.Add("@ModuleId", query.ModuleId); // Добавляем ModuleId в параметры
 
         var sqlBuilder = new StringBuilder(
             """
-            WITH issues_positions AS (
-                SELECT
-                    m.id AS module_id,
-                    (ip->>'IssueId')::uuid AS issue_id,
-                    (ip->>'Position')::int AS position
-                FROM issues.modules AS m
-                JOIN LATERAL jsonb_array_elements(m.issues_position) AS ip ON true
-            )
             SELECT
                 i.id AS Id,
-                i.lesson_id AS LessonId,
                 i.module_id AS ModuleId,
+                i.lesson_id AS LessonId,
                 ip.position AS Position,
                 i.files AS Files,
                 i.is_deleted AS IsDeleted,
                 i.description AS Description,
                 i.title AS Title
             FROM issues.issues AS i
-            JOIN issues_positions AS ip
-                ON i.id = ip.issue_id
+                     JOIN issues.issue_positions AS ip
+                          ON i.id = ip.issue_id
             WHERE NOT i.is_deleted
-            ORDER BY ip.position ASC;
+              AND i.module_id = @ModuleId
             """);
 
         if (!string.IsNullOrWhiteSpace(query.Title))
@@ -61,16 +54,17 @@ public class GetIssuesByModuleWithPaginationHandler
         var allowedSortColumns = new List<string>
         {
             "Id",
-            "LessonId",
             "ModuleId",
+            "LessonId",
             "Position",
             "Files",
             "IsDeleted",
             "Description",
             "Title",
         };
+
         string? sortBy = allowedSortColumns.Contains(query.SortBy) ? query.SortBy : "Id";
-        string? sortDirection = query.SortDirection?.ToUpper() == "DESC" ? "DESC" : "ASC";
+        string sortDirection = query.SortDirection?.ToUpper() == "DESC" ? "DESC" : "ASC";
         sqlBuilder.ApplySorting(sortBy, sortDirection);
         sqlBuilder.ApplyPagination(parameters, query.Page, query.PageSize);
 
@@ -78,8 +72,9 @@ public class GetIssuesByModuleWithPaginationHandler
             """
             SELECT COUNT(*)
             FROM issues.issues AS i
-            JOIN issues.modules AS m ON i.module_id = m.id
+            JOIN issues.issue_positions AS ip ON i.id = ip.issue_id
             WHERE NOT i.is_deleted
+            AND i.module_id = @ModuleId
             """);
 
         if (!string.IsNullOrWhiteSpace(query.Title))

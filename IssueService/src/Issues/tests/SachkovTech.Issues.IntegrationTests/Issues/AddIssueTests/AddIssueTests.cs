@@ -23,7 +23,6 @@ public class AddIssueTests : IssueTestsBase
         var cancellationToken = new CancellationTokenSource().Token;
 
         var moduleId = await SeedModule();
-
         var lessonId = await SeedLesson(moduleId);
 
         var command = Fixture.CreateAddIssueCommand(moduleId, lessonId);
@@ -42,8 +41,10 @@ public class AddIssueTests : IssueTestsBase
         issue?.ModuleId.Value.Should().Be(moduleId);
 
         var module = await ReadDbContext.ReadModules
+            .Include(m => m.IssuesPosition)
             .FirstOrDefaultAsync(m => m.Id == moduleId, cancellationToken);
 
+        module.Should().NotBeNull();
         module!.IssuesPosition.Should().NotBeEmpty();
     }
 

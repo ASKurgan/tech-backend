@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SachkovTech.Core.Database;
 using SachkovTech.Issues.Domain.Module;
 using SachkovTech.Issues.Domain.ValueObjects;
 using SachkovTech.Issues.Domain.ValueObjects.Ids;
@@ -36,13 +35,13 @@ public class ModuleConfiguration : IEntityTypeConfiguration<Module>
                 .HasColumnName("description");
         });
 
-        builder.Property(i => i.IssuesPosition)
-            .ValueObjectsCollectionJsonConversion()
-            .HasColumnName("issues_position");
+        builder.HasMany(m => m.IssuesPosition)
+            .WithOne()
+            .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Property(i => i.LessonsPosition)
-            .ValueObjectsCollectionJsonConversion()
-            .HasColumnName("lessons_position");
+        builder.HasMany(i => i.LessonsPosition)
+            .WithOne()
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(m => m.IsDeleted)
             .HasColumnName("is_deleted");

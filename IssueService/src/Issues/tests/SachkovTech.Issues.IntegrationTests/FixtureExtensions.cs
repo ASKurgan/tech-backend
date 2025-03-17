@@ -6,7 +6,7 @@ using SachkovTech.Issues.Application.Features.Issue.Commands.RestoreIssue;
 using SachkovTech.Issues.Application.Features.Issue.Commands.UpdateIssueMainInfo;
 using SachkovTech.Issues.Application.Features.Lessons.Command.CreateLesson;
 using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonById;
-using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessons;
+using SachkovTech.Issues.Application.Features.Lessons.Queries.GetLessonsByModuleWithPagination;
 using SachkovTech.Issues.Application.Features.Modules.Commands.Create;
 using SachkovTech.Issues.Application.Features.Modules.Commands.Delete;
 using SachkovTech.Issues.Application.Features.Modules.Commands.UpdateIssuePosition;
@@ -50,10 +50,10 @@ public static class FixtureExtensions
         Guid moduleId)
     {
         return fixture.Build<UpdateIssueMainInfoCommand>()
-            .With(c => c.IssueId, issueId)
-            .With(c => c.LessonId, lessonId)
-            .With(c => c.ModuleId, moduleId)
-            .With(c => c.Experience, 5)
+            .With(u => u.IssueId, issueId)
+            .With(u => u.LessonId, lessonId)
+            .With(u => u.ModuleId, moduleId)
+            .With(u => u.Experience, 5)
             .Create();
     }
 
@@ -62,7 +62,7 @@ public static class FixtureExtensions
         Guid issueId)
     {
         return fixture.Build<DeleteIssueCommand>()
-            .With(c => c.IssueId, issueId)
+            .With(d => d.IssueId, issueId)
             .Create();
     }
 
@@ -71,7 +71,7 @@ public static class FixtureExtensions
         Guid issueId)
     {
         return fixture.Build<RestoreIssueCommand>()
-            .With(c => c.IssueId, issueId)
+            .With(r => r.IssueId, issueId)
             .Create();
     }
 
@@ -80,18 +80,22 @@ public static class FixtureExtensions
         Guid lessonId)
     {
         return fixture.Build<GetLessonByIdQuery>()
-            .With(c => c.LessonId, lessonId)
+            .With(g => g.LessonId, lessonId)
             .Create();
     }
 
     public static GetLessonsWithPaginationQuery CreateGetLessonsWithPaginationQuery(
         this IFixture fixture,
+        Guid moduleId,
         int page,
-        int pageSize)
+        int pageSize,
+        string? search = null)
     {
         return fixture.Build<GetLessonsWithPaginationQuery>()
-            .With(c => c.Page, page)
-            .With(c => c.PageSize, pageSize)
+            .With(g => g.ModuleId, moduleId)
+            .With(g => g.Page, page)
+            .With(g => g.PageSize, pageSize)
+            .With(g => g.Search, search)
             .Create();
     }
 
@@ -103,14 +107,14 @@ public static class FixtureExtensions
     public static DeleteModuleCommand CreateDeleteModuleCommand(this IFixture fixture, Guid moduleId)
     {
         return fixture.Build<DeleteModuleCommand>()
-            .With(c => c.ModuleId, moduleId)
+            .With(d => d.ModuleId, moduleId)
             .Create();
     }
 
     public static UpdateMainInfoCommand CreateUpdateMainInfoCommand(this IFixture fixture, Guid moduleId)
     {
         return fixture.Build<UpdateMainInfoCommand>()
-            .With(c => c.ModuleId, moduleId)
+            .With(u => u.ModuleId, moduleId)
             .Create();
     }
 
@@ -121,9 +125,9 @@ public static class FixtureExtensions
         int position)
     {
         return fixture.Build<UpdateIssuePositionCommand>()
-            .With(c => c.ModuleId, moduleId)
-            .With(c => c.IssueId, issueId)
-            .With(c => c.NewPosition, position)
+            .With(u => u.ModuleId, moduleId)
+            .With(u => u.IssueId, issueId)
+            .With(u => u.NewPosition, position)
             .Create();
     }
 
@@ -134,9 +138,9 @@ public static class FixtureExtensions
         int position)
     {
         return fixture.Build<UpdateLessonPositionCommand>()
-            .With(c => c.ModuleId, moduleId)
-            .With(c => c.LessonId, lessonId)
-            .With(c => c.Position, position)
+            .With(u => u.ModuleId, moduleId)
+            .With(u => u.LessonId, lessonId)
+            .With(u => u.Position, position)
             .Create();
     }
 

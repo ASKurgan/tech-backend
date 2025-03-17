@@ -37,6 +37,7 @@ public class UpdateLessonPositionTests : ModuleTestsBase
         result.IsSuccess.Should().BeTrue();
 
         var module = await ReadDbContext.ReadModules
+            .Include(m => m.LessonsPosition)
             .FirstOrDefaultAsync(x => x.Id == moduleId, cancellationToken);
 
         module?.LessonsPosition.Should().NotBeNull();
